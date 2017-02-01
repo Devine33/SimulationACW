@@ -1,5 +1,5 @@
 # Engine
-## Synopsis
+## Synopsis:
 A little project ive started to keep my C++ skills and DirectX skills sharp as well as test out some new techniques.
 
 I started the project shortly after my Real-Time Graphics hand-in some time in January 2017.
