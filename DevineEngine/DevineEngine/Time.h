@@ -7,13 +7,14 @@ public:
 	Time();
 	~Time();
 	void StartTime();
-	void StartQuery();
-	void EndQuery();
+	/*void StartQuery();*/
+	/*void EndQuery();*/
 	void EndTime();
 	void GetElapsed();
+	void GetTimeNow();
 private:
 	std::chrono::time_point<std::chrono::high_resolution_clock> Start, End;
-	std::chrono::duration<double> elapsed_seconds;
+	std::chrono::duration<double> elapsed_seconds,Current;
 
 	
 	LARGE_INTEGER li;

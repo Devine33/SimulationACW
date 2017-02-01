@@ -38,11 +38,7 @@ private:
 	int screenWidth = GetSystemMetrics(SM_CXSCREEN) /2;
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN) /2;
 
-#pragma region Command Pattern (Inputs)
-	Input* m_Input;
-	KeyDownCommand* m_KeyDown;
-	InputHandler* m_Handler;
-#pragma endregion 
+
 
 };
 static Windowing* ApplicationHandle = nullptr;

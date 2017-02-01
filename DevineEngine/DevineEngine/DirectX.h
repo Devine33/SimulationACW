@@ -26,15 +26,14 @@ public:
 	void DirectXInitialize(const HWND hwnd, const int ScreenWidth, const int ScreenHeight, const bool Fullscreen);
 
 	////Move these to graphicsEngine Maybe
-	void BeginScene();
+	void BeginScene() const;
 	void EndScene() const;
 
-	//could maybe register these in the engine?
 	ID3D11Device* GetDevice() const;
 	ID3D11DeviceContext* GetDeviceContext() const;
 
 private:
-
+	
 	Windowing window;
 	std::vector<D3D_FEATURE_LEVEL> m_FeatureLevels;
 #pragma region Factory,Adapter & Output
