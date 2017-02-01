@@ -1,10 +1,10 @@
 #include "Windowing.h"
 #include "Trace.hpp"
 #include <string>
-// Step 4: the Window Procedure
+// Step 4: the Window Procedure COULD  POSSIBLE MOVE THIS TO GAME ENGINE but works just fine here :D
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	/*TRACE(L"Windowing::WndProc \n");*/
+	TRACE(L"Windowing::WndProc \n");
 	switch (msg)
 	{
 	case WM_CLOSE:
@@ -25,7 +25,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-Windowing::Windowing(): m_HInstance(nullptr), m_Done(false), m_Result(false), m_Hwnd(nullptr), m_Input(nullptr), m_KeyDown(nullptr), m_Handler(nullptr)
+Windowing::Windowing(): m_HInstance(nullptr), m_Done(false), m_Result(false), m_Hwnd(nullptr)//, m_Input(nullptr), m_KeyDown(nullptr), m_Handler(nullptr)
 {
 }
 
@@ -57,10 +57,6 @@ bool Windowing::FillWindowStruct()
 			MB_ICONEXCLAMATION | MB_OK);
 		return false;
 	}
-
-	m_Input = new Input;
-	m_KeyDown = new KeyDownCommand(m_Input);
-	m_Handler = new InputHandler;
 	return true;
 	
 }
@@ -110,50 +106,50 @@ int const& Windowing::GetScreenHeight() const
 }
 
 //THIS WILL BE MOVING TO GAME ENGINE SEE WEBSITE ABOUT GAME LOOP AND WIN32
-void Windowing::Run()
-{
-	MSG m_Msg;
-	ZeroMemory(&m_Msg, sizeof(MSG));
-	std::wstring message = std::to_wstring(m_Msg.wParam).c_str();
-	std::wstring newl = message.append(L"\n").c_str();
-	// Loop until there is a quit message from the window or the user.
-	m_Done = false;
-	while (!m_Done)
-	{
-		// Handle the windows messages.
-		if (PeekMessage(&m_Msg, nullptr, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&m_Msg);
-			DispatchMessage(&m_Msg);
-		
-		}
-
-		switch (m_Msg.message)
-		{
-		case WM_KEYDOWN:
-			m_Handler->SetCommand(m_KeyDown);
-			m_Handler->KeyPress();
-			
-			TRACE(std::to_wstring(m_Msg.wParam).append(L"\n").c_str());
-			break;
-			case WM_QUIT:
-				m_Done = true;
-			/*default:
-				TRACE(L"Rendering \n");		*/			
-		}
-		// If windows signals to end the application then exit out.
-		//if (m_Msg.message == WM_QUIT)
-		//{
-		//	m_Done = true;
-		//}
-		//else
-		//{
-		//	// Otherwise do the  rendering
-		//	m_Done = false;
-		//}
-
-	}
-}
+//void Windowing::Run()
+//{
+//	MSG m_Msg;
+//	ZeroMemory(&m_Msg, sizeof(MSG));
+//	std::wstring message = std::to_wstring(m_Msg.wParam).c_str();
+//	std::wstring newl = message.append(L"\n").c_str();
+//	// Loop until there is a quit message from the window or the user.
+//	m_Done = false;
+//	while (!m_Done)
+//	{
+//		// Handle the windows messages.
+//		if (PeekMessage(&m_Msg, nullptr, 0, 0, PM_REMOVE))
+//		{
+//			TranslateMessage(&m_Msg);
+//			DispatchMessage(&m_Msg);
+//		
+//		}
+//
+//		switch (m_Msg.message)
+//		{
+//		case WM_KEYDOWN:
+//			m_Handler->SetCommand(m_KeyDown);
+//			m_Handler->KeyPress();
+//			
+//			TRACE(std::to_wstring(m_Msg.wParam).append(L"\n").c_str());
+//			break;
+//			case WM_QUIT:
+//				m_Done = true;
+//			/*default:
+//				TRACE(L"Rendering \n");		*/			
+//		}
+//		// If windows signals to end the application then exit out.
+//		//if (m_Msg.message == WM_QUIT)
+//		//{
+//		//	m_Done = true;
+//		//}
+//		//else
+//		//{
+//		//	// Otherwise do the  rendering
+//		//	m_Done = false;
+//		//}
+//
+//	}
+//}
 
 LRESULT Windowing::MessageHandler(const HWND hwnd, const UINT umsg, const WPARAM wparam, const LPARAM lparam)
 {

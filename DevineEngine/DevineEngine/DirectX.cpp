@@ -2,6 +2,7 @@
 #include "Trace.hpp"
 #include <string>
 
+
 DirectX::DirectX(): m_Factory(nullptr), m_Adapter(nullptr), m_AdapterOutput(nullptr), m_DisplayModeList(nullptr), m_NumModes(0), i(0), m_Numerator(0), m_Denominator(0), m_FeatureLevel()
 {
 }
@@ -11,6 +12,7 @@ DirectX::~DirectX()
 {
 }
 
+//Starts the window and initializes all the DirectX elements then starts the scene
 void DirectX::StartWindowing(int cmd)
 {	//seperate window 
 	window.WindowCreation(cmd);
@@ -25,7 +27,7 @@ void DirectX::StartWindowing(int cmd)
 
 	//should always be at the end as it initiates the messaging loop
 	//going to move window out of here and seprate them in GE
-	window.Run();
+	//window.Run();
 
 	//possibly move render loop up a stage
 }
@@ -39,7 +41,7 @@ void DirectX::CreateFeatureList()
 
 	TRACE(L"Feature List Populate \n");
 }
-//pass window.getscreen height and width
+//Initializes Factory, Adapter & Output
 void DirectX::InitializeFactory(int ScreenWidth,int ScreenHeight)
 {
 	CreateFeatureList();
@@ -73,7 +75,7 @@ void DirectX::InitializeFactory(int ScreenWidth,int ScreenHeight)
 	
 	//Factory Is Finished
 }
-
+//Initializes the device and swapchain - you can change these to seperate the two.
 void DirectX::InitializeSwapChain(int ScreenWidth, int ScreenHeight,HWND hwnd)
 {
 	UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
@@ -141,19 +143,12 @@ void DirectX::InitializeSwapChain(int ScreenWidth, int ScreenHeight,HWND hwnd)
 	/*m_Device.As(&m_Device);
 	m_DeviceContext.As(&m_DeviceContext);
 	m_SwapChain.As(&m_SwapChain);*/
-
-
-
-
 	TRACE(L"swapchain ended \n");
-
-
 }
 
 void DirectX::InitializeResources(int ScreenWidth, int ScreenHeight)
 {
 	TRACE(L"Resource Initialization Started \n");
-	
 	//Acquire texture interface from swapchain
 	m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(m_SwapChainBuffer.GetAddressOf()));
 
@@ -263,14 +258,15 @@ void DirectX::DirectXInitialize(const HWND hwnd, const int ScreenWidth, const in
 	/*HRESULT Result = S_OK;*/
 }
 
-void DirectX::BeginScene()
+void DirectX::BeginScene() const
 {
 	std::vector<float> colour(4);
 	float color[4];
-	const float red = 0.0f;
-	const float green = 1.0f;
+	const float red = (0.1 * 0.5) * 0.25 + 0.5f;
+	const float green = 1.0;
 	const float blue = 1.0f;
 	const float alpha = 1.0f;
+	
 	// Setup the color to clear the buffer to.
 	colour.push_back(red);
 	colour.push_back(green);
@@ -281,16 +277,15 @@ void DirectX::BeginScene()
 	color[1] = green;
 	color[2] = blue;
 	color[3] = alpha;
-
 	// Clear the back buffer.
 	m_DeviceContext.Get()->ClearRenderTargetView(m_RenderTarget.Get(),color);
-
+	
 	// Clear the depth buffer.
 	m_DeviceContext.Get()->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void DirectX::EndScene() const
-{
+{	
 	// Present the back buffer to the screen since rendering is complete
 	// Lock to screen refresh rate.
 	m_SwapChain.Get()->Present(1, 0);

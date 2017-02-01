@@ -3,22 +3,23 @@
 #include "Time.h"
 #include <memory>
 #include "Trace.hpp"
+#include "GameEngine.h"
 
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
-	Time t;
-
-	t.StartQuery();
-	std::unique_ptr<DirectX> X(new DirectX);
-
-	X->StartWindowing(nCmdShow);
 
 
-	t.EndQuery();
+	/*t.StartQuery();*/
+	std::unique_ptr<GameEngine> G(new GameEngine);
+
+	/*X->StartWindowing(nCmdShow);*/
+	G->InitializeComponents(nCmdShow);
+	G->RenderLoop();
+	/*t.EndQuery();*/
 
 	/*t.GetElapsed();*/
-	X->BeginScene();
+	/*X->BeginScene();*/
 	TRACE(L"WinMain \n");
 	//std::unique_ptr<Windowing> wind(new Windowing);	
 	//wind->WindowCreation(nCmdShow);
