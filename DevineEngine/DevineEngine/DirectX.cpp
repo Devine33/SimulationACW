@@ -240,8 +240,8 @@ void DirectX::InitializeResources(int ScreenWidth, int ScreenHeight)
 	m_DeviceContext.Get()->RSSetState(m_RasterizerState.Get());
 
 	m_Viewport = {};
-	m_Viewport.Width = m_DepthDesc.Width;
-	m_Viewport.Height = m_DepthDesc.Height;
+	m_Viewport.Width = static_cast<FLOAT>(m_DepthDesc.Width);
+	m_Viewport.Height = static_cast<FLOAT>(m_DepthDesc.Height);
 	m_Viewport.MinDepth = 0.0f;
 	m_Viewport.MaxDepth = 1.0f;
 	m_Viewport.TopLeftX = 0;
