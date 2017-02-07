@@ -4,22 +4,25 @@
 
 GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr), m_Handler(nullptr)
 {
+
+	m_DirectX = new DirectX;
+	m_Timer = new Time;
 }
 
 
 GameEngine::~GameEngine()
 {
+	delete m_DirectX;
+	delete m_Timer;
 }
 
 void GameEngine::InitializeComponents(int cmd)
 {
-	m_DirectX.StartWindowing(cmd);
+	m_DirectX->StartWindowing(cmd);
+	
 	m_Input = new Input;
 	m_KeyDown = new KeyDownCommand(m_Input);
 	m_Handler = new InputHandler;
-
-	//
-	//RenderLoop
 }
 
 void GameEngine::RenderLoop()
@@ -31,10 +34,10 @@ void GameEngine::RenderLoop()
 
 		// Loop until there is a quit message from the window or the user.
 		m_Done = false;
-		m_Timer.StartTime();
+		m_Timer->StartTime();
 		while (!m_Done)
 		{
-			m_Timer.GetTimeNow();
+			m_Timer->GetTimeNow();
 			// Handle the windows messages.
 			if (PeekMessage(&m_Msg, nullptr, 0, 0, PM_REMOVE))
 			{
@@ -50,18 +53,20 @@ void GameEngine::RenderLoop()
 				break;
 			case WM_QUIT:
 				m_Done = true;
-				m_Timer.EndTime();
-				m_Timer.GetElapsed();
-				default:
-				/*TRACE(L"Rendering \n");	*/
+				m_Timer->EndTime();
+				m_Timer->GetElapsed();
+			default:
+				{
 				Draw();
+				}
+			
 			}		
 	}
 }
 
-void GameEngine::Draw()
+void GameEngine::Draw() const
 {
-	m_DirectX.BeginScene();
-
-	m_DirectX.EndScene();
+	m_DirectX->BeginScene();
+	TRACE(L"GameEngine::Draw() \n");	
+	m_DirectX->EndScene();
 }

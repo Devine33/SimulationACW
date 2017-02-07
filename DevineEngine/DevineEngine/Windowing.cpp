@@ -151,32 +151,32 @@ int const& Windowing::GetScreenHeight() const
 //	}
 //}
 
-LRESULT Windowing::MessageHandler(const HWND hwnd, const UINT umsg, const WPARAM wparam, const LPARAM lparam)
-{
-	switch (umsg)
-	{
-		// Check if a key has been pressed on the keyboard.
-	//case WM_KEYDOWN:
-	//{
-	//	TRACE(L"Key is Pressed \n");
-	//	switch (wparam)
-	//	{
-	//	case VK_ESCAPE:
-	//		PostQuitMessage(0);
-	//		::WndProc(hwnd, WM_CLOSE, wparam, lparam);
-	//	}
-	//}
-
-	// Check if a key has been released on the keyboard.
-	//case WM_KEYUP:
-	//{
-	//	return 0;
-	//}
-
-	// Any other messages send to the default message handler as our application won't make use of them.
-		default:
-		{
-			return TRACE(L"MessageHandler");
-		}
-	}
-}
+//LRESULT Windowing::MessageHandler(const HWND hwnd, const UINT umsg, const WPARAM wparam, const LPARAM lparam)
+//{
+//	switch (umsg)
+//	{
+//		// Check if a key has been pressed on the keyboard.
+//	//case WM_KEYDOWN:
+//	//{
+//	//	TRACE(L"Key is Pressed \n");
+//	//	switch (wparam)
+//	//	{
+//	//	case VK_ESCAPE:
+//	//		PostQuitMessage(0);
+//	//		::WndProc(hwnd, WM_CLOSE, wparam, lparam);
+//	//	}
+//	//}
+//
+//	// Check if a key has been released on the keyboard.
+//	//case WM_KEYUP:
+//	//{
+//	//	return 0;
+//	//}
+//
+//	// Any other messages send to the default message handler as our application won't make use of them.
+//		default:
+//		{
+//			return TRACE(L"MessageHandler");
+//		}
+//	}
+//}

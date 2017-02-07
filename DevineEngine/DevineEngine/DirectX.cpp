@@ -20,44 +20,55 @@ void DirectX::StartWindowing(int cmd)
 	InitializeSwapChain(window.GetScreenWidth(), window.GetScreenHeight(), window.GetHandle());
 	InitializeResources(window.GetScreenWidth(), window.GetScreenHeight());
 	BeginScene();
-	//next step is engine seprate window and directx make run accept directx object and in else call beginscene to test
-	//MOVE WINDOW PROC OUT OF WINDOWING MAYBE *USE WINDOW TO CREATE WINDOW AND HAND TO ENGINE TO CONTROL INPUT AND RENDERING
-	//WINDOW WILL ONLY SET WINDOW USING HINSTANCE THEN PASS ENGINE TO MAIN
-
-
-	//should always be at the end as it initiates the messaging loop
-	//going to move window out of here and seprate them in GE
-	//window.Run();
-
-	//possibly move render loop up a stage
 }
 
 void DirectX::CreateFeatureList()
 {
 	m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_11_0);
-	m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_10_1);
-	m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_10_0);
-	m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_9_3);
+	//m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_10_1);
+	//m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_10_0);
+	//m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_9_3);
 
 	TRACE(L"Feature List Populate \n");
 }
 //Initializes Factory, Adapter & Output
 void DirectX::InitializeFactory(int ScreenWidth,int ScreenHeight)
 {
+	HRESULT result;
 	CreateFeatureList();
 	TRACE(L"DirectX::InitializeFactory \n");
 
-	CreateDXGIFactory(__uuidof(IDXGIFactory), reinterpret_cast<void**>(m_Factory.GetAddressOf()));
-
+	result = CreateDXGIFactory(__uuidof(IDXGIFactory), reinterpret_cast<void**>(m_Factory.GetAddressOf()));
+	if (FAILED(result))
+	{
+		TRACE(L"Test");
+	}
 	// Use the factory to create an adapter for the primary graphics interface (video card).
-	m_Factory->EnumAdapters(0, m_Adapter.GetAddressOf());
-	m_Adapter->EnumOutputs(0, m_AdapterOutput.GetAddressOf());
-
-	m_AdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_NumModes, nullptr);
+	result = m_Factory->EnumAdapters(0, m_Adapter.GetAddressOf());
+	if (FAILED(result))
+	{
+		TRACE(L"Test");
+	}
+	result = m_Adapter->EnumOutputs(0, m_AdapterOutput.GetAddressOf());
+	if (FAILED(result))
+	{
+		TRACE(L"Test");
+	}
+	result = m_AdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_NumModes, nullptr);
+	if (FAILED(result))
+	{
+		TRACE(L"Test");
+	}
 	m_DisplayModeList = new DXGI_MODE_DESC[m_NumModes];
-
-	m_AdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_NumModes, m_DisplayModeList);
-
+	if(!m_DisplayModeList)
+	{		
+		TRACE(L"Test");		
+	}
+	result = m_AdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_NumModes, m_DisplayModeList);
+	if (FAILED(result))
+	{
+		TRACE(L"Test");
+	}
 	// Now go through all the display modes and find the one that matches the screen width and height.
 	// When a match is found store the numerator and denominator of the refresh rate for that monitor.
 	for (i = 0; i < m_NumModes; i++)
@@ -107,36 +118,29 @@ void DirectX::InitializeSwapChain(int ScreenWidth, int ScreenHeight,HWND hwnd)
 	//Windowed allow fullscreen later
 	m_SwapChainDesc.Windowed = true;
 	//DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL causes crash
-	m_SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
+	/*m_SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
 
-	m_SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	m_SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;*/
 
 	//SORT FULLSCREEN LATER
-
-	/*Microsoft::WRL::ComPtr<ID3D11Device> device;
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
- //   Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;*/
-	//D3D_FEATURE_LEVEL levels[] = {
-	//	D3D_FEATURE_LEVEL_9_1,
-	//	D3D_FEATURE_LEVEL_9_2,
-	//	D3D_FEATURE_LEVEL_9_3,
-	//	D3D_FEATURE_LEVEL_10_0,
-	//	D3D_FEATURE_LEVEL_10_1,
-	//	D3D_FEATURE_LEVEL_11_0,
-	//	D3D_FEATURE_LEVEL_11_1
-	//};
 	
-
+	HRESULT result;
 	//D3D_FEATURE_LEVEL feature = D3D_FEATURE_LEVEL_11_0;
 	//cycle the features list later
-	HRESULT result1 = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, //adapter , drivertype,software
+	result = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, //adapter , drivertype,software
 									creationFlags,&m_FeatureLevels.front() , m_FeatureLevels.size(), //flags ,*pfeature featurelevels,
 									D3D11_SDK_VERSION, &m_SwapChainDesc, m_SwapChain.GetAddressOf(), //sdkversion *pSwapChaindesc,**swapchain
 									m_Device.GetAddressOf(), nullptr, m_DeviceContext.GetAddressOf()); 
-
-	if (FAILED(result1))
+	
+	if (FAILED(result))
 	{
-		return ;
+		TRACE(L"ASDSA");
+	}
+
+	result = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(m_SwapChainBuffer.GetAddressOf()));
+	if (FAILED(result))
+	{
+		TRACE(L"ASDSA");
 	}
 	//only needed for dd3d11.1 or up
 	//**device ,*feature level *ImmediateContext
@@ -150,14 +154,14 @@ void DirectX::InitializeResources(int ScreenWidth, int ScreenHeight)
 {
 	TRACE(L"Resource Initialization Started \n");
 	//Acquire texture interface from swapchain
-	m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(m_SwapChainBuffer.GetAddressOf()));
-
+	
+	HRESULT result;
 
 	//createa a rendering target view to allow binding the swapchain teture to the pipeline for rendering
-	HRESULT HR = m_Device.Get()->CreateRenderTargetView(m_SwapChainBuffer.Get(), nullptr, m_RenderTarget.GetAddressOf());
-	if(FAILED(HR))
+	result  = m_Device.Get()->CreateRenderTargetView(m_SwapChainBuffer.Get(), nullptr, m_RenderTarget.GetAddressOf());
+	if (FAILED(result))
 	{
-		return;
+		TRACE(L"ASDSA");
 	}
 	
 	m_DepthDesc.Width = m_SwapChainDesc.BufferDesc.Width;
@@ -175,10 +179,10 @@ void DirectX::InitializeResources(int ScreenWidth, int ScreenHeight)
 	m_DepthDesc.CPUAccessFlags = 0;
 	m_DepthDesc.MiscFlags = 0;
 
-	HR = m_Device.Get()->CreateTexture2D(&m_DepthDesc, nullptr, m_DepthStencilBuffer.GetAddressOf());
-	if (FAILED(HR))
+	result = m_Device.Get()->CreateTexture2D(&m_DepthDesc, nullptr, m_DepthStencilBuffer.GetAddressOf());
+	if (FAILED(result))
 	{
-		return;
+		TRACE(L"ASDSA");
 	}
 	
 	m_DepthStencilBufferDescription.DepthEnable = TRUE;
@@ -198,11 +202,11 @@ void DirectX::InitializeResources(int ScreenWidth, int ScreenHeight)
 	m_DepthStencilBufferDescription.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	m_DepthStencilBufferDescription.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-	HR = m_Device.Get()->CreateDepthStencilState(&m_DepthStencilBufferDescription, m_DepthStencilState.GetAddressOf());
+	result = m_Device.Get()->CreateDepthStencilState(&m_DepthStencilBufferDescription, m_DepthStencilState.GetAddressOf());
 
-	if (FAILED(HR))
+	if (FAILED(result))
 	{
-		return;
+		TRACE(L"ASDSA");
 	}
 
 	//
@@ -214,10 +218,10 @@ void DirectX::InitializeResources(int ScreenWidth, int ScreenHeight)
 	m_DepthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	m_DepthStencilViewDesc.Texture2D.MipSlice = 0;
 
-	HR = m_Device.Get()->CreateDepthStencilView(m_DepthStencilBuffer.Get(), &m_DepthStencilViewDesc, m_DepthStencilView.GetAddressOf());
-	if (FAILED(HR))
+	result = m_Device.Get()->CreateDepthStencilView(m_DepthStencilBuffer.Get(), &m_DepthStencilViewDesc, m_DepthStencilView.GetAddressOf());
+	if (FAILED(result))
 	{
-		return;
+		TRACE(L"ASDSA");
 	}
 	m_Rasterizer = {};
 	m_Rasterizer.FillMode = D3D11_FILL_SOLID;
