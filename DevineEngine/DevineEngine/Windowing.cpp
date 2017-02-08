@@ -36,6 +36,8 @@ Windowing::~Windowing()
 
 bool Windowing::FillWindowStruct()
 {
+	
+
 	TRACE(L"Windowing::FillWindowStruct \n");
 	//Step 1: Registering the Window Class
 	m_Window.cbSize = sizeof(WNDCLASSEX);

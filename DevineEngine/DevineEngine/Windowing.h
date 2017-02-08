@@ -27,19 +27,16 @@ public:
 	int const& GetScreenHeight() const;
 	void Run();
 	 LRESULT MessageHandler(const  HWND hwnd, const  UINT umsg, const  WPARAM wparam, const LPARAM lparam);
-private:
 
+private:
 	const LPCWSTR m_ClassName = L"myWindowClass";
 	HINSTANCE m_HInstance;
 	WNDCLASSEX m_Window;	
 	bool m_Done, m_Result;
 	HWND m_Hwnd;
-
-	int screenWidth = GetSystemMetrics(SM_CXSCREEN) /2;
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN) /2;
-
-
-
+	
+	int screenWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN) / 2;
 };
 static Windowing* ApplicationHandle = nullptr;
 

@@ -4,9 +4,27 @@
 
 GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr), m_Handler(nullptr)
 {
-
-	m_DirectX = new DirectX;
+	m_DirectX = new Direct_X;
 	m_Timer = new Time;
+	m_Camera = new Camera;
+	if(!m_Camera)
+	{
+		TRACE(L"NO Camera");
+	}
+	m_Input = new Input;
+	m_KeyDown = new KeyDownCommand(m_Input);
+	m_Handler = new InputHandler;
+	m_Triangle = new Triangle;
+	if (!m_Triangle)
+	{
+		TRACE(L"NO MODEL");
+	}
+
+	m_Colour = new ColourShader;
+	if (!m_Colour)
+	{
+		TRACE(L"NO MODEL");
+	}
 }
 
 
@@ -14,15 +32,31 @@ GameEngine::~GameEngine()
 {
 	delete m_DirectX;
 	delete m_Timer;
+	delete m_Camera;
+	delete m_Input;
+	delete m_KeyDown;
+	delete m_Handler;
 }
 
-void GameEngine::InitializeComponents(int cmd)
+void GameEngine::InitializeComponents(int cmd) const
 {
+	bool result = true;
 	m_DirectX->StartWindowing(cmd);
-	
-	m_Input = new Input;
-	m_KeyDown = new KeyDownCommand(m_Input);
-	m_Handler = new InputHandler;
+	m_Camera->CameraSetup(m_DirectX->GetScreenHeight(), m_DirectX->GetScreenWidth());
+	m_Camera->SetPosition(0.0f, 0.0f, 0.0f);
+	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
+	result = m_Triangle->Initialize(m_DirectX->GetDevice());
+	if(!result)
+	{
+		TRACE(L"TRIANGLE FAILED");
+	}
+
+	result = m_Colour->Initialize(m_DirectX->GetDevice());
+	if (!result)
+	{
+		TRACE(L"SHADER FAILED");
+	}
+	TRACE(L"Initialized");
 }
 
 void GameEngine::RenderLoop()
@@ -56,9 +90,10 @@ void GameEngine::RenderLoop()
 				m_Timer->EndTime();
 				m_Timer->GetElapsed();
 			default:
-				{
+			{
 				Draw();
-				}
+				//check graphics debugger something possibly missing from directx if not just clone ACW AND REMAKE IT
+			}
 			
 			}		
 	}
@@ -66,7 +101,20 @@ void GameEngine::RenderLoop()
 
 void GameEngine::Draw() const
 {
+	bool result;
+	DirectX::SimpleMath::Matrix worldMatrix, viewMatrix, projectionMatrix;
 	m_DirectX->BeginScene();
 	TRACE(L"GameEngine::Draw() \n");	
+	m_Camera->Render();
+	m_Camera->GetWorldMatrix(worldMatrix);
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_Camera->GetProjectionMatrix(projectionMatrix);
+
+	m_Triangle->Render(m_DirectX->GetDeviceContext());
+	result = m_Colour->Render(m_DirectX->GetDeviceContext(), m_Triangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	if (!result)
+	{
+		TRACE(L"SHADER FAILED");
+	}
 	m_DirectX->EndScene();
 }

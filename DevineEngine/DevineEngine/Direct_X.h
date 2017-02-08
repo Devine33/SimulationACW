@@ -7,15 +7,15 @@
 
 //what can i abstract from this?
 //feature list of D3Dmodes e.g. create feature list
-//Will Initialize DirectX and Associate with Rendering
+//Will Initialize Direct_X and Associate with Rendering
 #pragma comment (lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
-class DirectX
+class Direct_X
 {
 
 public:
-	DirectX();
-	~DirectX();
+	Direct_X();
+	~Direct_X();
 	void StartWindowing(int cmd);
 	void CreateFeatureList();
 	void InitializeFactory(int ScreenWidth, int ScreenHeight);
@@ -31,7 +31,8 @@ public:
 
 	ID3D11Device* GetDevice() const;
 	ID3D11DeviceContext* GetDeviceContext() const;
-
+	 float GetScreenWidth() const;
+	 float GetScreenHeight() const;
 private:
 	
 	Windowing window;
