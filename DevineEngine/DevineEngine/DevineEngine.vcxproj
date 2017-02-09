@@ -95,7 +95,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>C:\Users\Philip\Desktop\DeclareDPIAware.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
+      <AdditionalManifestFiles>%(AdditionalManifestFiles)</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

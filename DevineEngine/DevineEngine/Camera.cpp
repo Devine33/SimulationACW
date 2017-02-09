@@ -32,23 +32,20 @@ void Camera::CameraSetup(const float screenheight, const float screenwidth)
 
 void Camera::Render()
 {
-	// Setup the vector that points upwards.
-	up.x = 0.0f;
-	up.y = 1.0f;
-	up.z = 0.0f;
+	DirectX::XMFLOAT3 UP = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
+	up = DirectX::XMLoadFloat3(&UP);
 
 
+	DirectX::XMFLOAT3 POSITION = DirectX::XMFLOAT3(m_positionX, m_positionY, m_positionZ);
 	// Setup the position of the camera in the world.
-	position.x = m_positionX;
-	position.y = m_positionY;
-	position.z = m_positionZ;
+	position = DirectX::XMLoadFloat3(&POSITION);
 
 	radians = m_rotationY * 0.0174532925f;
 
+
+	DirectX::XMFLOAT3 LOOKAT = DirectX::XMFLOAT3(sinf(radians) + m_positionX, m_positionY, 100.0f);
 	// Setup where the camera is looking by default.
-	lookAt.x = sinf(radians) + m_positionX;
-	lookAt.y = m_positionY;
-	lookAt.z = 100.0f;//cosf(radians) + m_positionZ;
+	lookAt = DirectX::XMLoadFloat3(&LOOKAT);
 
 					  //1.0f
 
@@ -59,7 +56,8 @@ void Camera::Render()
 
 	////// Create the rotation matrix from the yaw, pitch, and roll values.
 	//
-	rotationMatrix = DirectX::SimpleMath::Matrix::CreateFromYawPitchRoll(yaw, pitch, roll);
+	
+	rotationMatrix = DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 	//// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
 	lookAt = XMVector3TransformCoord(lookAt, rotationMatrix);
 	up = XMVector3TransformCoord(up, rotationMatrix);
@@ -79,17 +77,17 @@ void Camera::Render()
 	m_projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fieldOfView, screenaspect, 1.0f, 1000.0F);
 }
 
-void Camera::GetViewMatrix(DirectX::SimpleMath::Matrix& viewMatrix) const
+void Camera::GetViewMatrix(DirectX::XMMATRIX& viewMatrix) const
 {
 	viewMatrix = m_viewMatrix;
 }
 
-void Camera::GetProjectionMatrix(DirectX::SimpleMath::Matrix& projection) const
+void Camera::GetProjectionMatrix(DirectX::XMMATRIX& projection) const
 {
 	projection = m_projectionMatrix;
 }
 
-void Camera::GetWorldMatrix(DirectX::SimpleMath::Matrix& world) const
+void Camera::GetWorldMatrix(DirectX::XMMATRIX& world) const
 {
 	world = m_worldMatrix;
 }

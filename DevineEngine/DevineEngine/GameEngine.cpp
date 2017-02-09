@@ -96,7 +96,7 @@ void GameEngine::RenderLoop()
 void GameEngine::Draw() const
 {
 	bool result;
-	DirectX::SimpleMath::Matrix worldMatrix, viewMatrix, projectionMatrix;
+	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	m_DirectX->BeginScene();
 	TRACE(L"GameEngine::Draw() \n");	
 	m_Camera->Render();

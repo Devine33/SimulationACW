@@ -26,7 +26,7 @@ bool ColourShader::Initialize(ID3D11Device* device)
 	return true;
 }
 
-bool ColourShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
+bool ColourShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix)
 {
 	bool result;
 
@@ -135,16 +135,19 @@ bool ColourShader::InitializeShader(ID3D11Device* device, WCHAR* vsFilename, WCH
 	return true;
 }
 
-bool ColourShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
+bool ColourShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX& worldMatrixin, const XMMATRIX& viewMatrixin, const XMMATRIX& projectionMatrixin) const
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
 
+	 XMMATRIX worldMatrix = worldMatrixin;
+	 XMMATRIX viewMatrix = viewMatrixin;
+	 XMMATRIX projectionMatrix = projectionMatrixin;
 
 	// Transpose the matrices to prepare them for the shader.
-	worldMatrix = XMMatrixTranspose(worldMatrix);
+	worldMatrix = DirectX::XMMatrixTranspose(worldMatrix);
 	viewMatrix = XMMatrixTranspose(viewMatrix);
 	projectionMatrix = XMMatrixTranspose(projectionMatrix);
 
