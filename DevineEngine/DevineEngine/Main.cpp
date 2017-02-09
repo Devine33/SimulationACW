@@ -1,5 +1,5 @@
 #include <windows.h>  
-#include "DirectX.h"
+#include "Direct_X.h"
 #include "Time.h"
 #include <memory>
 #include "Trace.hpp"

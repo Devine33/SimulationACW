@@ -1,16 +1,20 @@
 #pragma once
 #include <Windows.h>
 #include "Windowing.h"
-#include "DirectX.h"
+#include "Direct_X.h"
 #include "Time.h"
+#include "Camera.h"
+#include "Triangle.h"
+#include "ColourShader.h"
+
 class GameEngine
 {
 public:
 	GameEngine();
 	~GameEngine();
-	void InitializeComponents(int cmd);
+	void InitializeComponents(int cmd) const;
 	void RenderLoop();
-	void Draw();
+	void Draw() const;
 private:
 	bool m_Done;
 #pragma region Command Pattern (Inputs)
@@ -18,8 +22,11 @@ private:
 	KeyDownCommand* m_KeyDown;
 	InputHandler* m_Handler;
 #pragma endregion 
-	DirectX m_DirectX;
-	Time m_Timer;
+	Direct_X* m_DirectX;
+	Time* m_Timer;
+	Camera* m_Camera;
+	Triangle* m_Triangle;
+	ColourShader* m_ColourShader;
 };
 
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
