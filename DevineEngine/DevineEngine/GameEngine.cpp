@@ -6,6 +6,7 @@ GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr), m
 {
 	m_DirectX = new Direct_X;
 	m_Timer = new Time;
+	//SORT THIS LATER 
 	m_Camera = new Camera;
 	if(!m_Camera)
 	{

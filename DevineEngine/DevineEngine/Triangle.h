@@ -2,7 +2,7 @@
 #include <d3d11.h>
 #include <directxmath.h>
 
-#pragma ""
+
 using namespace DirectX;
 class Triangle
 {
