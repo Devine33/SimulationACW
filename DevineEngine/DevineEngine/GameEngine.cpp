@@ -19,12 +19,7 @@ GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr), m
 	{
 		TRACE(L"NO MODEL");
 	}
-
-	m_Colour = new ColourShader;
-	if (!m_Colour)
-	{
-		TRACE(L"NO MODEL");
-	}
+	m_ColourShader = new ColourShader;
 }
 
 
@@ -43,15 +38,14 @@ void GameEngine::InitializeComponents(int cmd) const
 	bool result = true;
 	m_DirectX->StartWindowing(cmd);
 	m_Camera->CameraSetup(m_DirectX->GetScreenHeight(), m_DirectX->GetScreenWidth());
-	m_Camera->SetPosition(0.0f, 0.0f, 0.0f);
+	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
 	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
 	result = m_Triangle->Initialize(m_DirectX->GetDevice());
 	if(!result)
 	{
 		TRACE(L"TRIANGLE FAILED");
 	}
-
-	result = m_Colour->Initialize(m_DirectX->GetDevice());
+	result = m_ColourShader->Initialize(m_DirectX->GetDevice());
 	if (!result)
 	{
 		TRACE(L"SHADER FAILED");
@@ -78,25 +72,25 @@ void GameEngine::RenderLoop()
 				TranslateMessage(&m_Msg);
 				DispatchMessage(&m_Msg);
 			}
-			switch (m_Msg.message)
-			{
-			case WM_KEYDOWN:
-				m_Handler->SetCommand(m_KeyDown);
-				m_Handler->KeyPress();
-				TRACE(std::to_wstring(m_Msg.wParam).append(L"\n").c_str());
-				break;
-			case WM_QUIT:
-				m_Done = true;
-				m_Timer->EndTime();
-				m_Timer->GetElapsed();
-			default:
-			{
-				Draw();
-				//check graphics debugger something possibly missing from directx if not just clone ACW AND REMAKE IT
-			}
+				switch (m_Msg.message)
+				{
+				case WM_KEYDOWN:
+					m_Handler->SetCommand(m_KeyDown);
+					m_Handler->KeyPress();
+					TRACE(std::to_wstring(m_Msg.wParam).append(L"\n").c_str());
+					break;
+				case WM_QUIT:
+					m_Done = true;
+					m_Timer->EndTime();
+					m_Timer->GetElapsed();
+				default:
+					{
+						Draw();
+						
+					}
 			
-			}		
-	}
+				}		
+		}
 }
 
 void GameEngine::Draw() const
@@ -111,10 +105,12 @@ void GameEngine::Draw() const
 	m_Camera->GetProjectionMatrix(projectionMatrix);
 
 	m_Triangle->Render(m_DirectX->GetDeviceContext());
-	result = m_Colour->Render(m_DirectX->GetDeviceContext(), m_Triangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+
+	result = m_ColourShader->Render(m_DirectX->GetDeviceContext(), m_Triangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)
 	{
-		TRACE(L"SHADER FAILED");
+		TRACE(L"FAILED SHADER");
 	}
+	//shader
 	m_DirectX->EndScene();
 }

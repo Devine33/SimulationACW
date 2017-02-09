@@ -172,6 +172,8 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="KeyDownCommand.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Trace.hpp" />
     <ClInclude Include="Triangle.h" />

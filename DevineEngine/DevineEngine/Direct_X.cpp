@@ -82,6 +82,8 @@ void Direct_X::InitializeFactory(int ScreenWidth,int ScreenHeight)
 			}
 		}
 	}
+	
+
 	delete[] m_DisplayModeList;
 	
 	//Factory Is Finished
@@ -96,7 +98,7 @@ void Direct_X::InitializeSwapChain(int ScreenWidth, int ScreenHeight,HWND hwnd)
 #endif
 
 	TRACE(L"SwapChain Started \n");
-	m_SwapChainDesc = {};
+	ZeroMemory(m_SwapChain.GetAddressOf(), sizeof(m_SwapChainDesc));
 	//BufferDesc
 	m_SwapChainDesc.BufferDesc.Width = ScreenWidth;
 	m_SwapChainDesc.BufferDesc.Height = ScreenHeight;
@@ -104,8 +106,8 @@ void Direct_X::InitializeSwapChain(int ScreenWidth, int ScreenHeight,HWND hwnd)
 	m_SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	//DXGI_FORMAT_R8G8B8A8_UNORM << only works with this one find out something about this
 	m_SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//DXGI_FORMAT_R32G32B32A32_UINT;
-	//m_SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE;
-	//m_SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	m_SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;//DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE;
+	m_SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	//SamplerDesc
 	m_SwapChainDesc.SampleDesc.Count = 1;
 	m_SwapChainDesc.SampleDesc.Quality = 0;
@@ -118,9 +120,9 @@ void Direct_X::InitializeSwapChain(int ScreenWidth, int ScreenHeight,HWND hwnd)
 	//Windowed allow fullscreen later
 	m_SwapChainDesc.Windowed = true;
 	//DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL causes crash
-	/*m_SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_SEQUENTIAL;
+	m_SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
-	m_SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;*/
+	m_SwapChainDesc.Flags = 0;
 
 	//SORT FULLSCREEN LATER
 	
@@ -156,8 +158,11 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	result  = m_Device->CreateRenderTargetView(m_SwapChainBuffer.Get(), nullptr, m_RenderTarget.GetAddressOf());
 	if (FAILED(result))
 	{
-		TRACE(L"ASDSA");
+		TRACE(L"FAIL");
 	}
+	// Release pointer to the back buffer as we no longer need it.
+	
+	
 	ZeroMemory(&m_DepthDesc, sizeof(D3D11_TEXTURE2D_DESC));
 	m_DepthDesc.Width = ScreenWidth;
 	m_DepthDesc.Height = ScreenHeight;
@@ -172,7 +177,7 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	m_DepthDesc.Usage = D3D11_USAGE_DEFAULT;
 	m_DepthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	m_DepthDesc.CPUAccessFlags = 0;
-	//m_DepthDesc.MiscFlags = 0;
+	m_DepthDesc.MiscFlags = 0;
 
 	result = m_Device->CreateTexture2D(&m_DepthDesc, nullptr, m_DepthStencilBuffer.GetAddressOf());
 	if (FAILED(result))
@@ -180,10 +185,10 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 		TRACE(L"ASDSA");
 	}
 	
-	m_DepthStencilBufferDescription.DepthEnable = TRUE;
+	m_DepthStencilBufferDescription.DepthEnable = true;
 	m_DepthStencilBufferDescription.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	m_DepthStencilBufferDescription.DepthFunc = D3D11_COMPARISON_LESS;
-	m_DepthStencilBufferDescription.StencilEnable = TRUE;
+	m_DepthStencilBufferDescription.StencilEnable = true;
 	m_DepthStencilBufferDescription.StencilReadMask = 0xFF;
 	m_DepthStencilBufferDescription.StencilWriteMask = 0xFF;
 	// Stencil operations if pixel is front-facing.
@@ -209,7 +214,7 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	
 
 	//DXGI_FORMAT_D32_FLOAT_S8X24_UINT
-	 m_DepthStencilViewDesc = {};
+	ZeroMemory(&m_DepthStencilViewDesc, sizeof(m_DepthStencilViewDesc));
 	m_DepthStencilViewDesc.Format = m_DepthDesc.Format;
 	m_DepthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	m_DepthStencilViewDesc.Texture2D.MipSlice = 0;
@@ -219,8 +224,8 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	{
 		TRACE(L"ASDSA");
 	}
-
 	m_DeviceContext.Get()->OMSetRenderTargets(1, m_RenderTarget.GetAddressOf(), m_DepthStencilView.Get());
+
 	m_Rasterizer = {};
 	m_Rasterizer.FillMode = D3D11_FILL_SOLID;
 	m_Rasterizer.CullMode = D3D11_CULL_NONE;
@@ -229,22 +234,27 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	m_Rasterizer.SlopeScaledDepthBias = 0.0f;
 	m_Rasterizer.DepthBiasClamp = 0.0f;
 	m_Rasterizer.DepthClipEnable = true;
-	m_Rasterizer.ScissorEnable = true;
+	m_Rasterizer.ScissorEnable = false;
 	m_Rasterizer.MultisampleEnable = false;
 	m_Rasterizer.AntialiasedLineEnable = false;
 
-	m_Device.Get()->CreateRasterizerState(&m_Rasterizer, m_RasterizerState.GetAddressOf());
+	result = m_Device.Get()->CreateRasterizerState(&m_Rasterizer, m_RasterizerState.GetAddressOf());
+	if (FAILED(result))
+	{
+		TRACE(L"failed");
+	}
+
 	m_DeviceContext.Get()->RSSetState(m_RasterizerState.Get());
 
-	m_Viewport = {};
-	m_Viewport.Width = static_cast<FLOAT>(m_DepthDesc.Width);
-	m_Viewport.Height = static_cast<FLOAT>(m_DepthDesc.Height);
+	
+	m_Viewport.Width = static_cast<float>(m_DepthDesc.Width);
+	m_Viewport.Height = static_cast<float>(m_DepthDesc.Height);
 	m_Viewport.MinDepth = 0.0f;
 	m_Viewport.MaxDepth = 1.0f;
 	m_Viewport.TopLeftX = 0;
 	m_Viewport.TopLeftY = 0;
 
-	m_DeviceContext.Get()->RSSetViewports(1, &m_Viewport);
+	m_DeviceContext->RSSetViewports(1, &m_Viewport);
 	//attempt to break this up even more and SETUP
 	TRACE(L"Resource Initialization Finished \n");
 }

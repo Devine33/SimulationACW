@@ -8,8 +8,7 @@
 #include <fstream>
 using namespace DirectX;
 using namespace std;
-#pragma comment (lib, "d3d11.lib")
-#pragma comment(lib,"d3dcompiler.lib")
+
 class ColourShader
 {
 public:
@@ -19,6 +18,7 @@ public:
 	bool Initialize(ID3D11Device* device);
 	void Shutdown();
 	bool Render(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
+
 private:
 	struct MatrixBufferType
 	{
@@ -27,16 +27,18 @@ private:
 		XMMATRIX projection;
 	};
 
-	bool InitializeShader(ID3D11Device* device,WCHAR* vsFilename, WCHAR* psFilename);
+	bool InitializeShader(ID3D11Device* device,WCHAR* vsfilename, WCHAR* psfilename);
 	void ShutdownShader();
-	/*void OutputShaderErrorMessage(ID3D10Blob*, HWND, WCHAR*);*/
 
 	bool SetShaderParameters(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
 	void RenderShader(ID3D11DeviceContext* deviceContext, int indexCount);
+
 
 	ID3D11VertexShader* m_vertexShader;
 	ID3D11PixelShader* m_pixelShader;
 	ID3D11InputLayout* m_layout;
 	ID3D11Buffer* m_matrixBuffer;
+
+
 };
 

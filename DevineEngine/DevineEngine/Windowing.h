@@ -35,8 +35,11 @@ private:
 	bool m_Done, m_Result;
 	HWND m_Hwnd;
 	
-	int screenWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
-	int screenHeight = GetSystemMetrics(SM_CYSCREEN) / 2;
+	/*int screenWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
+	int screenHeight = GetSystemMetrics(SM_CYSCREEN) / 2;*/
+
+	int screenWidth = 800;
+	int screenHeight = 600;
 };
 static Windowing* ApplicationHandle = nullptr;
 

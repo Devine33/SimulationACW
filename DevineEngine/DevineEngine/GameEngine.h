@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Triangle.h"
 #include "ColourShader.h"
+
 class GameEngine
 {
 public:
@@ -25,7 +26,7 @@ private:
 	Time* m_Timer;
 	Camera* m_Camera;
 	Triangle* m_Triangle;
-	ColourShader* m_Colour;
+	ColourShader* m_ColourShader;
 };
 
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

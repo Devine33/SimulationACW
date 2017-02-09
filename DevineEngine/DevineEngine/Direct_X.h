@@ -8,8 +8,9 @@
 //what can i abstract from this?
 //feature list of D3Dmodes e.g. create feature list
 //Will Initialize Direct_X and Associate with Rendering
-#pragma comment (lib, "d3d11.lib")
+#pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 class Direct_X
 {
 
@@ -52,14 +53,17 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>					m_SwapChain;
 	Microsoft::WRL::ComPtr<ID3D11Device>					m_Device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>				m_DeviceContext;
+	Microsoft::WRL::ComPtr<IDXGIAdapter>					M_Adapter;
 #pragma endregion 
 
 #pragma region Resources
-	Microsoft::WRL::ComPtr < ID3D11RenderTargetView>		m_RenderTarget;
 	D3D11_RENDER_TARGET_VIEW_DESC							m_RenderTargetViewDesc;
+	Microsoft::WRL::ComPtr < ID3D11RenderTargetView>		m_RenderTarget;
+
 	Microsoft::WRL::ComPtr < ID3D11Texture2D>				m_SwapChainBuffer;
-	D3D11_TEXTURE2D_DESC									m_DepthDesc;
+
 #pragma region Depth
+	D3D11_TEXTURE2D_DESC									m_DepthDesc;
 	Microsoft::WRL::ComPtr < ID3D11Texture2D>				m_DepthStencilBuffer;
 	D3D11_DEPTH_STENCIL_DESC								m_DepthStencilBufferDescription;
 	Microsoft::WRL::ComPtr <ID3D11DepthStencilState>		m_DepthStencilState;
@@ -72,6 +76,7 @@ private:
 	Microsoft::WRL::ComPtr <ID3D11RasterizerState>			m_RasterizerState;
 #pragma endregion 
 #pragma region ViewPort
+
 	D3D11_VIEWPORT											m_Viewport;
 #pragma endregion 
 	

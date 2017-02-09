@@ -14,6 +14,8 @@ ColourShader::~ColourShader()
 bool ColourShader::Initialize(ID3D11Device* device)
 {
 	bool result;
+
+
 	// Initialize the vertex and pixel shaders.
 	result = InitializeShader(device,L"Shaders/color.vs", L"Shaders/color.ps");
 	if (!result)
@@ -61,41 +63,10 @@ bool ColourShader::InitializeShader(ID3D11Device* device, WCHAR* vsFilename, WCH
 	// Compile the vertex shader code.
 	result = D3DCompileFromFile(vsFilename, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0,
 		&vertexShaderBuffer, &errorMessage);
-	if (FAILED(result))
-	{
-		//// If the shader failed to compile it should have writen something to the error message.
-		//if (errorMessage)
-		//{
-		//	OutputShaderErrorMessage(errorMessage, hwnd, vsFilename);
-		//}
-		// If there was  nothing in the error message then it simply could not find the shader file itself.
-		/*else
-		{
-			MessageBoxW(,vsFilename, L"Missing Shader File", MB_OK);
-		}*/
-
-		return false;
-	}
 
 	// Compile the pixel shader code.
 	result = D3DCompileFromFile(psFilename, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0,
 		&pixelShaderBuffer, &errorMessage);
-	if (FAILED(result))
-	{
-		//// If the shader failed to compile it should have writen something to the error message.
-		//if (errorMessage)
-		//{
-		//	OutputShaderErrorMessage(errorMessage, hwnd, psFilename);
-		//}
-		//// If there was nothing in the error message then it simply could not find the file itself.
-		//else
-		//{
-		//	MessageBox(hwnd, psFilename, L"Missing Shader File", MB_OK);
-		//}
-
-		return false;
-	}
-
 	// Create the vertex shader from the buffer.
 	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
 	if (FAILED(result))
@@ -171,6 +142,7 @@ bool ColourShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, XMMAT
 	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
 
+
 	// Transpose the matrices to prepare them for the shader.
 	worldMatrix = XMMatrixTranspose(worldMatrix);
 	viewMatrix = XMMatrixTranspose(viewMatrix);
@@ -184,7 +156,7 @@ bool ColourShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, XMMAT
 	}
 
 	// Get a pointer to the data in the constant buffer.
-	dataPtr = static_cast<MatrixBufferType*>(mappedResource.pData);
+	dataPtr = (MatrixBufferType*)mappedResource.pData;
 
 	// Copy the matrices into the constant buffer.
 	dataPtr->world = worldMatrix;
@@ -214,4 +186,6 @@ void ColourShader::RenderShader(ID3D11DeviceContext* deviceContext, int indexCou
 
 	// Render the triangle.
 	deviceContext->DrawIndexed(indexCount, 0, 0);
+
+	return;
 }

@@ -48,10 +48,10 @@
     <ClCompile Include="Direct_X.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ColourShader.cpp">
+    <ClCompile Include="Triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Triangle.cpp">
+    <ClCompile Include="ColourShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,10 +86,16 @@
     <ClInclude Include="Direct_X.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ColourShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Triangle.h">
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

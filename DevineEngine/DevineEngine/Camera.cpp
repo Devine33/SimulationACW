@@ -25,7 +25,7 @@ void Camera::SetRotation(const float x, const float y, const float z)
 
 void Camera::CameraSetup(const float screenheight, const float screenwidth)
 {
-	screenaspect = screenheight / screenwidth;
+	screenaspect = screenwidth / screenheight;
 	screenHeight = screenheight;
 	ScreenWidth = screenwidth;
 }
@@ -67,7 +67,7 @@ void Camera::Render()
 	float fieldOfView;
 	// Translate the rotated camera position to the location of the viewer.
 
-	fieldOfView = static_cast<float>(DirectX::XM_PI) / 4.0f;
+	fieldOfView = DirectX::XM_PI / 4.0f;
 	/*screenaspect = height / width;*/
 	// Create the projection matrix for 3D rendering.
 	m_worldMatrix = DirectX::XMMatrixIdentity();
