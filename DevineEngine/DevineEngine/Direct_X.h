@@ -72,7 +72,7 @@ private:
 #pragma endregion 
 
 #pragma region Rasterizer
-	D3D11_RASTERIZER_DESC m_Rasterizer;
+	D3D11_RASTERIZER_DESC									m_Rasterizer;
 	Microsoft::WRL::ComPtr <ID3D11RasterizerState>			m_RasterizerState;
 #pragma endregion 
 #pragma region ViewPort

@@ -2,8 +2,9 @@
 //base for drawing objects 
 class Renderer
 {
+	
 public:
-	Renderer();
-	~Renderer();
+	virtual ~Renderer();
+	virtual void Draw() = 0;
 };
 

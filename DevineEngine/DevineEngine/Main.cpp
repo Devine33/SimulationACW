@@ -18,7 +18,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	G->RenderLoop();
 	/*t.EndQuery();*/
 
-	/*t.GetElapsed();*/
+	/*t.Elapsed();*/
 	/*X->BeginScene();*/
 	TRACE(L"WinMain \n");
 	//std::unique_ptr<Windowing> wind(new Windowing);	

@@ -23,7 +23,11 @@ private:
 	InputHandler* m_Handler;
 #pragma endregion 
 	Direct_X* m_DirectX;
+
 	Time* m_Timer;
+
+	//covers overall running times and such
+	Time* m_OverallTimer;
 	Camera* m_Camera;
 	Triangle* m_Triangle;
 	ColourShader* m_ColourShader;

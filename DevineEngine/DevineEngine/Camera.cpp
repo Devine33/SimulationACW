@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera()
+Camera::Camera(): screenaspect(0), m_positionX(0), m_positionY(0), m_positionZ(0), m_rotationX(0), m_rotationY(0), m_rotationZ(0), screenHeight(0), ScreenWidth(0), yaw(0), pitch(0), roll(0), radians(0)
 {
 }
 

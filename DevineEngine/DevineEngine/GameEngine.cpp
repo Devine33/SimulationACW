@@ -6,6 +6,7 @@ GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr), m
 {
 	m_DirectX = new Direct_X;
 	m_Timer = new Time;
+	m_OverallTimer = new Time;
 	m_Camera = new Camera;
 	if(!m_Camera)
 	{
@@ -62,10 +63,10 @@ void GameEngine::RenderLoop()
 
 		// Loop until there is a quit message from the window or the user.
 		m_Done = false;
-		m_Timer->StartTime();
+		m_OverallTimer->StartTime();
 		while (!m_Done)
 		{
-			m_Timer->GetTimeNow();
+			m_OverallTimer->TotalRunningTime();
 			// Handle the windows messages.
 			if (PeekMessage(&m_Msg, nullptr, 0, 0, PM_REMOVE))
 			{
@@ -80,13 +81,16 @@ void GameEngine::RenderLoop()
 					TRACE(std::to_wstring(m_Msg.wParam).append(L"\n").c_str());
 					break;
 				case WM_QUIT:
+					m_OverallTimer->EndTime();
+					m_OverallTimer->Elapsed();
 					m_Done = true;
-					m_Timer->EndTime();
-					m_Timer->GetElapsed();
+					
 				default:
-					{
+					{			
+						m_Timer->StartTime();
 						Draw();
-						
+						m_Timer->EndTime();
+						m_Timer->DeltaTime();
 					}
 			
 				}		
@@ -103,10 +107,11 @@ void GameEngine::Draw() const
 	m_Camera->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Camera->GetProjectionMatrix(projectionMatrix);
-
+	
+	XMMATRIX world = XMMatrixTranslation(0, 0, 0) * XMMatrixRotationRollPitchYaw(0, 0, m_OverallTimer->GetTotalRunningTime());
 	m_Triangle->Render(m_DirectX->GetDeviceContext());
 
-	result = m_ColourShader->Render(m_DirectX->GetDeviceContext(), m_Triangle->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	result = m_ColourShader->Render(m_DirectX->GetDeviceContext(), m_Triangle->GetIndexCount(), world, viewMatrix, projectionMatrix);
 	if (!result)
 	{
 		TRACE(L"FAILED SHADER");

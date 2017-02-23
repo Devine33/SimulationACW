@@ -98,8 +98,20 @@
     <ClInclude Include="Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\RayTracerVS.hlsl" />
+    <FxCompile Include="Shaders\RayTracer.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DevineEngine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

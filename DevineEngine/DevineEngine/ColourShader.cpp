@@ -53,7 +53,7 @@ bool ColourShader::InitializeShader(ID3D11Device* device, WCHAR* vsFilename, WCH
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
 	unsigned int numElements;
 	D3D11_BUFFER_DESC matrixBufferDesc;
-
+	
 
 	// Initialize the pointers this function will use to null.
 	errorMessage = 0;

@@ -52,24 +52,44 @@ void Time::StartTime()
 void Time::EndTime()
 {
 	End = std::chrono::high_resolution_clock::now();
+
 	//OutputDebugString(L" \n End Time \n");
 	/*OutputDebugString(std::to_wstring(End.time_since_epoch().count()).c_str());
 	OutputDebugString(L"\n");*/
-	
 }
-
-void Time::GetElapsed()
+//gets the elapsed time the application is running for
+void Time::Elapsed()
 {
 	elapsed_seconds = End - Start;
 	OutputDebugString(L" \n Total Elapsed Time \n");
 	OutputDebugString(std::to_wstring(elapsed_seconds.count()).c_str());
-	
+}
+//returns the total time the application has been running for
+void Time::TotalRunningTime()
+{
+	Current = std::chrono::high_resolution_clock::now() - Start;
+	OutputDebugString(L" \n Total Running Time \n");
+	OutputDebugString(std::to_wstring(Current.count()).c_str());
 }
 
-void Time::GetTimeNow()
+void Time::DeltaTime()
 {
-	Current = std::chrono::high_resolution_clock::now() - Start ;
-	OutputDebugString(L" \n Current Running Time \n");
-	OutputDebugString(std::to_wstring(Current.count()).c_str());
-	
+	/*auto elapsed = (End - Start) / 1000;*/
+	auto elapsed = (End - Start); 
+	//sets delta time
+	dt = elapsed;
+	OutputDebugString(L" \n DELTATIME \n");
+	OutputDebugString(std::to_wstring(dt.count()).c_str());
+	End = Start;
+}
+//returns the deltatime as a float
+float Time::GetDeltaTime() const
+{
+	return dt.count();
+}
+
+float Time::GetTotalRunningTime() const
+{
+	float total = Current.count();
+	return total;
 }
