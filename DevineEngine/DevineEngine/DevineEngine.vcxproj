@@ -152,12 +152,14 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColourShader.cpp" />
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="CShader.cpp" />
     <ClCompile Include="Direct_X.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="KeyDownCommand.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Trace.cpp" />
     <ClCompile Include="Triangle.cpp" />
@@ -167,11 +169,13 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ColourShader.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="CShader.h" />
     <ClInclude Include="Direct_X.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="KeyDownCommand.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
@@ -193,6 +197,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RayTracing</EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Shaders\RayTracerVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -201,6 +206,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RenderSceneVS_RT</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RenderSceneVS_RT</EntryPointName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

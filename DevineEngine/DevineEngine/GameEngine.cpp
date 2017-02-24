@@ -6,11 +6,11 @@ GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr), m
 {
 	m_DirectX = new Direct_X;
 	m_Timer = new Time;
-<<<<<<< HEAD
+
 	m_OverallTimer = new Time;
-=======
+
 	//SORT THIS LATER 
->>>>>>> origin/master
+
 	m_Camera = new Camera;
 	if(!m_Camera)
 	{
@@ -112,7 +112,7 @@ void GameEngine::Draw() const
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Camera->GetProjectionMatrix(projectionMatrix);
 	
-	XMMATRIX world = XMMatrixTranslation(0, 0, 0) * XMMatrixRotationRollPitchYaw(0, 0, m_OverallTimer->GetTotalRunningTime());
+	XMMATRIX world = XMMatrixTranslation(0, 0, 0) * XMMatrixRotationRollPitchYaw(0, 0, m_Timer->GetDeltaTime());
 	m_Triangle->Render(m_DirectX->GetDeviceContext());
 
 	result = m_ColourShader->Render(m_DirectX->GetDeviceContext(), m_Triangle->GetIndexCount(), world, viewMatrix, projectionMatrix);

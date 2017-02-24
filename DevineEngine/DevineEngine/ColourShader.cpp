@@ -26,6 +26,7 @@ bool ColourShader::Initialize(ID3D11Device* device)
 	return true;
 }
 
+ 
 bool ColourShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix)
 {
 	bool result;
@@ -44,6 +45,7 @@ bool ColourShader::Render(ID3D11DeviceContext* deviceContext, int indexCount, co
 	return true;
 }
 
+//step 1
 bool ColourShader::InitializeShader(ID3D11Device* device, WCHAR* vsFilename, WCHAR* psFilename)
 {
 	HRESULT result;
@@ -62,7 +64,7 @@ bool ColourShader::InitializeShader(ID3D11Device* device, WCHAR* vsFilename, WCH
 
 	// Compile the vertex shader code.
 	result = D3DCompileFromFile(vsFilename, NULL, NULL, "ColorVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0,
-		&vertexShaderBuffer, &errorMessage);
+		&vertexShaderBuffer, nullptr);
 
 	// Compile the pixel shader code.
 	result = D3DCompileFromFile(psFilename, NULL, NULL, "ColorPixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0,
@@ -134,7 +136,7 @@ bool ColourShader::InitializeShader(ID3D11Device* device, WCHAR* vsFilename, WCH
 
 	return true;
 }
-
+//step 3 
 bool ColourShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX& worldMatrixin, const XMMATRIX& viewMatrixin, const XMMATRIX& projectionMatrixin) const
 {
 	HRESULT result;
@@ -177,7 +179,7 @@ bool ColourShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const
 
 	return true;
 }
-
+//Step 3 
 void ColourShader::RenderShader(ID3D11DeviceContext* deviceContext, int indexCount)
 {
 	// Set the vertex input layout.

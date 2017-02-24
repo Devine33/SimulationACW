@@ -75,21 +75,23 @@ void Time::TotalRunningTime()
 void Time::DeltaTime()
 {
 	/*auto elapsed = (End - Start) / 1000;*/
-	auto elapsed = (End - Start); 
+	auto elapsed = (End - Start) / 1000; 
 	//sets delta time
 	dt = elapsed;
 	OutputDebugString(L" \n DELTATIME \n");
 	OutputDebugString(std::to_wstring(dt.count()).c_str());
+	OutputDebugString(std::to_wstring(elapsed.count()).c_str());
 	End = Start;
 }
 //returns the deltatime as a float
 float Time::GetDeltaTime() const
 {
-	return dt.count();
+	//returns a normal value 
+	return std::chrono::high_resolution_clock::now().time_since_epoch().count() - Start.time_since_epoch().count();
 }
 
 float Time::GetTotalRunningTime() const
 {
-	float total = Current.count();
+	double total = Current.count();
 	return total;
 }
