@@ -9,121 +9,153 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{47df07a9-462c-412a-98d8-204d70eddab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine">
+      <UniqueIdentifier>{686118a0-0e9e-4a01-b7e3-f39081a080bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{363fa963-998c-40af-9851-a212641b958d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Configuration">
+      <UniqueIdentifier>{4c4195a9-e361-4660-b75d-ca1c1bb26c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{51adb82e-d495-419f-bd12-094a100d54c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{095a9c55-b65e-41a8-bb2a-4e449b4150af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Base">
+      <UniqueIdentifier>{71769a60-bceb-4065-a9a3-8972a5c57268}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Shaders">
+      <UniqueIdentifier>{de7ceed8-9c47-451d-9425-84a2274dd545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Shaders\ColourShader">
+      <UniqueIdentifier>{4452a5e2-a24f-400d-9d34-dfb82c715b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Shaders\Concrete">
+      <UniqueIdentifier>{19964ad9-55de-49ee-ae39-fbf77a28ecb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Primitives">
+      <UniqueIdentifier>{207e639f-afd4-4758-98cc-ecbd02433b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Primitives\Triangle">
+      <UniqueIdentifier>{02b44d0f-d392-4963-bdb3-2e556a52a94d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Shaders\Base">
+      <UniqueIdentifier>{bec13a6b-1c0a-4a84-bf5d-1dd46c586440}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tracer">
+      <UniqueIdentifier>{06ece579-da63-4e7e-a836-87e5b7b2ca6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{0230994a-5592-4231-9dd7-5fbf890afc76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{9968c2e1-73c0-4776-a2b5-66993da02a81}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Windowing.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Camera\Camera.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Configuration\Parser.cpp">
+      <Filter>Configuration</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Window\Windowing.cpp">
+      <Filter>Window</Filter>
     </ClCompile>
-    <ClCompile Include="KeyDownCommand.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Tracer\Trace.cpp">
+      <Filter>Tracer</Filter>
     </ClCompile>
-    <ClCompile Include="Trace.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Timer\Time.cpp">
+      <Filter>Timer</Filter>
     </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Input\Command.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngine.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Input\Input.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Input\InputHandler.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Input\KeyDownCommand.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="Direct_X.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DirectX\Direct_X.cpp">
+      <Filter>DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="Triangle.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GameEngine\GameEngine.cpp">
+      <Filter>GameEngine</Filter>
     </ClCompile>
-    <ClCompile Include="ColourShader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Graphics\Primitives\Triangle\Triangle.cpp">
+      <Filter>Graphics\Primitives\Triangle</Filter>
     </ClCompile>
-    <ClCompile Include="CShader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Graphics\Shaders\Concrete\CShader.cpp">
+      <Filter>Graphics\Shaders\Concrete</Filter>
     </ClCompile>
-    <ClCompile Include="Parser.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Graphics\Shaders\ColourShader\ColourShader.cpp">
+      <Filter>Graphics\Shaders\ColourShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Windowing.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Camera\Camera.h">
+      <Filter>Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Configuration\Parser.h">
+      <Filter>Configuration</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Window\Windowing.h">
+      <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="KeyDownCommand.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Tracer\Trace.hpp">
+      <Filter>Tracer</Filter>
     </ClInclude>
-    <ClInclude Include="Trace.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Timer\Time.h">
+      <Filter>Timer</Filter>
     </ClInclude>
-    <ClInclude Include="InputHandler.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Input\Command.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngine.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Input\Input.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Input\InputHandler.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Input\KeyDownCommand.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="Direct_X.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="DirectX\Direct_X.h">
+      <Filter>DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Triangle.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GameEngine\GameEngine.h">
+      <Filter>GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="ColourShader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Base\Renderer.h">
+      <Filter>Graphics\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Primitives\Triangle\Triangle.h">
+      <Filter>Graphics\Primitives\Triangle</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Shaders\Base\Shader.h">
+      <Filter>Graphics\Shaders\Base</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Shaders\Concrete\CShader.h">
+      <Filter>Graphics\Shaders\Concrete</Filter>
     </ClInclude>
-    <ClInclude Include="CShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Parser.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Graphics\Shaders\ColourShader\ColourShader.h">
+      <Filter>Graphics\Shaders\ColourShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Shaders\RayTracerVS.hlsl" />
-    <FxCompile Include="Shaders\RayTracer.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="DevineEngine.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

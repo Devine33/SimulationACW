@@ -1,11 +1,14 @@
 #pragma once
 #include <Windows.h>
-#include "Windowing.h"
-#include "Direct_X.h"
-#include "Time.h"
-#include "Camera.h"
-#include "Triangle.h"
-#include "ColourShader.h"
+#include "../Input/Input.h"
+#include "../Input/InputHandler.h"
+#include "../DirectX/Direct_X.h"
+#include "../Timer/Time.h"
+#include "../Camera/Camera.h"
+#include "../Graphics/Primitives/Triangle/Triangle.h"
+#include "../Graphics/Shaders/ColourShader/ColourShader.h"
+
+class KeyDownCommand;
 
 class GameEngine
 {

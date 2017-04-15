@@ -1,6 +1,6 @@
 #include "Windowing.h"
-#include "Trace.hpp"
 #include <string>
+#include "../Tracer/Trace.hpp"
 // Step 4: the Window Procedure COULD  POSSIBLE MOVE THIS TO GAME ENGINE but works just fine here :D
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {

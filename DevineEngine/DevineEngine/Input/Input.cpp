@@ -1,6 +1,7 @@
 #include "Input.h"
 #include <iostream>
-#include "Trace.hpp"
+#include "../Tracer/Trace.hpp"
+
 Input::Input(): m_keys{true}
 {
 }

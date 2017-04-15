@@ -1,6 +1,9 @@
 #include "GameEngine.h"
+#include "../Input/KeyDownCommand.h"
+#include "../Tracer/Trace.hpp"
 #include <string>
-#include "Trace.hpp"
+
+
 
 GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr), m_Handler(nullptr)
 {

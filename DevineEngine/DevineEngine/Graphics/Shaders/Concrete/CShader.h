@@ -1,6 +1,6 @@
 #pragma once
-#include "Shader.h"
-#include "ColourShader.h"
+#include "../Base/Shader.h"
+#include <d3d11.h>
 
 class CShader : Shader
 {

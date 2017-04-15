@@ -1,5 +1,5 @@
 #include "InputHandler.h"
-#include "Trace.hpp"
+#include "../Tracer/Trace.hpp"
 
 
 InputHandler::InputHandler(): m_Cmd(nullptr)

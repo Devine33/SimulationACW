@@ -1,5 +1,5 @@
 #include "KeyDownCommand.h"
-#include "Trace.hpp"
+#include "../Tracer/Trace.hpp"
 
 KeyDownCommand::KeyDownCommand(Input* input): m_Input(nullptr)
 {

@@ -1,6 +1,6 @@
 #include "Direct_X.h"
-#include "Trace.hpp"
 #include <string>
+#include "../Tracer/Trace.hpp"
 
 
 Direct_X::Direct_X(): m_Factory(nullptr), m_Adapter(nullptr), m_AdapterOutput(nullptr), m_DisplayModeList(nullptr), m_NumModes(0), i(0), m_Numerator(0), m_Denominator(0), m_FeatureLevel()

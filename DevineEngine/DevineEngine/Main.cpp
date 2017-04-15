@@ -1,9 +1,8 @@
-#include <windows.h>  
-#include "Direct_X.h"
+#include <windows.h>
 #include "Time.h"
 #include <memory>
-#include "Trace.hpp"
-#include "GameEngine.h"
+#include "GameEngine/GameEngine.h"
+#include "Tracer/Trace.hpp"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)

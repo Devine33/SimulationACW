@@ -1,9 +1,5 @@
 #pragma once
 #include <windows.h>  
-#include "Input.h"
-#include "KeyDownCommand.h"
-#include "InputHandler.h"
-
 #define WIN32_LEAN_AND_MEAN
 class Windowing
 {
