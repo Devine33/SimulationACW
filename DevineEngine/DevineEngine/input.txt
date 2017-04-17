@@ -1,0 +1,73 @@
+Background= (0,0,80)
+
+Camera {
+	FieldOfView= 60
+}
+
+Screen {
+	Width= 1024
+	Height= 1024
+}
+
+Scene {
+	Sphere {
+		Color= (255, 0, 0)
+		Centre= [0, 0, 100]
+		Radius= 40
+	}
+
+	Sphere {
+		Color= (0, 0, 255)
+        Centre= [10, 0, 50]
+        Radius= 5
+	}
+
+	Sphere {
+		Color= (0, 0, 255)
+        Centre= [-10, 0, 50]
+        Radius= 5
+	}
+
+	Plane {
+		Color= (0, 255, 0)
+        Point= [0, -10, 0]
+        Normal= [0, 1, 0]
+	}
+}
+
+Scene {
+	Erosion {
+		Plane {
+			Color= (0, 200, 0)
+		    Point= [0, 4, 50]
+			Normal= [0, -1, 0.5]
+		}
+		Sphere {
+			Color= (0, 0, 200)
+			Centre= [3, -5, 50]
+			Radius= 12
+		}
+	}
+}
+
+Scene {
+	Erosion {
+		Sphere {
+			Color= (200, 0, 0)
+			Centre= [-3, -5, 46]
+			Radius= 8
+		}
+		Erosion {
+			Plane {
+				Color= (0, 200, 0)
+			    Point= [0, 4, 50]
+				Normal= [0, -1, 0.5]
+			}
+			Sphere {
+				Color= (0, 0, 200)
+				Centre= [3, -5, 50]
+				Radius= 12
+			}
+		}
+	}
+}

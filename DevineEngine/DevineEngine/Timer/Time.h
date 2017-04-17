@@ -17,10 +17,15 @@ public:
 	void DeltaTime();
 	float GetDeltaTime() const;
 	float GetTotalRunningTime() const;
+	double GetTime();
+	double CalcFrameRate();
 private:
 	std::chrono::time_point<std::chrono::high_resolution_clock> Start, End;
 	std::chrono::duration<double> elapsed_seconds,Current,dt;
-	
+	double DT = 0;
+
+	// This is the current time in seconds
+	double CurrentTime = 0;
 	LARGE_INTEGER li;
 	/*float dt;*/
 	double freq = 0.0;

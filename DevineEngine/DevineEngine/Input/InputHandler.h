@@ -8,6 +8,7 @@ public:
 	~InputHandler();
 	void SetCommand(Command* cmd);
 	void KeyPress() const;
+	void MouseClick() const;
 private:
 	Command* m_Cmd;
 };

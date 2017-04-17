@@ -75,14 +75,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>.\Bin</OutDir>
+    <OutDir>.\Bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>.\Bin</OutDir>
+    <OutDir>.\Bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -152,7 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
-    <ClCompile Include="Graphics\Shaders\ColourShader\ColourShader.cpp" />
+    <ClCompile Include="Graphics\Shaders\Colour\ColourShader.cpp" />
     <ClCompile Include="Input\Command.cpp" />
     <ClCompile Include="Graphics\Shaders\Concrete\CShader.cpp" />
     <ClCompile Include="DirectX\Direct_X.cpp" />
@@ -162,14 +162,16 @@
     <ClCompile Include="Input\KeyDownCommand.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Configuration\Parser.cpp" />
+    <ClCompile Include="Graphics\Primitives\Sphere\Sphere.cpp" />
     <ClCompile Include="Timer\Time.cpp" />
     <ClCompile Include="Tracer\Trace.cpp" />
     <ClCompile Include="Graphics\Primitives\Triangle\Triangle.cpp" />
+    <ClCompile Include="GUI\UI.cpp" />
     <ClCompile Include="Window\Windowing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h" />
-    <ClInclude Include="Graphics\Shaders\ColourShader\ColourShader.h" />
+    <ClInclude Include="Graphics\Shaders\Colour\ColourShader.h" />
     <ClInclude Include="Input\Command.h" />
     <ClInclude Include="Graphics\Shaders\Concrete\CShader.h" />
     <ClInclude Include="DirectX\Direct_X.h" />
@@ -180,9 +182,11 @@
     <ClInclude Include="Configuration\Parser.h" />
     <ClInclude Include="Graphics\Base\Renderer.h" />
     <ClInclude Include="Graphics\Shaders\Base\Shader.h" />
+    <ClInclude Include="Graphics\Primitives\Sphere\Sphere.h" />
     <ClInclude Include="Timer\Time.h" />
     <ClInclude Include="Tracer\Trace.hpp" />
     <ClInclude Include="Graphics\Primitives\Triangle\Triangle.h" />
+    <ClInclude Include="GUI\UI.h" />
     <ClInclude Include="Window\Windowing.h" />
   </ItemGroup>
   <ItemGroup>

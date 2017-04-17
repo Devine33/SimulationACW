@@ -1,6 +1,7 @@
 #include "Direct_X.h"
 #include <string>
 #include "../Tracer/Trace.hpp"
+#include <AntTweakBar.h>
 
 
 Direct_X::Direct_X(): m_Factory(nullptr), m_Adapter(nullptr), m_AdapterOutput(nullptr), m_DisplayModeList(nullptr), m_NumModes(0), i(0), m_Numerator(0), m_Denominator(0), m_FeatureLevel()
@@ -19,6 +20,14 @@ void Direct_X::StartWindowing(int cmd)
 	InitializeFactory(window.GetScreenWidth(), window.GetScreenHeight());
 	InitializeSwapChain(window.GetScreenWidth(), window.GetScreenHeight(), window.GetHandle());
 	InitializeResources(window.GetScreenWidth(), window.GetScreenHeight());
+	if (!TwInit(TW_DIRECT3D11,GetDevice()))
+	{
+		MessageBoxA(window.GetHandle(), TwGetLastError(), "AntTweakBar initialization failed", MB_OK | MB_ICONERROR);
+	}
+	TwBar *bar = TwNewBar("TweakBar");
+	TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar into a DirectX11 application.' "); // Message added to the help
+	int barSize[2] = { 224, 320 };
+	TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	BeginScene();
 }
 

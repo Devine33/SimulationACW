@@ -7,8 +7,6 @@
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
-
-
 	/*t.StartQuery();*/
 	std::unique_ptr<GameEngine> G(new GameEngine);
 

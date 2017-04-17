@@ -6,8 +6,10 @@
 #include "../Timer/Time.h"
 #include "../Camera/Camera.h"
 #include "../Graphics/Primitives/Triangle/Triangle.h"
-#include "../Graphics/Shaders/ColourShader/ColourShader.h"
-
+#include "../Graphics/Primitives/Sphere/Sphere.h"
+#include "../Graphics/Shaders/Colour/ColourShader.h"
+#include "../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/GeometricPrimitive.h"
+#include "../GUI/UI.h"
 class KeyDownCommand;
 
 class GameEngine
@@ -15,7 +17,7 @@ class GameEngine
 public:
 	GameEngine();
 	~GameEngine();
-	void InitializeComponents(int cmd) const;
+	void InitializeComponents(int cmd);
 	void RenderLoop();
 	void Draw() const;
 private:
@@ -33,7 +35,11 @@ private:
 	Time* m_OverallTimer;
 	Camera* m_Camera;
 	Triangle* m_Triangle;
+	std::unique_ptr<GeometricPrimitive> m_shape;
+	Sphere* m_Sphere;
 	ColourShader* m_ColourShader;
+	//get UI CLASS WORKING.. LATERR
+	UI* m_Ui;
 };
 
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

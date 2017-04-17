@@ -21,3 +21,9 @@ void InputHandler::KeyPress() const
 	TRACE(L"Key Pressed \n");
 	m_Cmd->Execute();
 }
+
+void InputHandler::MouseClick() const
+{
+	TRACE(L"Clicking \n");
+	m_Cmd->Execute();
+}

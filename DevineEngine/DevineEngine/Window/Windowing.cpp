@@ -1,9 +1,13 @@
 #include "Windowing.h"
 #include <string>
 #include "../Tracer/Trace.hpp"
+#include <AntTweakBar.h>
 // Step 4: the Window Procedure COULD  POSSIBLE MOVE THIS TO GAME ENGINE but works just fine here :D
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	if (TwEventWin(hwnd, msg, wParam, lParam))
+		return 0;
+
 	TRACE(L"Windowing::WndProc \n");
 	switch (msg)
 	{
@@ -19,6 +23,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			PostQuitMessage(0);
 		}
+		if(wParam == 82)
+		{
+			TRACE(L"System Reset\n");
+		}
+		break;
+	case WM_LBUTTONDOWN:
+		TRACE(L"Button Clicked\n");
+		break;
 	default:
 		return  DefWindowProc(hwnd, msg, wParam, lParam);
 	}
@@ -36,8 +48,6 @@ Windowing::~Windowing()
 
 bool Windowing::FillWindowStruct()
 {
-	
-
 	TRACE(L"Windowing::FillWindowStruct \n");
 	//Step 1: Registering the Window Class
 	m_Window.cbSize = sizeof(WNDCLASSEX);

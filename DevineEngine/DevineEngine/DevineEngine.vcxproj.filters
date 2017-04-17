@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{47df07a9-462c-412a-98d8-204d70eddab1}</UniqueIdentifier>
     </Filter>
@@ -57,6 +53,18 @@
     <Filter Include="DirectX">
       <UniqueIdentifier>{9968c2e1-73c0-4776-a2b5-66993da02a81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Primitives\Sphere">
+      <UniqueIdentifier>{10a8329d-5a70-4a76-9293-32fe0774b509}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking">
+      <UniqueIdentifier>{adc64b5d-3288-43aa-864d-d17c087dac2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{c155f9ed-5cb4-4cc8-9ddd-bada9739c54b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{9916ae4c-a23f-40a5-97bb-fdd0828f99eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -101,8 +109,14 @@
     <ClCompile Include="Graphics\Shaders\Concrete\CShader.cpp">
       <Filter>Graphics\Shaders\Concrete</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Shaders\ColourShader\ColourShader.cpp">
+    <ClCompile Include="Graphics\Shaders\Colour\ColourShader.cpp">
       <Filter>Graphics\Shaders\ColourShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Primitives\Sphere\Sphere.cpp">
+      <Filter>Graphics\Primitives\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\UI.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -151,8 +165,14 @@
     <ClInclude Include="Graphics\Shaders\Concrete\CShader.h">
       <Filter>Graphics\Shaders\Concrete</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Shaders\ColourShader\ColourShader.h">
+    <ClInclude Include="Graphics\Shaders\Colour\ColourShader.h">
       <Filter>Graphics\Shaders\ColourShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Primitives\Sphere\Sphere.h">
+      <Filter>Graphics\Primitives\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\UI.h">
+      <Filter>GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
