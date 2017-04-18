@@ -19,11 +19,15 @@ public:
 	float GetTotalRunningTime() const;
 	double GetTime();
 	double CalcFrameRate();
+	int getDelta();
+	void anotherDelta();
+	double RetDT();
 private:
 	std::chrono::time_point<std::chrono::high_resolution_clock> Start, End;
 	std::chrono::duration<double> elapsed_seconds,Current,dt;
+	using ms = std::chrono::duration<float, std::milli>;
 	double DT = 0;
-
+	double D_T = 0;
 	// This is the current time in seconds
 	double CurrentTime = 0;
 	LARGE_INTEGER li;

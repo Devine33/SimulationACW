@@ -10,6 +10,7 @@
 #include "../Graphics/Shaders/Colour/ColourShader.h"
 #include "../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/GeometricPrimitive.h"
 #include "../GUI/UI.h"
+#include "../Texture.h"
 class KeyDownCommand;
 
 class GameEngine
@@ -30,8 +31,7 @@ private:
 	Direct_X* m_DirectX;
 
 	Time* m_Timer;
-
-	//covers overall running times and such
+	////covers overall running times and such
 	Time* m_OverallTimer;
 	Camera* m_Camera;
 	Triangle* m_Triangle;
@@ -40,6 +40,7 @@ private:
 	ColourShader* m_ColourShader;
 	//get UI CLASS WORKING.. LATERR
 	UI* m_Ui;
+	Texture* m_Texture;
 };
 
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

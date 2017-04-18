@@ -13,7 +13,7 @@ public:
 	Sphere();
 	~Sphere();
 	void Initialize(ID3D11DeviceContext* context);
-	void Draw(DirectX::XMMATRIX, DirectX::XMMATRIX, DirectX::XMMATRIX) const;
+	void Draw(DirectX::XMMATRIX, DirectX::XMMATRIX, DirectX::XMMATRIX, ID3D11ShaderResourceView* texture) const;
 
 	friend std::istream &operator >> (std::istream &in, Sphere &o) { o.Read(in); return in; }
 private:

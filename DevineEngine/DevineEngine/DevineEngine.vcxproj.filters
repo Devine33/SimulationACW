@@ -65,6 +65,9 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{9916ae4c-a23f-40a5-97bb-fdd0828f99eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Texture">
+      <UniqueIdentifier>{7d13d3c7-a474-41bc-b28a-4e40cac41e57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -117,6 +120,9 @@
     </ClCompile>
     <ClCompile Include="GUI\UI.cpp">
       <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture\Texture.cpp">
+      <Filter>Graphics\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="GUI\UI.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture\Texture.h">
+      <Filter>Graphics\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

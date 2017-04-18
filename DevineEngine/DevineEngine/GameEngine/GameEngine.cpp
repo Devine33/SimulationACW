@@ -4,13 +4,14 @@
 #include "GeometricPrimitive.h"
 #include <string>
 #include <iostream>
+#include <thread>
 
 
 GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr), m_Handler(nullptr)
 {
 	m_DirectX = new Direct_X;
 	m_Timer = new Time;	
-	m_OverallTimer = new Time;
+	//m_OverallTimer = new Time;
 	//SORT THIS LATER 
 	m_Camera = new Camera;
 	if(!m_Camera)
@@ -35,13 +36,14 @@ GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr), m
 	//}
 	//else cout << "Unable to open file";
 	m_Ui = new UI;
+	m_Texture = new Texture;
 }
 
 
 GameEngine::~GameEngine()
 {
 	delete m_DirectX;
-	delete m_Timer;
+	//delete m_Timer;
 	delete m_Camera;
 	delete m_Input;
 	delete m_KeyDown;
@@ -71,6 +73,11 @@ void GameEngine::InitializeComponents(int cmd)
 
 	m_Ui->Initialize(m_DirectX->GetDevice());
 	m_Ui->GetWindowSize(m_DirectX->GetScreenWidth(), m_DirectX->GetScreenHeight());
+	result = m_Texture->Initialize(m_DirectX->GetDevice(), L"../DevineEngine/data/Stone01.dds");
+	if (!result)
+	{
+		TRACE(L"SHADER FAILED");
+	}
 
 	TRACE(L"Initialized");
 
@@ -83,14 +90,12 @@ void GameEngine::RenderLoop()
 		ZeroMemory(&m_Msg, sizeof(MSG));
 		/*std::wstring message = std::to_wstring(m_Msg.wParam).c_str();
 		std::wstring newl = message.append(L"\n").c_str();*/
-		
-		// Loop until there is a quit message from the window or the user.
 		m_Done = false;
-		m_OverallTimer->StartTime();
+		//m_OverallTimer->StartTime();
 		while (!m_Done)
 		{
-			m_OverallTimer->CalcFrameRate();
-			m_OverallTimer->TotalRunningTime();
+			/*m_OverallTimer->CalcFrameRate();
+			m_OverallTimer->TotalRunningTime();*/
 			// Handle the windows messages.
 			if (PeekMessage(&m_Msg, nullptr, 0, 0, PM_REMOVE))
 			{
@@ -105,8 +110,8 @@ void GameEngine::RenderLoop()
 					TRACE(std::to_wstring(m_Msg.wParam).append(L"\n").c_str());
 					break;
 				case WM_QUIT:
-					m_OverallTimer->EndTime();
-					m_OverallTimer->Elapsed();
+					/*m_OverallTimer->EndTime();
+					m_OverallTimer->Elapsed();*/
 					m_Done = true;
 					break;	
 				case WM_LBUTTONDOWN:
@@ -115,11 +120,8 @@ void GameEngine::RenderLoop()
 					m_Handler->MouseClick();
 				default:
 					{		
-						m_Timer->StartTime();
-						Draw();
-						m_Timer->EndTime();
-						m_Timer->DeltaTime();
-						
+					/*m_Timer->getDelta();*/
+					Draw();
 					}				
 				}
 		}
@@ -127,6 +129,9 @@ void GameEngine::RenderLoop()
 
 void GameEngine::Draw() const
 {	
+	
+
+
 	bool result;
 	XMMATRIX worldMatrix, view, projection;
 	m_DirectX->BeginScene();
@@ -136,10 +141,10 @@ void GameEngine::Draw() const
 	m_Camera->GetViewMatrix(view);
 	m_Camera->GetProjectionMatrix(projection);
 	
-	XMMATRIX world = XMMatrixTranslation(0, 0, -m_OverallTimer->GetTotalRunningTime()) * XMMatrixRotationRollPitchYaw(0, 0,0 /*m_Timer->GetDeltaTime()*/);
+	XMMATRIX world = XMMatrixTranslation(0, 0, 0) * XMMatrixRotationRollPitchYaw(0, 0,0 /*m_Timer->GetDeltaTime()*/);
 	//m_Triangle->Render(m_DirectX->GetDeviceContext());
 	//m_shape->Draw(world, viewMatrix, projectionMatrix);
-	m_Sphere->Draw(world, view, projection);
+	m_Sphere->Draw(worldMatrix, view, projection,m_Texture->GetTexture());
 	result = m_ColourShader->Render(m_DirectX->GetDeviceContext(), m_Triangle->GetIndexCount(), worldMatrix, view, projection);
 	if (!result)
 	{

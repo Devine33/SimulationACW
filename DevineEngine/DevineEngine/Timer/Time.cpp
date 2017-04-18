@@ -2,11 +2,10 @@
 #include <Windows.h>
 #include <string>
 #include <iostream>
+#include <thread>
 
-double clockToMilliseconds(clock_t ticks) {
-	// units/(units/time) => time (seconds) * 1000 = milliseconds
-	return (ticks / static_cast<double>(CLOCKS_PER_SEC))*1000.0;
-}
+using namespace std;
+using namespace chrono;
 
 Time::Time(): start(0)
 {
@@ -155,4 +154,49 @@ double Time::CalcFrameRate()
 	// Return the most recent FPS
 	//std::cout << currentFPS << "\n";
 	return currentFPS;
+}
+
+int Time::getDelta()
+{
+	std::cout << "Measurement resolution: " <<
+		duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::duration(1)).count()
+		<< "ns" << std::endl;
+
+	std::cout << "Will now tell thread to sleep for 1ms and measure that in actual time" << std::endl;
+
+	auto start = std::chrono::high_resolution_clock::now();
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+	auto end = std::chrono::high_resolution_clock::now();
+	auto dur = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+
+	std::cout << "Measured time: " << dur.count() << "ns" << std::endl;
+	D_T = std::chrono::duration_cast<std::chrono::nanoseconds>(dur - std::chrono::milliseconds(1)).count();
+	std::cout << "Delta: " <<
+	D_T
+		<< "ns" << std::endl;
+
+	return 0;
+}
+
+void Time::anotherDelta()
+{
+	using steady_clock = std::chrono::steady_clock;
+	using delta_t = std::chrono::milliseconds;
+
+	static_assert(steady_clock::is_steady, "");
+	static_assert(delta_t::period::den <= steady_clock::period::den, "");
+	auto delta = delta_t::rep{};
+
+	std::this_thread::sleep_for(1s);
+	auto const start = steady_clock::now();
+	auto const duration = (steady_clock::now() - start);
+	delta = std::chrono::duration_cast<delta_t>(duration).count();
+	std::cout << "this delta = " << delta;
+}
+
+double Time::RetDT()
+{
+	return D_T;
 }

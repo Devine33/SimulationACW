@@ -163,6 +163,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Configuration\Parser.cpp" />
     <ClCompile Include="Graphics\Primitives\Sphere\Sphere.cpp" />
+    <ClCompile Include="Graphics\Texture\Texture.cpp" />
     <ClCompile Include="Timer\Time.cpp" />
     <ClCompile Include="Tracer\Trace.cpp" />
     <ClCompile Include="Graphics\Primitives\Triangle\Triangle.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Graphics\Base\Renderer.h" />
     <ClInclude Include="Graphics\Shaders\Base\Shader.h" />
     <ClInclude Include="Graphics\Primitives\Sphere\Sphere.h" />
+    <ClInclude Include="Graphics\Texture\Texture.h" />
     <ClInclude Include="Timer\Time.h" />
     <ClInclude Include="Tracer\Trace.hpp" />
     <ClInclude Include="Graphics\Primitives\Triangle\Triangle.h" />
