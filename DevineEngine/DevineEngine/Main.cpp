@@ -12,7 +12,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	/*X->StartWindowing(nCmdShow);*/
 	G->InitializeComponents(nCmdShow);
-	G->RenderLoop();
+	G->GameLoop();
 	/*t.EndQuery();*/
 
 	/*t.Elapsed();*/

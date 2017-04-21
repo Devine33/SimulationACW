@@ -1,5 +1,8 @@
 #pragma once
 #include <windows.h>  
+#include "../Input/InputHandler.h"
+#include "../Input/KeyDownCommand.h"
+
 #define WIN32_LEAN_AND_MEAN
 class Windowing
 {
@@ -23,20 +26,24 @@ public:
 	int const& GetScreenHeight() const;
 	void Run();
 	 LRESULT MessageHandler(const  HWND hwnd, const  UINT umsg, const  WPARAM wparam, const LPARAM lparam);
-
+	 InputHandler* ReturnInputHandle();
+	 KeyDownCommand* ReturnKeyHandle();
 private:
 	const LPCWSTR m_ClassName = L"myWindowClass";
 	HINSTANCE m_HInstance;
 	WNDCLASSEX m_Window;	
 	bool m_Done, m_Result;
 	HWND m_Hwnd;
-	
+	Input* m_Input;
+	InputHandler* m_InputHandler;
+	KeyDownCommand* m_KeyDown;
 	/*int screenWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
 	int screenHeight = GetSystemMetrics(SM_CYSCREEN) / 2;*/
-
+	
 	int screenWidth = 800;
 	int screenHeight = 600;
 };
+
 static Windowing* ApplicationHandle = nullptr;
 
 

@@ -152,6 +152,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="ContactManifold.cpp" />
+    <ClCompile Include="Graphics\Primitives\Arena\Cylinder.cpp" />
     <ClCompile Include="Graphics\Shaders\Colour\ColourShader.cpp" />
     <ClCompile Include="Input\Command.cpp" />
     <ClCompile Include="Graphics\Shaders\Concrete\CShader.cpp" />
@@ -166,12 +168,13 @@
     <ClCompile Include="Graphics\Texture\Texture.cpp" />
     <ClCompile Include="Timer\Time.cpp" />
     <ClCompile Include="Tracer\Trace.cpp" />
-    <ClCompile Include="Graphics\Primitives\Triangle\Triangle.cpp" />
     <ClCompile Include="GUI\UI.cpp" />
     <ClCompile Include="Window\Windowing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="ContactManifold.h" />
+    <ClInclude Include="Graphics\Primitives\Arena\Cylinder.h" />
     <ClInclude Include="Graphics\Shaders\Colour\ColourShader.h" />
     <ClInclude Include="Input\Command.h" />
     <ClInclude Include="Graphics\Shaders\Concrete\CShader.h" />
@@ -185,9 +188,9 @@
     <ClInclude Include="Graphics\Shaders\Base\Shader.h" />
     <ClInclude Include="Graphics\Primitives\Sphere\Sphere.h" />
     <ClInclude Include="Graphics\Texture\Texture.h" />
+    <ClInclude Include="Timer\StepTime.h" />
     <ClInclude Include="Timer\Time.h" />
     <ClInclude Include="Tracer\Trace.hpp" />
-    <ClInclude Include="Graphics\Primitives\Triangle\Triangle.h" />
     <ClInclude Include="GUI\UI.h" />
     <ClInclude Include="Window\Windowing.h" />
   </ItemGroup>

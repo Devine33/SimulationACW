@@ -68,6 +68,12 @@
     <Filter Include="Graphics\Texture">
       <UniqueIdentifier>{7d13d3c7-a474-41bc-b28a-4e40cac41e57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Primitives\Plane">
+      <UniqueIdentifier>{66215603-3288-49d3-a666-b54e7032e014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Primitives\Cylinder">
+      <UniqueIdentifier>{7a261c7e-e0f5-4137-b404-521144ed4379}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -106,9 +112,6 @@
     <ClCompile Include="GameEngine\GameEngine.cpp">
       <Filter>GameEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Primitives\Triangle\Triangle.cpp">
-      <Filter>Graphics\Primitives\Triangle</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Shaders\Concrete\CShader.cpp">
       <Filter>Graphics\Shaders\Concrete</Filter>
     </ClCompile>
@@ -123,6 +126,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\Texture\Texture.cpp">
       <Filter>Graphics\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Primitives\Arena\Cylinder.cpp">
+      <Filter>Graphics\Primitives\Cylinder</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactManifold.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +171,6 @@
     <ClInclude Include="Graphics\Base\Renderer.h">
       <Filter>Graphics\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Primitives\Triangle\Triangle.h">
-      <Filter>Graphics\Primitives\Triangle</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Shaders\Base\Shader.h">
       <Filter>Graphics\Shaders\Base</Filter>
     </ClInclude>
@@ -183,6 +189,13 @@
     <ClInclude Include="Graphics\Texture\Texture.h">
       <Filter>Graphics\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="Timer\StepTime.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Primitives\Arena\Cylinder.h">
+      <Filter>Graphics\Primitives\Cylinder</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactManifold.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
