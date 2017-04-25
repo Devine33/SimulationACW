@@ -34,8 +34,6 @@ void Camera::Render()
 {
 	DirectX::XMFLOAT3 UP = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
 	up = DirectX::XMLoadFloat3(&UP);
-
-
 	DirectX::XMFLOAT3 POSITION = DirectX::XMFLOAT3(m_positionX, m_positionY, m_positionZ);
 	// Setup the position of the camera in the world.
 	position = DirectX::XMLoadFloat3(&POSITION);
@@ -62,7 +60,7 @@ void Camera::Render()
 	lookAt = XMVector3TransformCoord(lookAt, rotationMatrix);
 	up = XMVector3TransformCoord(up, rotationMatrix);
 
-	float fieldOfView;
+	
 	// Translate the rotated camera position to the location of the viewer.
 
 	fieldOfView = DirectX::XM_PI / 4.0f;
@@ -90,4 +88,24 @@ void Camera::GetProjectionMatrix(DirectX::XMMATRIX& projection) const
 void Camera::GetWorldMatrix(DirectX::XMMATRIX& world) const
 {
 	world = m_worldMatrix;
+}
+
+void Camera::MoveUp()
+{
+	m_positionY += 0.5;
+}
+
+void Camera::MoveDown()
+{
+	m_positionY -= 0.5f;
+}
+
+void Camera::MoveLeft()
+{
+	m_positionX -= 0.5f;
+}
+
+void Camera::MoveRight()
+{
+	m_positionX += 0.5f;
 }

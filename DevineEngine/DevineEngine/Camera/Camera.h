@@ -17,6 +17,10 @@ public:
 	void GetWorldMatrix(DirectX::XMMATRIX&) const;
 	DirectX::XMVECTOR GetPosition() const;
 	DirectX::XMVECTOR GetRotation() const;
+	void MoveUp();
+	void MoveDown();
+	void MoveLeft();
+	void MoveRight();
 
 private:
 	float screenaspect;
@@ -31,7 +35,7 @@ private:
 	DirectX::XMVECTOR up, position, lookAt;
 	float yaw, pitch, roll;
 	DirectX::XMMATRIX rotationMatrix;
-
+	float fieldOfView;
 	float radians;
 };
 

@@ -11,7 +11,7 @@ KeyDownCommand::~KeyDownCommand()
 
 void KeyDownCommand::Execute()
 {
-	TRACE(L"KeyDownCommand \n");
+	//TRACE(L"KeyDownCommand \n");
 	/*m_Input->KeyDown();*/
 }
 

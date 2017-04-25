@@ -21,6 +21,7 @@ public:
 	ManifoldPoint& GetPoint(int index);
 
 private:
+	//make dynamic
 	ManifoldPoint m_points[1000];
 	int m_numOfPoints;
 };

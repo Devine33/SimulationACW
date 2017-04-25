@@ -17,7 +17,7 @@ class Direct_X
 public:
 	Direct_X();
 	~Direct_X();
-	void StartWindowing(int cmd);
+	void StartWindowing(int cmd, WNDPROC Wndproc);
 	void CreateFeatureList();
 	void InitializeFactory(int ScreenWidth, int ScreenHeight);
 	void InitializeSwapChain(int ScreenWidth,int ScreenHeight,HWND hwnd);

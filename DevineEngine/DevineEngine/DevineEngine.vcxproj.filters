@@ -14,9 +14,6 @@
     <Filter Include="Input">
       <UniqueIdentifier>{363fa963-998c-40af-9851-a212641b958d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Configuration">
-      <UniqueIdentifier>{4c4195a9-e361-4660-b75d-ca1c1bb26c71}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Timer">
       <UniqueIdentifier>{51adb82e-d495-419f-bd12-094a100d54c6}</UniqueIdentifier>
     </Filter>
@@ -74,6 +71,12 @@
     <Filter Include="Graphics\Primitives\Cylinder">
       <UniqueIdentifier>{7a261c7e-e0f5-4137-b404-521144ed4379}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics\ContactManifold">
+      <UniqueIdentifier>{9b088bb3-d2b3-4aa9-a28e-f807f5e9fb53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics\GravityWell">
+      <UniqueIdentifier>{c1de4401-1ed1-4fb2-a2cc-7a24d819f1fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -81,9 +84,6 @@
     </ClCompile>
     <ClCompile Include="Camera\Camera.cpp">
       <Filter>Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Configuration\Parser.cpp">
-      <Filter>Configuration</Filter>
     </ClCompile>
     <ClCompile Include="Window\Windowing.cpp">
       <Filter>Window</Filter>
@@ -130,16 +130,16 @@
     <ClCompile Include="Graphics\Primitives\Arena\Cylinder.cpp">
       <Filter>Graphics\Primitives\Cylinder</Filter>
     </ClCompile>
-    <ClCompile Include="ContactManifold.cpp">
+    <ClCompile Include="Physics\ContactManifold.cpp">
+      <Filter>Physics\ContactManifold</Filter>
+    </ClCompile>
+    <ClCompile Include="GravityWell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
       <Filter>Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Configuration\Parser.h">
-      <Filter>Configuration</Filter>
     </ClInclude>
     <ClInclude Include="Window\Windowing.h">
       <Filter>Window</Filter>
@@ -195,7 +195,10 @@
     <ClInclude Include="Graphics\Primitives\Arena\Cylinder.h">
       <Filter>Graphics\Primitives\Cylinder</Filter>
     </ClInclude>
-    <ClInclude Include="ContactManifold.h" />
+    <ClInclude Include="Physics\ContactManifold.h">
+      <Filter>Physics\ContactManifold</Filter>
+    </ClInclude>
+    <ClInclude Include="GravityWell.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

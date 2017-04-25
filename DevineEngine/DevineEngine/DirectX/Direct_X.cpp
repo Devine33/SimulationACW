@@ -14,29 +14,21 @@ Direct_X::~Direct_X()
 }
 
 //Starts the window and initializes all the Direct_X elements then starts the scene
-void Direct_X::StartWindowing(int cmd)
+void Direct_X::StartWindowing(int cmd, WNDPROC Wndproc)
 {	//seperate window 
-	window.WindowCreation(cmd);
+	window.WindowCreation(cmd,Wndproc);
 	InitializeFactory(window.GetScreenWidth(), window.GetScreenHeight());
 	InitializeSwapChain(window.GetScreenWidth(), window.GetScreenHeight(), window.GetHandle());
 	InitializeResources(window.GetScreenWidth(), window.GetScreenHeight());
-	if (!TwInit(TW_DIRECT3D11,GetDevice()))
-	{
-		MessageBoxA(window.GetHandle(), TwGetLastError(), "AntTweakBar initialization failed", MB_OK | MB_ICONERROR);
-	}
-	TwBar *bar = TwNewBar("TweakBar");
-	TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar into a DirectX11 application.' "); // Message added to the help
-	int barSize[2] = { 224, 320 };
-	TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	BeginScene();
 }
 
 void Direct_X::CreateFeatureList()
 {
 	m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_11_0);
-	//m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_10_1);
-	//m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_10_0);
-	//m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_9_3);
+	/*m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_10_1);
+	m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_10_0);
+	m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_9_3);*/
 
 	TRACE(L"Feature List Populate \n");
 }

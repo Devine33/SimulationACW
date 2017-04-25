@@ -2,6 +2,7 @@
 #include <windows.h>  
 #include "../Input/InputHandler.h"
 #include "../Input/KeyDownCommand.h"
+#include "../Camera/Camera.h"
 
 #define WIN32_LEAN_AND_MEAN
 class Windowing
@@ -16,9 +17,9 @@ public:
 	~Windowing();
 #pragma endregion 
 	
-	bool FillWindowStruct();
+	bool FillWindowStruct(WNDPROC WndProc);
 	bool HardwareHandle(int cmd);
-	void WindowCreation(int cmd);
+	void WindowCreation(int cmd, WNDPROC Wndproc);
 	/*static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);*/
 	HWND const& GetHandle() const;
 	//This is the Messaging loop
@@ -44,7 +45,7 @@ private:
 	int screenHeight = 600;
 };
 
-static Windowing* ApplicationHandle = nullptr;
+//static Windowing* ApplicationHandle = nullptr;
 
 
 

@@ -17,7 +17,7 @@ void Input::Initialize()
 
 void Input::KeyDown(const unsigned int input)
 {
-	TRACE(L"Input::Keydown \n");
+	//TRACE(L"Input::Keydown \n");
 	// If a key is pressed then save that state in the key array.
 	GetAsyncKeyState(input);
 }

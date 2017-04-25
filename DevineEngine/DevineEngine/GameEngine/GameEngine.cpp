@@ -1,82 +1,109 @@
 #include "GameEngine.h"
 #include "../Tracer/Trace.hpp"
 #include "GeometricPrimitive.h"
-#include <string>
 #include <iostream>
 #include <thread>
+#include <AntTweakBar.h>
+// ReSharper disable once CppUnusedIncludeDirective
 #include <fstream>
 DX::StepTime s_Timer;
 
-GameEngine::GameEngine(): m_Done(false), m_Input(nullptr), m_KeyDown(nullptr)
+
+GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr)
 {
 	m_DirectX = new Direct_X;
-	m_Timer = new Time;	
-	//m_OverallTimer = new Time;
-	//SORT THIS LATER 
 	m_Camera = new Camera;
-	if(!m_Camera)
-	{
-		TRACE(L"NO Camera");
-	}
-	m_Input = new Input;
-	m_KeyDown = new KeyDownCommand(m_Input);
-	/*m_Handler = new InputHandler;*/
 	m_ColourShader = new ColourShader;
-	m_Cylinder = new Cylinder;
-	m_Ui = new UI;
+	//m_Ui = new UI("mybar",m_DirectX->GetDevice());
 	m_Texture = new Texture;
 	m_CM = new ContactManifold;
 }
 
-
 GameEngine::~GameEngine()
 {
 	delete m_DirectX;
-	//delete m_Timer;
 	delete m_Camera;
-	delete m_Input;
-	delete m_KeyDown;
-	//delete m_Handler;
+	delete m_ColourShader;
+	delete m_Cylinder;
+	//delete m_Ui;
+	delete m_Texture;
+	delete m_CM;
 }
 
-void GameEngine::InitializeComponents(int cmd)
+//Initializes Everything In The Application
+void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 {
-	SimpleMath::Vector3 Velo(3, 0, 0);
-	bool result = true;
-	m_DirectX->StartWindowing(cmd);
+	//Sphere Variables
+	Vector3 Velo {2.0f, 0.0f, 0.0f};
+	Vector3 CPOS{ 0.0f,0.0f,0.0f };
+
+#pragma region DirectX
+	m_DirectX->StartWindowing(cmd,Wndproc);
+#pragma endregion 
+#pragma region Camera
 	m_Camera->CameraSetup(m_DirectX->GetScreenHeight(), m_DirectX->GetScreenWidth());
-	m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
-	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
-	m_Cylinder->Initialize(m_DirectX->GetDeviceContext());
-	//m_Sphere = new Sphere(m_DirectX->GetDeviceContext());
-	//ifstream fin("Configuration/input.txt");
-	//fin >> *m_Sphere;
-	for (int i = 0; i <6 ; i++)
+	m_Camera->SetPosition(0.0f, 5.0f, -14);
+	m_Camera->SetRotation(25.0f, 0.0f, 0.0f);
+#pragma endregion 
+#pragma region Cylinder
+	m_Cylinder = new Cylinder(m_DirectX->GetDeviceContext(),10,300);
+	m_Cylinder->GetFloorHeight();
+	m_Cylinder->SetPosition(CPOS);
+#pragma endregion 
+#pragma region Sphere
+	
+	ifstream fin("Configuration/input.txt");
+	char buffer[256], ch;
+	fin.get(buffer, sizeof(buffer), '=');
+	fin >> ch >> balls;
+			
+	if (!TwInit(TW_DIRECT3D11, m_DirectX->GetDevice()))
 	{
+		//MessageBoxA(.GetHandle(), TwGetLastError(), "AntTweakBar initialization failed", MB_OK | MB_ICONERROR);
+	}
+	bar = TwNewBar("TweakBar");
+	TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar into a DirectX11 application.' "); // Message added to the help
+	/*int barSize[2] = { m_DirectX->GetScreenWidth(), m_DirectX->GetScreenHeight() };*/
+
+	m_NumBalls = &balls;
+	
+	TwAddVarRW(bar, "Number Of Balls", TW_TYPE_INT16, m_NumBalls, "");
+
+	for (int i = 0; i < balls ; i++)
+	{		
+		//set position
 		m_Sphere = new Sphere(m_DirectX->GetDeviceContext(),0.5);
+		//m_Sphere->SetPos(PosIn);
 		m_Sphere->SetVelocity(Velo);
-		m_Sphere->SetPos(Pos *= {0,0.1f,0});
-		m_Sphere->SetMass(10.0f);
+		m_Sphere->SetMass(1.0f);
 		m_SphereList.push_back(m_Sphere);
+		Velo.x = -Velo.x;
+		/*PosIn.x += 1.5;*/
 	}
-	
-	// auto count = std::count(m_SphereList.begin(), m_SphereList.end(), 1);
-	
-	result = m_ColourShader->Initialize(m_DirectX->GetDevice());
-	if (!result)
-	{
-		TRACE(L"SHADER FAILED");
-	}
+	m_Sphere->ArrangeGrid(m_SphereList,m_SphereList.size());
+	//for (auto element : m_SphereList)
+	//{
+	//	
+	//}
 
-	m_Ui->Initialize(m_DirectX->GetDevice());
-	m_Ui->GetWindowSize(m_DirectX->GetScreenWidth(), m_DirectX->GetScreenHeight());
-	result = m_Texture->Initialize(m_DirectX->GetDevice(), L"../DevineEngine/data/Stone01.dds");
-	if (!result)
-	{
-		TRACE(L"SHADER FAILED");
-	}
-
+#pragma endregion 
+	Vector3 gwellpos = { 0,0,-4 };
+	m_GravityWell = new GravityWell(m_DirectX->GetDeviceContext(), 5);
+	m_GravityWell->SetPos(gwellpos);
+#pragma region ColourShader
+	m_ColourShader->Initialize(m_DirectX->GetDevice());
+#pragma endregion 
+#pragma region UI
+	////m_Ui->Initialize(m_DirectX->GetDevice());
+	//m_Ui->GetWindowSize(800,800);
+	//m_Ui->AddIntVariable("var", m_numballs);
+	//TwAddVarRW(m_Ui->getBar(), "var",TW_TYPE_INT16 ,&m_numballs, "");
+#pragma endregion 
+#pragma region Texture
+	m_Texture->Initialize(m_DirectX->GetDevice(), L"../DevineEngine/data/Stone01.dds");
+#pragma endregion 
 	TRACE(L"Initialized");
+	GameLoop();
 
 
 }
@@ -85,86 +112,85 @@ void GameEngine::GameLoop()
 {
 		MSG m_Msg;
 		ZeroMemory(&m_Msg, sizeof(MSG));
-		/*std::wstring message = std::to_wstring(m_Msg.wParam).c_str();
-		std::wstring newl = message.append(L"\n").c_str();*/
 		m_Done = false;
-		//m_OverallTimer->StartTime();
 		while (!m_Done)
 		{
-			/*m_OverallTimer->CalcFrameRate();
-			m_OverallTimer->TotalRunningTime();*/
-			// Handle the windows messages.
-			//inut handler moved to window;
-			if (PeekMessage(&m_Msg, nullptr, 0, 0, PM_REMOVE))
+			while (PeekMessage(&m_Msg, nullptr, 0, 0, PM_REMOVE))
 			{
 				TranslateMessage(&m_Msg);
 				DispatchMessage(&m_Msg);
-
-				if (m_Msg.message == WM_QUIT) m_Done = true;
+				
 			}
+			if (m_Msg.message == WM_QUIT) m_Done = true;
 			else
 			{
+				DeltaTime = s_Timer.GetElapsedSeconds();
+				DT = &DeltaTime;
 				s_Timer.Tick([&]()
 				{
-					Update(s_Timer);
+					
+					Update(s_Timer);	
+					TwAddVarRW(bar, "Delta", TW_TYPE_DOUBLE, DT, "");
+					//allows Y,H to increase/decrease the time scale, minimum 0.001, maximum 1.0 (globally)
+					/*s_Timer.SetTargetElapsedTicks()*/
 				});
-				Draw();
-			}
 				
+				Draw();
+			}			
 		}
 }
 
-void GameEngine::Draw() const
-{	
-	
-
-
-	bool result;
+//Renders Everything In The Scene
+void GameEngine::Draw()
+{
+	auto Red = Colors::Turquoise;;
+	Red.f[3] = 0.3;
+	//Matrixes For Camera
 	XMMATRIX worldMatrix, view, projection;
-	m_DirectX->BeginScene();
-	/*TRACE(L"GameEngine::Draw() \n");*/	
+	m_DirectX->BeginScene();	
+#pragma region Camera
 	m_Camera->Render();
 	m_Camera->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(view);
 	m_Camera->GetProjectionMatrix(projection);
-
-	XMMATRIX world = XMMatrixTranslation(-1,0,0);
-	
+#pragma endregion 
+	//Shapes World Matrix
+	Matrix world = worldMatrix;
 	for (auto element : m_SphereList)
-	{
-		//element->SetPos(Pos);
-		world *= XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
-		//element.(world += XMMatrixTranslation(-0.5, 0, 0), view, projection, m_Texture->GetTexture());
+	{			
+		world *= DirectX::XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
 		element->GetPrim()->Draw(world, view, projection,Colors::White, m_Texture->GetTexture());
-		world *= XMMatrixTranslation(0.6,0,0);
+		world = worldMatrix;
 	}
+	world *= DirectX::XMMatrixTranslation(m_Cylinder->GetPosition().x, m_Cylinder->GetPosition().y, m_Cylinder->GetPosition().z);
+	m_Cylinder->GetPrim()->Draw(world, view, projection);
+	world = worldMatrix;
+	world *= DirectX::XMMatrixTranslation(m_GravityWell->GetPos().x, m_GravityWell->GetPos().y, m_GravityWell->GetPos().z);
+	
+	m_GravityWell->GetPrim()->Draw(world, view, projection,Red);
+	world = worldMatrix;
 
-	m_Cylinder->Draw(worldMatrix, view, projection);
-	//result = m_ColourShader->Render(m_DirectX->GetDeviceContext(), m_Triangle->GetIndexCount(), worldMatrix, view, projection);
-
-	//if (!result)
-	//{
-	//	TRACE(L"FAILED SHADER");
-	//}
 	TwDraw();
-	//shader
 	m_DirectX->EndScene();
+	
 }
 
+//Physics Loop Controls All Movement And Collision
 void GameEngine::Update(DX::StepTime const& timer)
 {
-	float delta = float(timer.GetElapsedSeconds());
 
-	CalculateObjectPhysics(delta);
+	/*auto delta = timer.GetElapsedSeconds();*/
+	auto t = DT;
+	
+	CalculateObjectPhysics(*t);
 	m_CM->Clear();
 	DynamicCollisionDetection();
-
-	DynamicCollisionResponse();
-	//
+	DynamicCollisionResponse();	
 	UpdateObjectPhysics();
-
+	
 }
 
+//If Objects Have Collided Get The Collision Point And Respond Appropriately
 void GameEngine::DynamicCollisionResponse()
 {
 	for (int collision = 0; collision < m_CM->GetNumPoints(); ++collision)
@@ -174,34 +200,90 @@ void GameEngine::DynamicCollisionResponse()
 	}
 }
 
+//Detect If Objects Have Collided With One Another
 void GameEngine::DynamicCollisionDetection()
 {
 	for (auto element : m_SphereList)
 	{
 		for (auto element2 : m_SphereList)
 		{
-			/*if (element == element2)
+			
+			if (element == element2)
 			{
-				continue;
 			}
 			else
-				element->CollisionWithSphere(element2, m_CM);*/
+				element->CollisionWithSphere(element2, m_CM);
+		}
+	}
+
+	for (auto element : m_SphereList)
+	{
+		for (auto element2 : m_SphereList)
+		{
+
+			if (element == element2)
+			{
+			}
+			else
+				element->CollisionWithGround(m_Cylinder, m_CM);
+		}
+	}
+
+
+	for (auto element : m_SphereList)
+	{
+		for (auto element2 : m_SphereList)
+		{
+
+			if (element == element2)
+			{
+			}
+			else
+				element->CollisionWithWalls(m_Cylinder, m_CM);
 		}
 	}
 }
-
+//Move All The Spheres By The Appropriate Forces
 void GameEngine::CalculateObjectPhysics(float dt)
 {
 	for (auto element : m_SphereList)
 	{
-		element->CalculatePhysics(dt);
+		element->CalculatePhysics(dt);		
 	}
 }
 
+void GameEngine::Restart()
+{
+	
+
+}
+
+//Update All The Spheres
 void GameEngine::UpdateObjectPhysics()
 {
 	for (auto element : m_SphereList)
 	{
+		
 		element->Update();
 	}
+}
+
+void GameEngine::MoveUp() const
+{
+	m_Camera->MoveUp();
+}
+
+void GameEngine::MoveDown() const
+{
+	m_Camera->MoveDown();
+}
+
+void GameEngine::MoveLeft() const
+{
+	m_Camera->MoveLeft();
+}
+
+void GameEngine::MoveRight() const
+{
+	m_Camera->MoveRight();
 }
