@@ -1,26 +1,18 @@
 #include "Sphere.h"
-#include <iostream>
-//add in set 
-
-
 int Sphere::countID = 0;
 Sphere::Sphere(ID3D11DeviceContext* context,float radius): SphereNumber(0), m_Mass(0), m_Radius(radius)
 {
 	m_objectID = countID;
 	++countID;
 	m_shape = DirectX::GeometricPrimitive::CreateSphere(context, radius);
-	
 }
 
 Sphere::~Sphere()
 {
-	/*m_shape.reset();*/
 }
 
 void Sphere::CalculatePhysics(float dt)
 {
-	//dt current 
-	//t
 	/*float Friction;
 	float Elasticity;*/
 	Vector3 Force(0.0f, -9.81f * m_Mass,0);
