@@ -4,7 +4,7 @@
 class UI
 {
 public:
-	UI(std::string, ID3D11Device* DEV);
+	UI(std::string&, ID3D11Device* DEV);
 	~UI();
 	void Initialize(ID3D11Device*);
 	void GetWindowSize(int width, int height);

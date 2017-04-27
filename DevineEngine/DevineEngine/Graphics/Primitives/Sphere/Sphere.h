@@ -8,10 +8,21 @@
 #include <istream>
 #include <list>
 
+struct Derivative;
 struct ManifoldPoint;
 class ContactManifold;
 using namespace DirectX::SimpleMath;
+struct State
+{
+	Vector3 x;      // position
+	Vector3 v;      // velocity
+};
 
+struct Derivative
+{
+	Vector3 dx;      // dx/dt = velocity
+	Vector3 dv;      // dv/dt = acceleration
+};
 class Sphere
 {
 public:
@@ -22,7 +33,9 @@ public:
 	void CalculatePhysics(float dt);
 	void CollisionWithSphere(Sphere* Sphere, ContactManifold *contactManifold);
 	void Update();
-
+	Vector3 CalculateAcceleration(const State &state, float t);
+	Derivative Evaluate(float t,float dt,const Derivative &d);
+	void Integrate(float dt);
 	void CollisionResponseWithSphere(ManifoldPoint &point);
 	void CollisionWithGround(Cylinder* Cylinder, ContactManifold *contactManifold);
 	void CollisionWithWalls(Cylinder* Cylinder, ContactManifold *contactManifold);
@@ -32,20 +45,6 @@ public:
 	void SetMass(float mass);
 	void SetNewPos(Vector3 pos);
 	void SetNewVel(Vector3 vel);
-
-	//void Evaluate(float dt);
-	//Vector3 EvaluateVelocity(float dt);
-	//Vector3 EvaluatePosition(float dt);
-	//Vector3 EvaluateAcceleration();
-	//Vector3 EvaluateSecond(float dt);
-	//void RK4(float dt);
-	//Vector3 CalcAcceleration(float dt, Vector3 MVEL, Vector3 MPOS);
-	//Vector3 CalcPosition(float dt, Vector3);
-	//void Integrate(float dt);
-	/*void Evaluate(void(*f)(Vector3,));*/
-
-	Vector3 OutputVel;
-	Vector3 OutputAcceleration;
 	Vector3 GetPos() const;
 	Vector3 GetVel();	
 	Vector3 GetNewPos() const;
@@ -55,7 +54,6 @@ public:
 	float GetMass() const;
 	std::shared_ptr<DirectX::GeometricPrimitive> GetPrim();
 	int GetSphereCount() const;
-
 	void ResetPos();	
 
 	friend std::istream &operator >> (std::istream &in, Sphere &o) { o.Read(in); return in; }
@@ -72,11 +70,9 @@ private:
 	static int countID;
 	int m_objectID;
 	void Read(std::istream &in);
-
 	Vector3 Acceleration;
 
 
-	const double sixth = 1.0 / 6.0;
 };
 
 

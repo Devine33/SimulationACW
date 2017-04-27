@@ -2,11 +2,13 @@
 #include <directxmath.h>
 #include <d3d11.h>
 #include "SimpleMath.h"
+#include "../Graphics/Primitives/Arena/Cylinder.h"
 class Sphere;
 
 struct ManifoldPoint {
 	Sphere *contactID1;
 	Sphere *contactID2;
+	Cylinder * ContactID3;
 	DirectX::SimpleMath::Vector3 contactNormal;
 };
 

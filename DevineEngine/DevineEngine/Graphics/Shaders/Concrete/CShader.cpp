@@ -2,7 +2,7 @@
 
 
 
-CShader::CShader()
+CShader::CShader(): m_VertexShader(nullptr), m_PixelShader(nullptr), m_HullShader(nullptr), m_DomainShader(nullptr), m_GeometryShader(nullptr)
 {
 }
 

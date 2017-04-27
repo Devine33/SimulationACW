@@ -6,12 +6,13 @@
 #include <iostream>
 #include <Mouse.h>
 std::unique_ptr<GameEngine> G(new GameEngine);
-std::unique_ptr<Mouse> mouse(new Mouse);
+
+
 //mouse = std::make_unique<Mouse>();
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	XMFLOAT2 mousePosInPixels(float(mouse.get()->GetState().x), float(mouse.get()->GetState().y));
-	mouse->SetWindow(hwnd);
+	//Vector3 mousePosInPixels(float(mouse.get()->GetState().x), float(mouse.get()->GetState().y),0.0f);
+	//mouse->SetWindow(hwnd);
 	if (TwEventWin(hwnd, msg, wParam, lParam))
 		return 0;
 
@@ -59,9 +60,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		//make use of input handler here send over WPARAM MATCH MVOEMENTS TO CAMERA AND CALL METHOD
 		break;
 	case WM_ACTIVATEAPP:
+		Mouse::ProcessMessage(msg, wParam, lParam);
+		break;
 	case WM_INPUT:
 	case WM_MOUSEMOVE:
 		/*std::cout << "Moving \n";*/
+		//G->MoveGravityWell(mousePosInPixels);
 	case WM_LBUTTONDOWN:
 	case WM_LBUTTONUP:
 	case WM_RBUTTONDOWN:

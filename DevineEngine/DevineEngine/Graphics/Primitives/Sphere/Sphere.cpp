@@ -1,6 +1,8 @@
 #include "Sphere.h"
 #include <iostream>
 //add in set 
+
+
 int Sphere::countID = 0;
 Sphere::Sphere(ID3D11DeviceContext* context,float radius): SphereNumber(0), m_Mass(0), m_Radius(radius)
 {
@@ -17,94 +19,16 @@ Sphere::~Sphere()
 
 void Sphere::CalculatePhysics(float dt)
 {
+	//dt current 
+	//t
+	/*float Friction;
+	float Elasticity;*/
 	Vector3 Force(0.0f, -9.81f * m_Mass,0);
 	Vector3 Acceleration = Force / m_Mass;
 	
 	m_NewVelocity = m_Velocity + (Acceleration * dt);
 	m_NewPosition = m_Position + (m_Velocity + m_NewVelocity /= 2) * dt;
 }
-
-
-//Vector3 Sphere::CalcAcceleration(float dt, Vector3 MVEL, Vector3 MPOS)
-//{
-//	const float k = 10;
-//	const float b = 1;
-//	return -k * MPOS - b * MVEL ;
-//}
-//
-////might need to break up these functions
-//Vector3 Sphere::CalcPosition(float dt, Vector3 MPOS)
-//{
-//	const float k = 10;
-//	return -k * MPOS;
-//}
-//
-//void Sphere::Integrate(float dt)
-//{
-//	m_Velocity = m_Velocity + m_NewVelocity * dt;
-//	m_Position = m_Position = GetPos() + m_NewPosition * dt;
-//
-//	m_NewVelocity = m_Velocity;
-//	Acceleration = CalcAcceleration(dt, m_Velocity, m_Position);
-//}
-//
-//void Sphere::Evaluate(float dt)
-//{
-//
-//	auto MVEL = EvaluateVelocity(dt);
-//	auto MPOS = EvaluatePosition(dt);
-//
-//	m_NewVelocity = MVEL;
-//	Acceleration = CalcAcceleration(dt, MVEL, MPOS);
-//
-//}
-////state.v = initial.v + d.dv*dt;
-//Vector3 Sphere::EvaluateVelocity(float dt)
-//{
-//	auto MVEL = m_Velocity = GetVel() + m_NewVelocity * dt;
-//	return m_NewVelocity = MVEL;
-//}
-//
-////state.x = initial.x + d.dx*dt;
-//Vector3 Sphere::EvaluatePosition(float dt)
-//{
-//	auto MPOS = m_Position + m_NewPosition * dt;
-//	return m_NewPosition = MPOS;
-//}
-//
-//Vector3 Sphere::EvaluateSecond(float dt)
-//{
-//}
-//
-//void Sphere::RK4(float dt)
-//{
-//	// F= MA
-//	//Vector3 Force(0.0f, -9.81f * m_Mass, 0);
-//	//
-//
-//	//m_NewVelocity = m_Position / dt;
-//	////A = F/M : RATE OF CHANGE IN VELOCITY
-//	//Vector3 Acceleration = Force / m_Mass;
-//	//auto a;
-//	//auto b;
-//	//auto c;
-//	//auto d;
-//	//DX/DT = V: VELOCITY IS THE RATE OF CHANGE OF POSITION OVER TIME
-//
-//	//VELOCITY = POSITION / DT
-//	//m_Position
-//	//m_Velocity
-//
-//	//m_NewVelocity
-//	//Vector3 Acceleration
-//
-//	//WORK OUT ACCELERATION BEING APPLIED
-//	//A = F / M
-//	//V = A * T
-//	//P = V *T
-//}
-//
-//
 
 void Sphere::CollisionWithSphere(Sphere* Sphere2, ContactManifold* contactManifold)
 {
@@ -130,6 +54,50 @@ void Sphere::Update()
 	m_Position = m_NewPosition;
 }
 
+Vector3 Sphere::CalculateAcceleration(const State& state, float t)
+{
+	Vector3 Force(0.0f, -9.81f * m_Mass, 0);
+	Vector3 Acceleration = Force / m_Mass;
+	//const float k = 10;
+	//const float b = 1;
+	return Acceleration;
+}
+
+Derivative Sphere::Evaluate(float t, float dt, const Derivative& d)
+{
+	State state;
+	state.x = m_Position + d.dx*dt;
+	state.v = m_Velocity + d.dv*dt;
+
+	Derivative output;
+	output.dx = m_Velocity;
+	output.dv = CalculateAcceleration(state, t + dt);
+	return output;
+}
+
+void Sphere::Integrate(float dt)
+{
+	Derivative a, b, c, d;
+	float t = dt;
+	a = Evaluate(t, 0.0f, Derivative());
+	b = Evaluate(t, dt*=0.5f, a);
+	c = Evaluate(t, dt*=0.5f, b);
+	d = Evaluate(t, dt, c);
+
+	//velocity
+	Vector3 dxdt = 1.0f / 6.0f *
+		(a.dx + 2.0f*(b.dx + c.dx) + d.dx);
+	//acceleration
+	Vector3 dvdt = 1.0f / 6.0f *
+		(a.dv + 2.0f*(b.dv + c.dv) + d.dv);
+
+	m_NewPosition = m_Position + dxdt * dt;
+	m_NewVelocity = m_Velocity + dvdt * dt;
+
+	/*state.x = state.x + dxdt * dt;
+	state.v = state.v + dvdt * dt;*/
+}
+
 void Sphere::CollisionResponseWithSphere(ManifoldPoint& point)
 {
 	Vector3 colNormal = point.contactNormal;
@@ -147,15 +115,16 @@ void Sphere::CollisionWithGround(Cylinder* Cylinder, ContactManifold* contactMan
 	int GROUND = Cylinder->GetFloorHeight();
 	if (POS1.y < -GROUND + this->GetRadius())
 	{
-		Vector3 NP{ m_NewPosition.x, static_cast<float>(-Cylinder->GetFloorHeight() + this->GetRadius()), m_NewPosition.z };
+		/*Vector3 NP{ m_NewPosition.x, static_cast<float>(-Cylinder->GetFloorHeight() + this->GetRadius()), m_NewPosition.z };
 		Vector3 NV{ 0,0.0f,0 };
 		this->SetNewPos(NP);
-		this->SetNewVel(NV);
+		this->SetNewVel(NV);*/
 
 		//A COLLISION HAS OCCURRED ADD A MANIFOLD POINT
 		ManifoldPoint mp;
 		mp.contactID1 = this;
-	/*	mp.contactID2 = Cylinder;*/
+		mp.ContactID3 = Cylinder;
+
 	}
 }
 
@@ -177,8 +146,8 @@ void Sphere::CollisionWithWalls(Cylinder* Cylinder, ContactManifold* contactMani
 void Sphere::ArrangeGrid(std::vector<Sphere*> S, int num)
 {
 	Vector3 Standard{ -4.0f,0.0f,0.0f };
-	Vector3 PS{-4.0,0.0,0.0 };
-	float spacevalue = 1.5;
+	//Vector3 PS{-4.0,0.0,0.0 };
+	//float spacevalue = 1.5;
 	for (auto element : S)
 	{
 		
@@ -215,7 +184,6 @@ void Sphere::SetVelocity(Vector3 velin)
 {
 	m_Velocity = velin;
 }
-
 
 Vector3 Sphere::GetPos() const
 {

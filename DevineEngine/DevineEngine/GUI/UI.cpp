@@ -1,5 +1,5 @@
 #include "UI.h"
-UI::UI(std::string barname, ID3D11Device* DEV): bar(nullptr)
+UI::UI(std::string& barname, ID3D11Device* DEV): bar(nullptr)
 {
 
 	if (!TwInit(TW_DIRECT3D11, DEV))

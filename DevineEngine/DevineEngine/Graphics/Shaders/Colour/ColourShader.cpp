@@ -2,7 +2,7 @@
 
 
 
-ColourShader::ColourShader()
+ColourShader::ColourShader(): m_vertexShader(nullptr), m_pixelShader(nullptr), m_layout(nullptr), m_matrixBuffer(nullptr)
 {
 }
 
@@ -161,7 +161,7 @@ bool ColourShader::SetShaderParameters(ID3D11DeviceContext* deviceContext, const
 	}
 
 	// Get a pointer to the data in the constant buffer.
-	dataPtr = (MatrixBufferType*)mappedResource.pData;
+	dataPtr = static_cast<MatrixBufferType*>(mappedResource.pData);
 
 	// Copy the matrices into the constant buffer.
 	dataPtr->world = worldMatrix;

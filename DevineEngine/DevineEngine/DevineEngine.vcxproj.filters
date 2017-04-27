@@ -134,7 +134,7 @@
       <Filter>Physics\ContactManifold</Filter>
     </ClCompile>
     <ClCompile Include="GravityWell.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Physics\GravityWell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -198,7 +198,9 @@
     <ClInclude Include="Physics\ContactManifold.h">
       <Filter>Physics\ContactManifold</Filter>
     </ClInclude>
-    <ClInclude Include="GravityWell.h" />
+    <ClInclude Include="GravityWell.h">
+      <Filter>Physics\GravityWell</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

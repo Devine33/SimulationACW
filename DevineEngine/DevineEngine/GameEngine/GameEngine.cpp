@@ -6,6 +6,7 @@
 #include <AntTweakBar.h>
 // ReSharper disable once CppUnusedIncludeDirective
 #include <fstream>
+#include <Mouse.h>
 DX::StepTime s_Timer;
 
 
@@ -102,10 +103,11 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 #pragma region Texture
 	m_Texture->Initialize(m_DirectX->GetDevice(), L"../DevineEngine/data/Stone01.dds");
 #pragma endregion 
+
+	mouse = std::make_unique<Mouse>();
+	mouse->SetWindow(m_DirectX->GetHandle());
 	TRACE(L"Initialized");
 	GameLoop();
-
-
 }
 
 void GameEngine::GameLoop()
@@ -124,17 +126,21 @@ void GameEngine::GameLoop()
 			if (m_Msg.message == WM_QUIT) m_Done = true;
 			else
 			{
+			/*	auto MouseState = mouse->GetState();
+				if (MouseState)
+				{
+					
+				}*/
+				//XMFLOAT2 mousePosInPixels(float(MouseState.x), float(MouseState.y));
 				DeltaTime = s_Timer.GetElapsedSeconds();
 				DT = &DeltaTime;
 				s_Timer.Tick([&]()
-				{
-					
+				{					
 					Update(s_Timer);	
 					TwAddVarRW(bar, "Delta", TW_TYPE_DOUBLE, DT, "");
 					//allows Y,H to increase/decrease the time scale, minimum 0.001, maximum 1.0 (globally)
 					/*s_Timer.SetTargetElapsedTicks()*/
 				});
-				
 				Draw();
 			}			
 		}
@@ -178,8 +184,6 @@ void GameEngine::Draw()
 //Physics Loop Controls All Movement And Collision
 void GameEngine::Update(DX::StepTime const& timer)
 {
-
-	/*auto delta = timer.GetElapsedSeconds();*/
 	auto t = DT;
 	
 	CalculateObjectPhysics(*t);
@@ -187,7 +191,6 @@ void GameEngine::Update(DX::StepTime const& timer)
 	DynamicCollisionDetection();
 	DynamicCollisionResponse();	
 	UpdateObjectPhysics();
-	
 }
 
 //If Objects Have Collided Get The Collision Point And Respond Appropriately
@@ -229,7 +232,6 @@ void GameEngine::DynamicCollisionDetection()
 		}
 	}
 
-
 	for (auto element : m_SphereList)
 	{
 		for (auto element2 : m_SphereList)
@@ -248,8 +250,10 @@ void GameEngine::CalculateObjectPhysics(float dt)
 {
 	for (auto element : m_SphereList)
 	{
-		element->CalculatePhysics(dt);		
+		//element->CalculatePhysics(dt);		
+		element->Integrate(dt);
 	}
+	
 }
 
 void GameEngine::Restart()
@@ -263,7 +267,6 @@ void GameEngine::UpdateObjectPhysics()
 {
 	for (auto element : m_SphereList)
 	{
-		
 		element->Update();
 	}
 }
@@ -287,3 +290,10 @@ void GameEngine::MoveRight() const
 {
 	m_Camera->MoveRight();
 }
+
+void GameEngine::MoveGravityWell(Vector3 vec)
+{
+	m_GravityWell->Move(vec);
+}
+
+

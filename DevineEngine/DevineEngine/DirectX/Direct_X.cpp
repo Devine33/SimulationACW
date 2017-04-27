@@ -314,7 +314,12 @@ ID3D11DeviceContext* Direct_X::GetDeviceContext() const
 	return m_DeviceContext.Get();
 }
 
- float Direct_X::GetScreenWidth() const
+HWND Direct_X::GetHandle() const
+{
+	return window.GetHandle();
+}
+
+float Direct_X::GetScreenWidth() const
 {
 	return window.GetScreenWidth();
 }

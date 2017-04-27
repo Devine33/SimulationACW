@@ -32,6 +32,7 @@ public:
 
 	ID3D11Device* GetDevice() const;
 	ID3D11DeviceContext* GetDeviceContext() const;
+	HWND GetHandle() const;
 	 float GetScreenWidth() const;
 	 float GetScreenHeight() const;
 private:
