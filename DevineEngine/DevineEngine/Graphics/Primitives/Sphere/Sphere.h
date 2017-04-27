@@ -37,6 +37,7 @@ public:
 	Derivative Evaluate(float t,float dt,const Derivative &d);
 	void Integrate(float dt);
 	void CollisionResponseWithSphere(ManifoldPoint &point);
+
 	void CollisionWithGround(Cylinder* Cylinder, ContactManifold *contactManifold);
 	void CollisionWithWalls(Cylinder* Cylinder, ContactManifold *contactManifold);
 	void ArrangeGrid(std::vector<Sphere*>,int num);

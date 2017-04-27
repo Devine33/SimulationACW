@@ -7,6 +7,7 @@ public:
 	GravityWell(ID3D11DeviceContext* context, float radius);
 	~GravityWell();
 	Vector3 GetPos() const;
+	void SetPos(Vector3 posin);
 	//LeftButton
 	Vector3 ApplyAttractor();
 	//RightButton

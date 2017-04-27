@@ -100,23 +100,25 @@ void Sphere::CollisionResponseWithSphere(ManifoldPoint& point)
 	point.contactID2->ResetPos();
 	point.contactID2->SetNewVel(-1.0f*colNormal*colNormal.Dot(point.contactID2->GetVel()));
 }
+
 //NEED COLLISIONR ESPONSE FOR FLOOR
 void Sphere::CollisionWithGround(Cylinder* Cylinder, ContactManifold* contactManifold)
 {
 	Vector3 POS1 = this->GetNewPos();
 	int GROUND = Cylinder->GetFloorHeight();
+	Vector3 POS2(0, -GROUND, 0);
+	POS2.Normalize();
 	if (POS1.y < -GROUND + this->GetRadius())
 	{
-		/*Vector3 NP{ m_NewPosition.x, static_cast<float>(-Cylinder->GetFloorHeight() + this->GetRadius()), m_NewPosition.z };
-		Vector3 NV{ 0,0.0f,0 };
-		this->SetNewPos(NP);
-		this->SetNewVel(NV);*/
-
-		//A COLLISION HAS OCCURRED ADD A MANIFOLD POINT
-		ManifoldPoint mp;
-		mp.contactID1 = this;
-		mp.ContactID3 = Cylinder;
-
+		Vector3 Reflected = 2 * POS2 * (POS2 * this->GetVel());
+		/*Vector3 ID(0, -1, 0);
+		Vector3 VR(this->GetVel().x, -this->GetVel().y, this->GetVel().z);
+		Vector3 VR2(ID  -  2*( this->GetVel().Dot(POS2)) * POS2);*/
+	/*	Vector3 NP{ m_NewPosition.x, static_cast<float>(-Cylinder->GetFloorHeight() + this->GetRadius()), m_NewPosition.z };
+		Vector3 NV{ 0.0f,0.0f,0.0f };
+		this->SetNewPos(NP);*/
+		//impulse * elasticity 
+		this->SetNewVel(-Reflected * 0.4);
 	}
 }
 
@@ -141,19 +143,16 @@ void Sphere::ArrangeGrid(std::vector<Sphere*> S, int num)
 	//Vector3 PS{-4.0,0.0,0.0 };
 	//float spacevalue = 1.5;
 	for (auto element : S)
-	{
-		
+	{		
 		if (element->ReturnObjectID() % 8 == 0 && element->ReturnObjectID() != 0 )
 		{
 			Standard.z += 1.5;
 			Standard.x -= 10.5;
 			element->SetPos(Standard);
-			
 		}
 		else
 			Standard.x += 1.5;
-			element->SetPos(Standard);
-			
+			element->SetPos(Standard);	
 	}
 }
 

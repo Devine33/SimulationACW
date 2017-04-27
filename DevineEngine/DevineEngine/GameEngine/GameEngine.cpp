@@ -88,7 +88,7 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	//}
 
 #pragma endregion 
-	Vector3 gwellpos = { 0,0,-4 };
+	Vector3 gwellpos = { 0,-3,-5 };
 	m_GravityWell = new GravityWell(m_DirectX->GetDeviceContext(), 5);
 	m_GravityWell->SetPos(gwellpos);
 #pragma region ColourShader

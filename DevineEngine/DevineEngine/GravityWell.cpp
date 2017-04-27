@@ -17,6 +17,11 @@ Vector3 GravityWell::GetPos() const
 	return m_Position;
 }
 
+void GravityWell::SetPos(Vector3 posin)
+{
+	m_Position = posin;
+}
+
 void GravityWell::Move(Vector3 Pos)
 {
 	m_Position += Pos;
