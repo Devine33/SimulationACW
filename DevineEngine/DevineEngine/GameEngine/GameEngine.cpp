@@ -17,6 +17,8 @@ GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullpt
 	m_ColourShader = new ColourShader;
 	//m_Ui = new UI("mybar",m_DirectX->GetDevice());
 	m_Texture = new Texture;
+	m_MarbleTexture = new Texture;
+	m_BowlingBall = new Texture;
 	m_CM = new ContactManifold;
 }
 
@@ -76,7 +78,7 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 		m_Sphere = new Sphere(m_DirectX->GetDeviceContext(),0.5);
 		//m_Sphere->SetPos(PosIn);
 		m_Sphere->SetVelocity(Velo);
-		m_Sphere->SetMass(1.0f);
+		//m_Sphere->SetMass(100.0f);
 		m_SphereList.push_back(m_Sphere);
 		Velo.x = -Velo.x;
 		/*PosIn.x += 1.5;*/
@@ -91,6 +93,11 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	Vector3 gwellpos = { 0,-3,-5 };
 	m_GravityWell = new GravityWell(m_DirectX->GetDeviceContext(), 5);
 	m_GravityWell->SetPos(gwellpos);
+	float elasticity  = 0.0;
+	fin.get(buffer, sizeof(buffer), '=');
+	fin >> ch >> elasticity;
+	fin.close();
+	m_GravityWell->SetElasticity(elasticity);
 #pragma region ColourShader
 	m_ColourShader->Initialize(m_DirectX->GetDevice());
 #pragma endregion 
@@ -102,10 +109,13 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 #pragma endregion 
 #pragma region Texture
 	m_Texture->Initialize(m_DirectX->GetDevice(), L"../DevineEngine/data/Stone01.dds");
+	m_MarbleTexture->Initialize(m_DirectX->GetDevice(), L"../DevineEngine/data/Marble.dds");
+	m_BowlingBall->Initialize(m_DirectX->GetDevice(), L"../DevineEngine/data/Bowling.dds");
 #pragma endregion 
 
-	mouse = std::make_unique<Mouse>();
+	mouse = std::make_shared<Mouse>();
 	mouse->SetWindow(m_DirectX->GetHandle());
+	mouse->SetMode(Mouse::MODE_RELATIVE);
 	TRACE(L"Initialized");
 	GameLoop();
 }
@@ -115,6 +125,7 @@ void GameEngine::GameLoop()
 		MSG m_Msg;
 		ZeroMemory(&m_Msg, sizeof(MSG));
 		m_Done = false;
+
 		while (!m_Done)
 		{
 			while (PeekMessage(&m_Msg, nullptr, 0, 0, PM_REMOVE))
@@ -124,24 +135,19 @@ void GameEngine::GameLoop()
 				
 			}
 			if (m_Msg.message == WM_QUIT) m_Done = true;
+
 			else
 			{
-			/*	auto MouseState = mouse->GetState();
-				if (MouseState)
-				{
-					
-				}*/
-				//XMFLOAT2 mousePosInPixels(float(MouseState.x), float(MouseState.y));
 				DeltaTime = s_Timer.GetElapsedSeconds();
 				DT = &DeltaTime;
 				s_Timer.Tick([&]()
 				{					
 					Update(s_Timer);	
-					TwAddVarRW(bar, "Delta", TW_TYPE_DOUBLE, DT, "");
+					
 					//allows Y,H to increase/decrease the time scale, minimum 0.001, maximum 1.0 (globally)
-					/*s_Timer.SetTargetElapsedTicks()*/
 				});
 				Draw();
+				TwAddVarRW(bar, "Delta", TW_TYPE_DOUBLE, DT, "");
 			}			
 		}
 }
@@ -165,7 +171,18 @@ void GameEngine::Draw()
 	for (auto element : m_SphereList)
 	{			
 		world *= DirectX::XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
-		element->GetPrim()->Draw(world, view, projection,Colors::White, m_Texture->GetTexture());
+		if (element->GetMass() == 1.0f)
+		{
+			element->GetPrim()->Draw(world, view, projection, Colors::White, m_Texture->GetTexture());
+		}
+		else if (element ->GetMass() == 5.0f)
+		{
+			element->GetPrim()->Draw(world, view, projection, Colors::Beige,m_MarbleTexture->GetTexture());
+		}
+		else
+		{
+			element->GetPrim()->Draw(world, view, projection, Colors::Azure,m_BowlingBall->GetTexture());
+		}
 		world = worldMatrix;
 	}
 	world *= DirectX::XMMatrixTranslation(m_Cylinder->GetPosition().x, m_Cylinder->GetPosition().y, m_Cylinder->GetPosition().z);
@@ -244,6 +261,12 @@ void GameEngine::DynamicCollisionDetection()
 				element->CollisionWithWalls(m_Cylinder, m_CM);
 		}
 	}
+
+	for (auto element : m_SphereList)
+	{
+		m_GravityWell->SpheresInWell(element);
+	}
+
 }
 //Move All The Spheres By The Appropriate Forces
 void GameEngine::CalculateObjectPhysics(float dt)
@@ -291,9 +314,53 @@ void GameEngine::MoveRight() const
 	m_Camera->MoveRight();
 }
 
-void GameEngine::MoveGravityWell(Vector3 vec)
+void GameEngine::MoveGravityWell()
 {
-	m_GravityWell->Move(vec);
+	
+	m_GravityWell->Move(Movement);
+}
+
+std::shared_ptr<Mouse> GameEngine::GetMouse()
+{
+	return mouse;
+}
+//gets mosue location on window
+void GameEngine::GetMousePosition()
+{
+	auto state = mouse->GetState();
+	XMFLOAT3 MP(float(state.x), float(state.y),-20);
+	mousePosInPixels = MP;
+	//std::cout <<  mousePosInPixels.x << "\n";
+	//std::cout << mousePosInPixels.y << "\n";
+
+	if (state.positionMode == Mouse::MODE_RELATIVE)
+	{ //state.x and state.y are relative values; system cursor is not visible
+		
+		//
+	
+		Movement = Vector3(mousePosInPixels.x * 0.1, 0, -mousePosInPixels.y * 0.1);
+	}
+	else
+	{
+		// state.x and state.y are absolute pixel values; system cursor is visible
+	}
+
+
+}
+
+void GameEngine::ApplyAttractor()
+{
+	Mouse::ButtonStateTracker tracker;
+	using ButtonState = Mouse::ButtonStateTracker::ButtonState;
+	auto state = mouse->GetState();
+
+
+	tracker.Update(state);
+	if (tracker.leftButton == ButtonState::PRESSED)
+	{
+		//std::cout << "HELD";
+		m_GravityWell->ApplyAttractor();
+	}
 }
 
 

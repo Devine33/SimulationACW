@@ -3,46 +3,6 @@
 #include "../Tracer/Trace.hpp"
 #include <AntTweakBar.h>
 #include <iostream>
-// Step 4: the Window Procedure COULD  POSSIBLE MOVE THIS TO GAME ENGINE but works just fine here
-//to move back remove WNDPROC AS PARAM
-//LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-//{
-//	if (TwEventWin(hwnd, msg, wParam, lParam))
-//		return 0;
-//
-//	//TRACE(L"Windowing::WndProc \n");
-//	switch (msg)
-//	{
-//	case WM_CLOSE:
-//		DestroyWindow(hwnd);
-//		break;
-//	case WM_DESTROY:
-//		PostQuitMessage(0);
-//		break;
-//	case WM_KEYDOWN:
-//		//TRACE(L"Windowing::WndProc::WM_KEYDOWN \n");
-//		std::cout << wParam << "\n";
-//		if(wParam == 27)
-//		{
-//			PostQuitMessage(0);
-//		}
-//		if(wParam == 82)
-//		{
-//			TRACE(L"System Reset\n");
-//		}
-//		break;
-//	case WM_LBUTTONDOWN:
-//		std::cout << "button clicked \n";
-//		/*
-//		ApplicationHandle->ReturnHandle()->SetCommand()*/
-//		/*m_Input->SetCommand(m_KeyDown);
-//		m_Handler->MouseClick();*/
-//		break;
-//	default:
-//		return  DefWindowProc(hwnd, msg, wParam, lParam);
-//	}
-//	return 0;
-//}
 
 Windowing::Windowing(): m_HInstance(nullptr), m_Done(false), m_Result(false), m_Hwnd(nullptr)//, m_Input(nullptr), m_KeyDown(nullptr), m_Handler(nullptr)
 {

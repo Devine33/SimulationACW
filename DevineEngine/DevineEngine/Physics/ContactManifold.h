@@ -8,7 +8,6 @@ class Sphere;
 struct ManifoldPoint {
 	Sphere *contactID1;
 	Sphere *contactID2;
-	Cylinder * ContactID3;
 	DirectX::SimpleMath::Vector3 contactNormal;
 };
 
@@ -24,7 +23,7 @@ public:
 
 private:
 	//make dynamic
-	ManifoldPoint m_points[1000];
+	ManifoldPoint m_points[10000];
 	int m_numOfPoints;
 };
 

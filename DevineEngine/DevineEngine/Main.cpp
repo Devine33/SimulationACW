@@ -6,16 +6,15 @@
 #include <iostream>
 #include <Mouse.h>
 std::unique_ptr<GameEngine> G(new GameEngine);
-
-
-//mouse = std::make_unique<Mouse>();
+int i = 0;
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	//Vector3 mousePosInPixels(float(mouse.get()->GetState().x), float(mouse.get()->GetState().y),0.0f);
-	//mouse->SetWindow(hwnd);
+	
+	
+
+	
 	if (TwEventWin(hwnd, msg, wParam, lParam))
 		return 0;
-
 	//TRACE(L"Windowing::WndProc \n");
 	switch (msg)
 	{
@@ -64,23 +63,34 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_INPUT:
 	case WM_MOUSEMOVE:
+		Mouse::ProcessMessage(msg, wParam, lParam);
 		/*std::cout << "Moving \n";*/
-		//G->MoveGravityWell(mousePosInPixels);
-	case WM_LBUTTONDOWN:
-	case WM_LBUTTONUP:
-	case WM_RBUTTONDOWN:
-	case WM_RBUTTONUP:
-	case WM_MBUTTONDOWN:
-	case WM_MBUTTONUP:
-	case WM_MOUSEWHEEL:
-	case WM_XBUTTONDOWN:
-	case WM_XBUTTONUP:
-	case WM_MOUSEHOVER:
-		/*Mouse::ProcessMessage(msg, wParam, lParam);
-		std::cout << mousePosInPixels.x << "\n";
-		std::cout << mousePosInPixels.y << "\n";*/
+		G->GetMousePosition();
+		G->MoveGravityWell();
 		break;
-		
+	case WM_LBUTTONDOWN:
+		Mouse::ProcessMessage(msg, wParam, lParam);
+		G->ApplyAttractor();
+		//std::cout << "Applying Attractor /n";	
+		break;
+	case WM_LBUTTONUP:
+		break;
+	case WM_RBUTTONDOWN:
+		break;
+	case WM_RBUTTONUP:
+		break;
+	case WM_MBUTTONDOWN:
+		break;
+	case WM_MBUTTONUP:
+		break;
+	case WM_MOUSEWHEEL:
+		break;
+	case WM_XBUTTONDOWN:
+		break;
+	case WM_XBUTTONUP:
+		break;
+	case WM_MOUSEHOVER:	
+		break;
 	default:
 		return  DefWindowProc(hwnd, msg, wParam, lParam);
 	}

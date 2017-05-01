@@ -1,1 +1,2 @@
-Spheres= 20
+Spheres= 200
+Elasticity=0.4

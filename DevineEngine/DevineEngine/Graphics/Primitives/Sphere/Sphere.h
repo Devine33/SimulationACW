@@ -43,6 +43,7 @@ public:
 	void ArrangeGrid(std::vector<Sphere*>,int num);
 	void SetPos(Vector3 posin);
 	void SetVelocity(Vector3 velin);
+	void SetElasticity(float e);
 	void SetMass(float mass);
 	void SetNewPos(Vector3 pos);
 	void SetNewVel(Vector3 vel);
@@ -72,7 +73,7 @@ private:
 	int m_objectID;
 	void Read(std::istream &in);
 	Vector3 Acceleration;
-
+	float Elasticity;
 
 };
 

@@ -13,6 +13,8 @@
 #include  <SimpleMath.h>
 #include "../GravityWell.h"
 #include "../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/Mouse.h"
+#include <memory>
+
 
 class GameEngine
 {
@@ -33,7 +35,10 @@ public:
 	void MoveDown() const;
 	void MoveLeft() const;
 	void MoveRight() const;
-	void MoveGravityWell(Vector3 vec);
+	void MoveGravityWell();
+	std::shared_ptr<Mouse>  GetMouse();
+	void GetMousePosition();
+	void ApplyAttractor();
 private:
 	bool m_Done;
 	Direct_X* m_DirectX;
@@ -46,12 +51,16 @@ private:
 	ContactManifold* m_CM;
 	UI* m_Ui;
 	Texture* m_Texture;
+	Texture* m_MarbleTexture;
+	Texture* m_BowlingBall;
 	TwBar *bar;
 	double DeltaTime;
 	double* DT;
 	int* m_NumBalls;
 	int balls = 0;
-	std::unique_ptr<Mouse> mouse;
+	std::shared_ptr<Mouse> mouse;
+	Vector3 mousePosInPixels;
+	Vector3 Movement;
 };
 
 //static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

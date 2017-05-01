@@ -1,4 +1,5 @@
 #include "Sphere.h"
+#include <iostream>
 int Sphere::countID = 0;
 Sphere::Sphere(ID3D11DeviceContext* context,float radius): SphereNumber(0), m_Mass(0), m_Radius(radius)
 {
@@ -28,16 +29,24 @@ void Sphere::CollisionWithSphere(Sphere* Sphere2, ContactManifold* contactManifo
 	Vector3 POS2 = Sphere2->GetNewPos();
 	float Distance = Vector3::Distance(POS1,POS2) -  ( this->GetRadius() / 2 + Sphere2->GetRadius() / 2);
 
-	if (Distance < 0.0f)
+	if (Distance <= 0.0f)
 	{
 		ManifoldPoint mp;
 		mp.contactID1 = this;   
 		mp.contactID2 = Sphere2;   
 		Vector3 SUB = POS2 - POS1;
+		this->GetVel() * 0.888;
+		Sphere2->GetVel() * 0.888;
 		SUB.Normalize();
 		mp.contactNormal = SUB;
 		contactManifold->Add(mp);
 	}
+	/*if (Distance <= -1.0f)
+	{
+		std::cout << "STUCK";
+	}*/
+	
+		
 }
 
 void Sphere::Update()
@@ -50,8 +59,6 @@ Vector3 Sphere::CalculateAcceleration(const State& state, float t)
 {
 	Vector3 Force(0.0f, -9.81f * m_Mass, 0);
 	Vector3 Acceleration = Force / m_Mass;
-	//const float k = 10;
-	//const float b = 1;
 	return Acceleration;
 }
 
@@ -92,33 +99,100 @@ void Sphere::Integrate(float dt)
 
 void Sphere::CollisionResponseWithSphere(ManifoldPoint& point)
 {
+
+
 	Vector3 colNormal = point.contactNormal;
+	Vector3 V1 = point.contactID1->GetVel();
 
-	point.contactID1->ResetPos();
-	point.contactID1->SetNewVel(-1.0f*colNormal*colNormal.Dot(point.contactID1->GetVel()));
+	float X1 = colNormal.Dot(V1);
 
+	
+
+	float m1 = point.contactID1->GetMass();
+
+	//colNormal = colNormal * -1;
+
+	Vector3 V2 = point.contactID2->GetVel();
+
+	float X2 = colNormal.Dot(V2);
+
+	Vector3 V2X = colNormal * X2;
+
+	Vector3 V2Y = V2 - V2X;
+
+	float m2 = point.contactID2->GetMass();
+
+	
+	Vector3 E1 = -(point.contactID1->GetVel() - point.contactID2->GetVel());
+	Vector3 E2 = (-point.contactID1->GetVel() - -point.contactID2->GetVel());
+	Vector3 E = E1 / E2;
+
+	Vector3 V1X = colNormal * X1;
+
+	Vector3 V1Y = V1 - V1X;
+	Vector3 P1 = V1X * (m1 - m2) / (m1+ m2);
+
+	Vector3 P2 = V2X*(2 * m2) / (m1 + m2);
+	Vector3 P3 = P2 += V1Y;
+
+	/*P3.Normalize();*/
+	Vector3 B1 = V1X * (2 * m1) / (m1 + m2);
+	Vector3 B2 = V2X*(m2 - m1) / (m1 + m2);
+	Vector3 B3 = B2 += V2Y;
+
+	Vector3 t = (m1 - Elasticity * m2) * (V1.Dot(colNormal) * colNormal + (m2 + Elasticity * m2) * V2.Dot(colNormal) * colNormal) / (m1 + m2);
+
+	Vector3 t2 = (m1 - Elasticity * m1) * (V1.Dot(colNormal) * colNormal + (m2 - Elasticity * m2) * V2.Dot(colNormal) * colNormal) / (m1 + m2);
+	t * cos(45);
+	/*B3.Normalize();*/
+	/*point.contactID1->ResetPos();
+	point.contactID1->SetNewVel(P3);
 	point.contactID2->ResetPos();
-	point.contactID2->SetNewVel(-1.0f*colNormal*colNormal.Dot(point.contactID2->GetVel()));
+	point.contactID2->SetNewVel(B3);*/
+	//may need to apply friction here
+	point.contactID1->ResetPos();
+	point.contactID1->SetNewVel(t);
+	point.contactID2->ResetPos();
+	point.contactID2->SetNewVel(t2);
+
+	
+
 }
 
-//NEED COLLISIONR ESPONSE FOR FLOOR
+//NEED COLLISION RESPONSE FOR FLOOR
 void Sphere::CollisionWithGround(Cylinder* Cylinder, ContactManifold* contactManifold)
 {
+	//Coefficient of restitution
+	 Elasticity = 0.4;
 	Vector3 POS1 = this->GetNewPos();
-	int GROUND = Cylinder->GetFloorHeight();
+	int GROUND = Cylinder->GetFloorHeight() + this->GetRadius();
 	Vector3 POS2(0, -GROUND, 0);
 	POS2.Normalize();
+	auto ColNormal = POS1 - POS2;
+	ColNormal.Normalize();
 	if (POS1.y < -GROUND + this->GetRadius())
 	{
-		Vector3 Reflected = 2 * POS2 * (POS2 * this->GetVel());
-		/*Vector3 ID(0, -1, 0);
-		Vector3 VR(this->GetVel().x, -this->GetVel().y, this->GetVel().z);
-		Vector3 VR2(ID  -  2*( this->GetVel().Dot(POS2)) * POS2);*/
-	/*	Vector3 NP{ m_NewPosition.x, static_cast<float>(-Cylinder->GetFloorHeight() + this->GetRadius()), m_NewPosition.z };
-		Vector3 NV{ 0.0f,0.0f,0.0f };
-		this->SetNewPos(NP);*/
-		//impulse * elasticity 
-		this->SetNewVel(-Reflected * 0.4);
+		//angular
+		/*float vDotN = ColNormal.Dot(ColNormal);
+		Vector3 FT = -(this->GetVel() + (vDotN * ColNormal));
+		FT *=  3.0+ 0.3;
+		FT *= this->GetMass();
+		Vector3 Centre = this->GetPos() - POS2;
+		auto Torgue = Centre.Cross(FT);
+		Torgue.Normalize();*/
+
+		//av
+		auto AV = this->GetPos().y - this->GetPos().x;
+		//av * world xy
+		auto AA = AV * 2;
+		//linear 
+		Vector3 SUB = POS2 - POS1;
+		Vector3 V(1, 1, 1);
+		SUB.Normalize();
+		this->ResetPos();
+
+		Vector3 Reflected = 2 * ColNormal * (ColNormal * this->GetVel());
+		this->SetNewVel(-Reflected *= Elasticity);
 	}
 }
 
@@ -130,10 +204,7 @@ void Sphere::CollisionWithWalls(Cylinder* Cylinder, ContactManifold* contactMani
 
 	if(wall < Vector3::Distance(POS1,CPOS))
 	{
-		Vector3 NP{ 0.0f,0.0f,0.0f };
-		Vector3 NV{ 0, 0.0f, 0 };
-		this->SetNewPos(NP);
-		this->SetNewVel(NV);
+
 	}
 }
 
@@ -149,10 +220,21 @@ void Sphere::ArrangeGrid(std::vector<Sphere*> S, int num)
 			Standard.z += 1.5;
 			Standard.x -= 10.5;
 			element->SetPos(Standard);
+			element->SetMass(5.0);
+		}
+		else if(element->ReturnObjectID() % 3 == 0)
+		{
+			Standard.x += 1.5;
+			element->SetPos(Standard);
+			element->SetMass(9.0);
 		}
 		else
+		{
 			Standard.x += 1.5;
-			element->SetPos(Standard);	
+			element->SetPos(Standard);
+			element->SetMass(1.0);
+		}
+		
 	}
 }
 
@@ -176,6 +258,11 @@ void Sphere::SetVelocity(Vector3 velin)
 	m_Velocity = velin;
 }
 
+void Sphere::SetElasticity(float e)
+{
+	Elasticity = e;
+}
+
 Vector3 Sphere::GetPos() const
 {
 	return m_Position;
@@ -195,9 +282,6 @@ void Sphere::SetNewVel(Vector3 vel)
 {
 	m_NewVelocity = vel;
 }
-
-
-
 
 Vector3 Sphere::GetNewPos() const
 {
