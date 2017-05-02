@@ -9,9 +9,9 @@ public:
 	Vector3 GetPos() const;
 	void SetPos(Vector3 posin);
 	//LeftButton
-	Vector3 ApplyAttractor();
+	Vector3 ApplyAttractor(Vector3 DT);
 	//RightButton
-	Vector3 ApplyRepellor();
+	Vector3 ApplyRepellor(Vector3 DT);
 	//both at the same time
 	Vector3 CancelForces();
 	void Move(Vector3);

@@ -19,6 +19,7 @@ bool _trace(const wchar_t* const format, ...)
 	/*OutputDebugString(buffer);*/
 
 	freopen_s(&stream,"CON","w",stdout);
+	
 	//
 	//std::wcout << buffer;
 	std::wcout << format;

@@ -76,6 +76,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONUP:
 		break;
 	case WM_RBUTTONDOWN:
+		Mouse::ProcessMessage(msg, wParam, lParam);
+		G->ApplyRetractor();
 		break;
 	case WM_RBUTTONUP:
 		break;

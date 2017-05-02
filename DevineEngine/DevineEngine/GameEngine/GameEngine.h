@@ -39,6 +39,8 @@ public:
 	std::shared_ptr<Mouse>  GetMouse();
 	void GetMousePosition();
 	void ApplyAttractor();
+	double ReturnDelta();
+	void ApplyRetractor();
 private:
 	bool m_Done;
 	Direct_X* m_DirectX;

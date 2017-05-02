@@ -49,7 +49,7 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	m_Camera->SetRotation(25.0f, 0.0f, 0.0f);
 #pragma endregion 
 #pragma region Cylinder
-	m_Cylinder = new Cylinder(m_DirectX->GetDeviceContext(),10,300);
+	m_Cylinder = new Cylinder(m_DirectX->GetDeviceContext(),10,30);
 	m_Cylinder->GetFloorHeight();
 	m_Cylinder->SetPosition(CPOS);
 #pragma endregion 
@@ -74,21 +74,13 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 
 	for (int i = 0; i < balls ; i++)
 	{		
-		//set position
 		m_Sphere = new Sphere(m_DirectX->GetDeviceContext(),0.5);
-		//m_Sphere->SetPos(PosIn);
 		m_Sphere->SetVelocity(Velo);
-		//m_Sphere->SetMass(100.0f);
 		m_SphereList.push_back(m_Sphere);
 		Velo.x = -Velo.x;
-		/*PosIn.x += 1.5;*/
 	}
-	m_Sphere->ArrangeGrid(m_SphereList,m_SphereList.size());
-	//for (auto element : m_SphereList)
-	//{
-	//	
-	//}
 
+	m_Sphere->ArrangeGrid(m_SphereList,m_SphereList.size());
 #pragma endregion 
 	Vector3 gwellpos = { 0,-3,-5 };
 	m_GravityWell = new GravityWell(m_DirectX->GetDeviceContext(), 5);
@@ -137,13 +129,10 @@ void GameEngine::GameLoop()
 			if (m_Msg.message == WM_QUIT) m_Done = true;
 
 			else
-			{
-				DeltaTime = s_Timer.GetElapsedSeconds();
-				DT = &DeltaTime;
+			{				
 				s_Timer.Tick([&]()
 				{					
-					Update(s_Timer);	
-					
+					Update(s_Timer);						
 					//allows Y,H to increase/decrease the time scale, minimum 0.001, maximum 1.0 (globally)
 				});
 				Draw();
@@ -201,8 +190,9 @@ void GameEngine::Draw()
 //Physics Loop Controls All Movement And Collision
 void GameEngine::Update(DX::StepTime const& timer)
 {
+	DeltaTime = timer.GetElapsedSeconds();
+	DT = &DeltaTime;
 	auto t = DT;
-	
 	CalculateObjectPhysics(*t);
 	m_CM->Clear();
 	DynamicCollisionDetection();
@@ -273,8 +263,11 @@ void GameEngine::CalculateObjectPhysics(float dt)
 {
 	for (auto element : m_SphereList)
 	{
-		//element->CalculatePhysics(dt);		
-		element->Integrate(dt);
+		State S;
+		S.v = element->GetVel();
+		S.x = element->GetPos();
+			
+		element->Integrate(S,dt);
 	}
 	
 }
@@ -335,9 +328,6 @@ void GameEngine::GetMousePosition()
 
 	if (state.positionMode == Mouse::MODE_RELATIVE)
 	{ //state.x and state.y are relative values; system cursor is not visible
-		
-		//
-	
 		Movement = Vector3(mousePosInPixels.x * 0.1, 0, -mousePosInPixels.y * 0.1);
 	}
 	else
@@ -354,13 +344,34 @@ void GameEngine::ApplyAttractor()
 	using ButtonState = Mouse::ButtonStateTracker::ButtonState;
 	auto state = mouse->GetState();
 
-
+	Vector3 DeltaTimeV = Vector3(ReturnDelta(), ReturnDelta(), ReturnDelta());
 	tracker.Update(state);
 	if (tracker.leftButton == ButtonState::PRESSED)
 	{
+		
 		//std::cout << "HELD";
-		m_GravityWell->ApplyAttractor();
+		m_GravityWell->ApplyAttractor(DeltaTimeV);
 	}
+}
+
+double GameEngine::ReturnDelta()
+{
+	return DeltaTime;
+}
+
+void GameEngine::ApplyRetractor()
+{
+	Mouse::ButtonStateTracker tracker;
+	using ButtonState = Mouse::ButtonStateTracker::ButtonState;
+	auto state = mouse->GetState();
+
+	Vector3 DeltaTimeV = Vector3(ReturnDelta(), ReturnDelta(), ReturnDelta());
+	tracker.Update(state);
+	if (tracker.rightButton == ButtonState::PRESSED)
+	{
+		m_GravityWell->ApplyRepellor(DeltaTimeV);
+	}
+	
 }
 
 

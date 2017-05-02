@@ -24,11 +24,20 @@ void GravityWell::SetPos(Vector3 posin)
 	m_Position = posin;
 }
 
-Vector3 GravityWell::ApplyAttractor()
+Vector3 GravityWell::ApplyAttractor(Vector3 DT)
 {
 	//std::cout << m_Force.x << "/n";
-	return m_Force += Vector3(-10.3, -6.3, 0.3);
-	
+	return m_Force += DT;
+}
+
+Vector3 GravityWell::ApplyRepellor(Vector3 DT)
+{
+	return m_Force -= DT;
+}
+
+Vector3 GravityWell::CancelForces()
+{
+	return m_Force = Vector3(0, 0, 0);
 }
 
 void GravityWell::Move(Vector3 Pos)
@@ -43,16 +52,17 @@ void GravityWell::SpheresInWell(Sphere* S)
 	auto Distance = Vector3::Distance(Well, _Sphere) - (this->GetRadius() + S->GetRadius() / 2);
 	if(Distance < 0.0f)
 	{
-		/*std::cout << "In Sphere \n";*/
-		m_Force +=  S->GetVel();
-		S->SetNewVel(GetGravityWellForce()); 
-		m_Force = Vector3(0, 0, 0);
-	}
-	//else
-	//{
-	//	std::cout << "Not In Sphere \n";
-	//}
+		m_Force = Vector3(10, 10, 10);
+		auto Direction = _Sphere - Well;
+		Direction.Normalize();
 
+		S->SetNewVel(m_Force * Direction);
+		std::cout << "In Sphere \n";
+		std::cout << m_Force.x << "/n";
+		/*m_Force +=  S->GetVel();
+		S->SetNewVel(GetGravityWellForce()); 
+		m_Force = Vector3(0, 0, 0);*/
+	}
 }
 
 float GravityWell::GetRadius() const

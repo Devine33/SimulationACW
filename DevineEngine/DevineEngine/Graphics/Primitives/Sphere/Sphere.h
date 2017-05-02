@@ -33,9 +33,9 @@ public:
 	void CalculatePhysics(float dt);
 	void CollisionWithSphere(Sphere* Sphere, ContactManifold *contactManifold);
 	void Update();
-	Vector3 CalculateAcceleration(const State &state, float t);
-	Derivative Evaluate(float t,float dt,const Derivative &d);
-	void Integrate(float dt);
+	Vector3 CalculateAcceleration(const State &state);
+	Derivative Evaluate(const State &initial,float dt,const Derivative &d);
+	void Integrate(State &state, float dt);
 	void CollisionResponseWithSphere(ManifoldPoint &point);
 
 	void CollisionWithGround(Cylinder* Cylinder, ContactManifold *contactManifold);

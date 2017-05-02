@@ -14,11 +14,8 @@ Sphere::~Sphere()
 
 void Sphere::CalculatePhysics(float dt)
 {
-	/*float Friction;
-	float Elasticity;*/
 	Vector3 Force(0.0f, -9.81f * m_Mass,0);
-	Vector3 Acceleration = Force / m_Mass;
-	
+	Vector3 Acceleration = Force / m_Mass;	
 	m_NewVelocity = m_Velocity + (Acceleration * dt);
 	m_NewPosition = m_Position + (m_Velocity + m_NewVelocity /= 2) * dt;
 }
@@ -55,37 +52,37 @@ void Sphere::Update()
 	m_Position = m_NewPosition;
 }
 
-Vector3 Sphere::CalculateAcceleration(const State& state, float t)
+Vector3 Sphere::CalculateAcceleration(const State& state)
 {
 	Vector3 Force(0.0f, -9.81f * m_Mass, 0);
 	Vector3 Acceleration = Force / m_Mass;
 	return Acceleration;
 }
 
-Derivative Sphere::Evaluate(float t, float dt, const Derivative& d)
+Derivative Sphere::Evaluate(const State &initial,float dt, const Derivative& d)
 {
 	State state;
-	state.x = m_Position + d.dx*dt;
-	state.v = m_Velocity + d.dv*dt;
+	state.x = initial.x + d.dx*dt;
+	state.v = initial.v + d.dv*dt;
 
 	Derivative output;
-	output.dx = m_Velocity;
-	output.dv = CalculateAcceleration(state, t + dt);
+	output.dx = state.v;/* + (CalculateAcceleration(state) * dt);*/
+	output.dv = CalculateAcceleration(state);
 	return output;
 }
 
-void Sphere::Integrate(float dt)
+void Sphere::Integrate(State &state, float dt)
 {
 	Derivative a, b, c, d;
-	float t = dt;
-	a = Evaluate(t, 0.0f, Derivative());
-	b = Evaluate(t, dt*=0.5f, a);
-	c = Evaluate(t, dt*=0.5f, b);
-	d = Evaluate(t, dt, c);
+
+	a = Evaluate(state,0.0f, Derivative());
+	b = Evaluate(state,dt*=0.5f, a);
+	c = Evaluate(state,dt*=0.5f, b);
+	d = Evaluate(state,dt, c);
 
 	//velocity
 	Vector3 dxdt = 1.0f / 6.0f *
-		(a.dx + 2.0f*(b.dx + c.dx) + d.dx);
+		(a.dx + 2.0*(b.dx + c.dx) + d.dx);
 	//acceleration
 	Vector3 dvdt = 1.0f / 6.0f *
 		(a.dv + 2.0f*(b.dv + c.dv) + d.dv);
@@ -93,8 +90,7 @@ void Sphere::Integrate(float dt)
 	m_NewPosition = m_Position + dxdt * dt;
 	m_NewVelocity = m_Velocity + dvdt * dt;
 
-	/*state.x = state.x + dxdt * dt;
-	state.v = state.v + dvdt * dt;*/
+
 }
 
 void Sphere::CollisionResponseWithSphere(ManifoldPoint& point)
@@ -180,31 +176,39 @@ void Sphere::CollisionWithGround(Cylinder* Cylinder, ContactManifold* contactMan
 		Vector3 Centre = this->GetPos() - POS2;
 		auto Torgue = Centre.Cross(FT);
 		Torgue.Normalize();*/
-
-		//av
-		auto AV = this->GetPos().y - this->GetPos().x;
-		//av * world xy
-		auto AA = AV * 2;
-		//linear 
-		Vector3 SUB = POS2 - POS1;
-		Vector3 V(1, 1, 1);
-		SUB.Normalize();
 		this->ResetPos();
+		////av
+		//auto AV = this->GetPos().y - this->GetPos().x;
+		////av * world xy
+		//auto AA = AV * 2;
 
-		Vector3 Reflected = 2 * ColNormal * (ColNormal * this->GetVel());
+		////linear 
+		//Vector3 SUB = POS2 - POS1;
+		//SUB.Normalize();
+	
+
+		Vector3 Reflected = 2 * ColNormal * (ColNormal * this->GetNewVel());
 		this->SetNewVel(-Reflected *= Elasticity);
 	}
 }
 
 void Sphere::CollisionWithWalls(Cylinder* Cylinder, ContactManifold* contactManifold)
 {
-	Vector3 POS1 = this->GetNewPos();
+	float SpositionX = this->GetPos().x;
+	float SpositionZ = this->GetPos().z;
+
+	Vector2 SP = Vector2(SpositionX, SpositionZ);
+	
+	float CpositionX = Cylinder.GetPos().x;
+	float CpositionZ = this->GetPos().z;
+
 	float wall = Cylinder->GetRadius();
-	Vector3 CPOS = Cylinder->GetPosition();
 
-	if(wall < Vector3::Distance(POS1,CPOS))
+
+	if(POS1.x > wall || POS1.z > wall)
 	{
-
+		Vector3 Reflected = 2 * ColNormal * (ColNormal * this->GetNewVel());
+		this->SetNewVel(-Reflected *= Elasticity);
 	}
 }
 
