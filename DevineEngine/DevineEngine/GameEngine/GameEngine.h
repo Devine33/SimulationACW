@@ -63,6 +63,7 @@ private:
 	std::shared_ptr<Mouse> mouse;
 	Vector3 mousePosInPixels;
 	Vector3 Movement;
+	float Elasticity;
 };
 
 //static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

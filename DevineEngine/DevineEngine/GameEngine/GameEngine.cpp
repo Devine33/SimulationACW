@@ -59,7 +59,8 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	char buffer[256], ch;
 	fin.get(buffer, sizeof(buffer), '=');
 	fin >> ch >> balls;
-			
+	fin >> ch >> Elasticity;
+	fin.close();
 	if (!TwInit(TW_DIRECT3D11, m_DirectX->GetDevice()))
 	{
 		//MessageBoxA(.GetHandle(), TwGetLastError(), "AntTweakBar initialization failed", MB_OK | MB_ICONERROR);
@@ -75,9 +76,9 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	for (int i = 0; i < balls ; i++)
 	{		
 		m_Sphere = new Sphere(m_DirectX->GetDeviceContext(),0.5);
-		m_Sphere->SetVelocity(Velo);
+		/*m_Sphere->SetVelocity(Velo);*/
 		m_SphereList.push_back(m_Sphere);
-		Velo.x = -Velo.x;
+		/*Velo.x = -Velo.x;*/
 	}
 
 	m_Sphere->ArrangeGrid(m_SphereList,m_SphereList.size());
@@ -85,11 +86,12 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	Vector3 gwellpos = { 0,-3,-5 };
 	m_GravityWell = new GravityWell(m_DirectX->GetDeviceContext(), 5);
 	m_GravityWell->SetPos(gwellpos);
-	float elasticity  = 0.0;
+	float elasticity = 0.85;
 	fin.get(buffer, sizeof(buffer), '=');
-	fin >> ch >> elasticity;
+
 	fin.close();
 	m_GravityWell->SetElasticity(elasticity);
+	m_Sphere->SetElasticity(elasticity);
 #pragma region ColourShader
 	m_ColourShader->Initialize(m_DirectX->GetDevice());
 #pragma endregion 
@@ -117,7 +119,7 @@ void GameEngine::GameLoop()
 		MSG m_Msg;
 		ZeroMemory(&m_Msg, sizeof(MSG));
 		m_Done = false;
-
+		/*auto state = mouse->GetState();*/
 		while (!m_Done)
 		{
 			while (PeekMessage(&m_Msg, nullptr, 0, 0, PM_REMOVE))
@@ -265,8 +267,7 @@ void GameEngine::CalculateObjectPhysics(float dt)
 	{
 		State S;
 		S.v = element->GetVel();
-		S.x = element->GetPos();
-			
+		S.x = element->GetPos();	
 		element->Integrate(S,dt);
 	}
 	
@@ -347,9 +348,8 @@ void GameEngine::ApplyAttractor()
 	Vector3 DeltaTimeV = Vector3(ReturnDelta(), ReturnDelta(), ReturnDelta());
 	tracker.Update(state);
 	if (tracker.leftButton == ButtonState::PRESSED)
-	{
-		
-		//std::cout << "HELD";
+	{	
+		std::cout << "HELD";
 		m_GravityWell->ApplyAttractor(DeltaTimeV);
 	}
 }

@@ -28,8 +28,6 @@ class Sphere
 public:
 	Sphere(ID3D11DeviceContext* context,float radius );
 	~Sphere();
-	//move all darrens methods in here but 3d
-
 	void CalculatePhysics(float dt);
 	void CollisionWithSphere(Sphere* Sphere, ContactManifold *contactManifold);
 	void Update();
@@ -37,13 +35,13 @@ public:
 	Derivative Evaluate(const State &initial,float dt,const Derivative &d);
 	void Integrate(State &state, float dt);
 	void CollisionResponseWithSphere(ManifoldPoint &point);
-
 	void CollisionWithGround(Cylinder* Cylinder, ContactManifold *contactManifold);
 	void CollisionWithWalls(Cylinder* Cylinder, ContactManifold *contactManifold);
 	void ArrangeGrid(std::vector<Sphere*>,int num);
 	void SetPos(Vector3 posin);
 	void SetVelocity(Vector3 velin);
 	void SetElasticity(float e);
+	float GetElasticity();
 	void SetMass(float mass);
 	void SetNewPos(Vector3 pos);
 	void SetNewVel(Vector3 vel);
@@ -75,6 +73,8 @@ private:
 	Vector3 Acceleration;
 	float Elasticity;
 
+
+	
 };
 
 
