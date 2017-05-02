@@ -116,11 +116,10 @@ void Sphere::CollisionWithGround(Cylinder* Cylinder, ContactManifold* contactMan
 	{
 		//elasticity is 0
 		//must be 0.85 or something else;
-		auto t = GetElasticity();
 		m_NewPosition = Vector3(m_NewPosition.x, -GROUND + m_Radius, m_NewPosition.z);
 		Vector3 PN = Vector3(0, 1, 0);
 		//elasticity isnt 
-		Vector3 NV = m_Velocity - (1.0f + 0.85) * m_Velocity.Dot(PN) * PN;
+		Vector3 NV = m_Velocity - (1.0f + GetElasticity()) * m_Velocity.Dot(PN) * PN;
 		this->SetNewVel(NV);
 	}
 }
@@ -129,17 +128,34 @@ void Sphere::CollisionWithWalls(Cylinder* Cylinder, ContactManifold* contactMani
 {
 	float SpositionX = this->GetPos().x;
 	float SpositionZ = this->GetPos().z;
-	Vector2 SP = Vector2(SpositionX, SpositionZ);
 	float CpositionX = Cylinder->GetPosition().x;
 	float CpositionZ = Cylinder->GetPosition().z;
+	//COLLISIONS ARE STICKING TO WALL
+	//Sphere x & z
+	Vector2 SP = Vector2(SpositionX, SpositionZ);
+
+	//Cylinder X & Z
 	Vector2 CP = Vector2(CpositionX, CpositionZ);
+	//Distance Between Sphere & Clinder Center
 	Vector2 CN = CP - SP;
+
 	//distance
 	auto D = Vector2::Distance(SP, CP);
+	//Cylinder Radius
 	float wall = Cylinder->GetRadius();
-	if(wall < D)
+	if(wall < D + this->GetRadius())
 	{
-		/*Vector3 Reflected = 2 * CN *= (CN * this->GetNewVel());
+		//Sphere Normal
+		Vector3 Ns = Vector3(-SP.x, 0, -SP.y);
+		Ns.Normalize();
+		//Position Reset
+		this->ResetPos();
+		//Nev Velocity
+		Vector3 NV = m_Velocity - (1.0f + GetElasticity()) * m_Velocity.Dot(Ns) * Ns;
+		
+		this->SetNewVel(NV);
+
+	/*	Vector3 Reflected = Vector3(0, 0, 0);
 		this->SetNewVel(Reflected *= Elasticity);*/
 	}
 }

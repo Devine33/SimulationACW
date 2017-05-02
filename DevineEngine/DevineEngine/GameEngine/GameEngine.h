@@ -41,6 +41,7 @@ public:
 	void ApplyAttractor();
 	double ReturnDelta();
 	void ApplyRetractor();
+	void SetTexture();
 private:
 	bool m_Done;
 	Direct_X* m_DirectX;

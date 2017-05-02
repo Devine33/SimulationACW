@@ -59,6 +59,7 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	char buffer[256], ch;
 	fin.get(buffer, sizeof(buffer), '=');
 	fin >> ch >> balls;
+	fin.get(buffer, sizeof(buffer), '=');
 	fin >> ch >> Elasticity;
 	fin.close();
 	if (!TwInit(TW_DIRECT3D11, m_DirectX->GetDevice()))
@@ -76,6 +77,7 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	for (int i = 0; i < balls ; i++)
 	{		
 		m_Sphere = new Sphere(m_DirectX->GetDeviceContext(),0.5);
+		m_Sphere->SetElasticity(Elasticity);
 		/*m_Sphere->SetVelocity(Velo);*/
 		m_SphereList.push_back(m_Sphere);
 		/*Velo.x = -Velo.x;*/
@@ -162,17 +164,19 @@ void GameEngine::Draw()
 	for (auto element : m_SphereList)
 	{			
 		world *= DirectX::XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
+		//element->GetPrim()->Draw(world, view, projection, Colors::White, m_Texture->GetTexture());
+		//lag caused by textures
 		if (element->GetMass() == 1.0f)
 		{
 			element->GetPrim()->Draw(world, view, projection, Colors::White, m_Texture->GetTexture());
 		}
 		else if (element ->GetMass() == 5.0f)
 		{
-			element->GetPrim()->Draw(world, view, projection, Colors::Beige,m_MarbleTexture->GetTexture());
+			element->GetPrim()->Draw(world, view, projection, Colors::White,m_MarbleTexture->GetTexture());
 		}
 		else
 		{
-			element->GetPrim()->Draw(world, view, projection, Colors::Azure,m_BowlingBall->GetTexture());
+			element->GetPrim()->Draw(world, view, projection, Colors::White,m_BowlingBall->GetTexture());
 		}
 		world = worldMatrix;
 	}
@@ -373,5 +377,3 @@ void GameEngine::ApplyRetractor()
 	}
 	
 }
-
-
