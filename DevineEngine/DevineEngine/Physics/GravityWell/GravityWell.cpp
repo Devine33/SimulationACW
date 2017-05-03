@@ -5,6 +5,7 @@
 GravityWell::GravityWell(ID3D11DeviceContext* context, float diameter): Sphere(context, diameter), m_Position(0, 0, 0), m_Radius(0)
 {
 	m_shape = DirectX::GeometricPrimitive::CreateSphere(context, diameter);
+	m_Cshape = DirectX::GeometricPrimitive::CreateSphere(context, diameter / 5);
 	m_Diameter = diameter;
 	m_Force = Vector3(0, 0, 0);
 }
@@ -58,7 +59,7 @@ void GravityWell::SpheresInWell(Sphere* S)
 
 		S->SetNewVel(m_Force * Direction);
 		std::cout << "In Sphere \n";
-		std::cout << m_Force.x << "/n";
+		/*std::cout << m_Force.x << "/n";*/
 		/*m_Force +=  S->GetVel();
 		S->SetNewVel(GetGravityWellForce()); 
 		m_Force = Vector3(0, 0, 0);*/
@@ -73,4 +74,9 @@ float GravityWell::GetRadius() const
 Vector3 GravityWell::GetGravityWellForce() const
 {
 	return m_Force;
+}
+
+std::shared_ptr<DirectX::GeometricPrimitive> GravityWell::GetCPrim()
+{
+	return m_Cshape;
 }

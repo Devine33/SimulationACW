@@ -4,13 +4,10 @@
 #include <iostream>
 #include <thread>
 #include <AntTweakBar.h>
-// ReSharper disable once CppUnusedIncludeDirective
 #include <fstream>
 #include <Mouse.h>
 DX::StepTime s_Timer;
-
-
-GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr)
+GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr), Elasticity(0), Simulation_Paused(false)
 {
 	m_DirectX = new Direct_X;
 	m_Camera = new Camera;
@@ -32,12 +29,10 @@ GameEngine::~GameEngine()
 	delete m_Texture;
 	delete m_CM;
 }
-
 //Initializes Everything In The Application
 void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 {
 	//Sphere Variables
-	Vector3 Velo {2.0f, 0.0f, 0.0f};
 	Vector3 CPOS{ 0.0f,0.0f,0.0f };
 
 #pragma region DirectX
@@ -49,7 +44,7 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	m_Camera->SetRotation(25.0f, 0.0f, 0.0f);
 #pragma endregion 
 #pragma region Cylinder
-	m_Cylinder = new Cylinder(m_DirectX->GetDeviceContext(),10,30);
+	m_Cylinder = new Cylinder(m_DirectX->GetDeviceContext(),10,50);
 	m_Cylinder->GetFloorHeight();
 	m_Cylinder->SetPosition(CPOS);
 #pragma endregion 
@@ -115,7 +110,7 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	TRACE(L"Initialized");
 	GameLoop();
 }
-
+//MainLoop
 void GameEngine::GameLoop()
 {
 		MSG m_Msg;
@@ -131,16 +126,23 @@ void GameEngine::GameLoop()
 				
 			}
 			if (m_Msg.message == WM_QUIT) m_Done = true;
-
 			else
-			{				
-				s_Timer.Tick([&]()
-				{					
-					Update(s_Timer);						
-					//allows Y,H to increase/decrease the time scale, minimum 0.001, maximum 1.0 (globally)
-				});
-				Draw();
-				TwAddVarRW(bar, "Delta", TW_TYPE_DOUBLE, DT, "");
+			{
+				
+				if (Simulation_Paused == false)
+				{
+					s_Timer.Tick([&]()
+					{
+						Update(s_Timer);
+						//allows Y,H to increase/decrease the time scale, minimum 0.001, maximum 1.0 (globally)
+					});
+					Draw();
+					TwAddVarRW(bar, "Delta", TW_TYPE_DOUBLE, DT, "");
+				}
+				else
+				{
+				}
+				
 			}			
 		}
 }
@@ -163,9 +165,11 @@ void GameEngine::Draw()
 	Matrix world = worldMatrix;
 	for (auto element : m_SphereList)
 	{			
+
+		//world *= Get elements rotation x,y,z
 		world *= DirectX::XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
+		
 		//element->GetPrim()->Draw(world, view, projection, Colors::White, m_Texture->GetTexture());
-		//lag caused by textures
 		if (element->GetMass() == 1.0f)
 		{
 			element->GetPrim()->Draw(world, view, projection, Colors::White, m_Texture->GetTexture());
@@ -186,13 +190,13 @@ void GameEngine::Draw()
 	world *= DirectX::XMMatrixTranslation(m_GravityWell->GetPos().x, m_GravityWell->GetPos().y, m_GravityWell->GetPos().z);
 	
 	m_GravityWell->GetPrim()->Draw(world, view, projection,Red);
+	m_GravityWell->GetCPrim()->Draw(world, view, projection,Colors::AliceBlue);
 	world = worldMatrix;
 
 	TwDraw();
 	m_DirectX->EndScene();
 	
 }
-
 //Physics Loop Controls All Movement And Collision
 void GameEngine::Update(DX::StepTime const& timer)
 {
@@ -205,7 +209,6 @@ void GameEngine::Update(DX::StepTime const& timer)
 	DynamicCollisionResponse();	
 	UpdateObjectPhysics();
 }
-
 //If Objects Have Collided Get The Collision Point And Respond Appropriately
 void GameEngine::DynamicCollisionResponse()
 {
@@ -276,7 +279,7 @@ void GameEngine::CalculateObjectPhysics(float dt)
 	}
 	
 }
-
+//Should Restart
 void GameEngine::Restart()
 {
 	
@@ -322,7 +325,7 @@ std::shared_ptr<Mouse> GameEngine::GetMouse()
 {
 	return mouse;
 }
-//gets mosue location on window
+//gets mouse location on window
 void GameEngine::GetMousePosition()
 {
 	auto state = mouse->GetState();
@@ -343,6 +346,18 @@ void GameEngine::GetMousePosition()
 
 }
 
+void GameEngine::PauseSimulation()
+{
+	if (Simulation_Paused)
+	{
+		Simulation_Paused = false;
+	}
+	else
+	{
+		Simulation_Paused = true;
+	}
+}
+
 void GameEngine::ApplyAttractor()
 {
 	Mouse::ButtonStateTracker tracker;
@@ -351,9 +366,12 @@ void GameEngine::ApplyAttractor()
 
 	Vector3 DeltaTimeV = Vector3(ReturnDelta(), ReturnDelta(), ReturnDelta());
 	tracker.Update(state);
+	//TwAddVarRW(bar, "Attract Value", TW_TYPE_FLOAT, &DeltaTimeV.x);
 	if (tracker.leftButton == ButtonState::PRESSED)
 	{	
-		std::cout << "HELD";
+		DeltaTimeV += Vector3(0.5, 0.5, 0.5);
+		std::cout << DeltaTimeV.x << "\n";
+
 		m_GravityWell->ApplyAttractor(DeltaTimeV);
 	}
 }
@@ -373,6 +391,8 @@ void GameEngine::ApplyRetractor()
 	tracker.Update(state);
 	if (tracker.rightButton == ButtonState::PRESSED)
 	{
+		DeltaTimeV -= Vector3(0.5, 0.5, 0.5);
+		std::cout << DeltaTimeV.x;
 		m_GravityWell->ApplyRepellor(DeltaTimeV);
 	}
 	

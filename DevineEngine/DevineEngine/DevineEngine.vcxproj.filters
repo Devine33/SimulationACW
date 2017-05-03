@@ -130,11 +130,14 @@
     <ClCompile Include="Graphics\Primitives\Arena\Cylinder.cpp">
       <Filter>Graphics\Primitives\Cylinder</Filter>
     </ClCompile>
-    <ClCompile Include="Physics\ContactManifold.cpp">
-      <Filter>Physics\ContactManifold</Filter>
+    <ClCompile Include="Networking\Server.cpp">
+      <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="GravityWell.cpp">
+    <ClCompile Include="Physics\GravityWell\GravityWell.cpp">
       <Filter>Physics\GravityWell</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\ContactManifold\ContactManifold.cpp">
+      <Filter>Physics\ContactManifold</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -195,11 +198,14 @@
     <ClInclude Include="Graphics\Primitives\Arena\Cylinder.h">
       <Filter>Graphics\Primitives\Cylinder</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\ContactManifold.h">
-      <Filter>Physics\ContactManifold</Filter>
+    <ClInclude Include="Networking\Server.h">
+      <Filter>Networking</Filter>
     </ClInclude>
-    <ClInclude Include="GravityWell.h">
+    <ClInclude Include="Physics\GravityWell\GravityWell.h">
       <Filter>Physics\GravityWell</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\ContactManifold\ContactManifold.h">
+      <Filter>Physics\ContactManifold</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

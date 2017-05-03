@@ -9,11 +9,12 @@
 #include "../Graphics/Texture/Texture.h"
 #include "../Timer/StepTime.h"
 #include "../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/GeometricPrimitive.h"
-#include "../Physics/ContactManifold.h"
+#include "../Physics/GravityWell/GravityWell.h"
+#include "../Physics/ContactManifold/ContactManifold.h"
 #include  <SimpleMath.h>
-#include "../GravityWell.h"
 #include "../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/Mouse.h"
 #include <memory>
+
 
 
 class GameEngine
@@ -38,10 +39,11 @@ public:
 	void MoveGravityWell();
 	std::shared_ptr<Mouse>  GetMouse();
 	void GetMousePosition();
+	void PauseSimulation();
 	void ApplyAttractor();
 	double ReturnDelta();
 	void ApplyRetractor();
-	void SetTexture();
+	
 private:
 	bool m_Done;
 	Direct_X* m_DirectX;
@@ -65,6 +67,7 @@ private:
 	Vector3 mousePosInPixels;
 	Vector3 Movement;
 	float Elasticity;
+	bool Simulation_Paused;
 };
 
 //static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

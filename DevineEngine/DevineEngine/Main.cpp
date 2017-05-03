@@ -9,10 +9,6 @@ std::unique_ptr<GameEngine> G(new GameEngine);
 int i = 0;
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	
-	
-
-	
 	if (TwEventWin(hwnd, msg, wParam, lParam))
 		return 0;
 	//TRACE(L"Windowing::WndProc \n");
@@ -34,6 +30,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (wParam == 82)
 		{
 			TRACE(L"System Reset\n");
+			
 		}
 		if (wParam == 87)
 		{
@@ -55,6 +52,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (wParam == 68)
 		{
 			G->MoveRight();
+		}
+		if (wParam == 80)
+		{
+			G->PauseSimulation();
 		}
 		//make use of input handler here send over WPARAM MATCH MVOEMENTS TO CAMERA AND CALL METHOD
 		break;

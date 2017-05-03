@@ -2,7 +2,7 @@
 #include <d3d11.h>
 #include <memory>
 #include "../Arena/Cylinder.h"
-#include "../../../Physics/ContactManifold.h"
+#include "../../../Physics/ContactManifold/ContactManifold.h"
 #include "../../../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/GeometricPrimitive.h"
 #include "SimpleMath.h"
 #include <istream>

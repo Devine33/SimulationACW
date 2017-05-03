@@ -1,5 +1,5 @@
 #pragma once
-#include "Graphics/Primitives/Sphere/Sphere.h"
+#include "../../Graphics/Primitives/Sphere/Sphere.h"
 
 class GravityWell : public Sphere
 {
@@ -18,8 +18,10 @@ public:
 	void SpheresInWell(Sphere* S);
 	float GetRadius() const;
 	Vector3 GetGravityWellForce() const;
+	std::shared_ptr<DirectX::GeometricPrimitive> GetCPrim();
 private:
 	std::shared_ptr<DirectX::GeometricPrimitive> m_shape;
+	std::shared_ptr<DirectX::GeometricPrimitive> m_Cshape;
 	float m_Diameter;
 	Vector3 m_Position;
 	float m_Radius;
