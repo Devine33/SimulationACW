@@ -127,8 +127,6 @@ void Sphere::CollisionWithGround(Cylinder* Cylinder, ContactManifold* contactMan
 
 void Sphere::CollisionWithWalls(Cylinder* Cylinder, ContactManifold* contactManifold)
 {
-
-	//COLLISIONS ARE STICKING TO WALL
 	float SpositionX = this->GetNewPos().x;
 	float SpositionZ = this->GetNewPos().z;
 	float CpositionX = Cylinder->GetPosition().x;

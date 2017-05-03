@@ -62,7 +62,7 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 		//MessageBoxA(.GetHandle(), TwGetLastError(), "AntTweakBar initialization failed", MB_OK | MB_ICONERROR);
 	}
 	bar = TwNewBar("TweakBar");
-	TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar into a DirectX11 application.' "); // Message added to the help
+	//TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar into a DirectX11 application.' "); // Message added to the help
 	/*int barSize[2] = { m_DirectX->GetScreenWidth(), m_DirectX->GetScreenHeight() };*/
 
 	m_NumBalls = &balls;
@@ -116,6 +116,7 @@ void GameEngine::GameLoop()
 		MSG m_Msg;
 		ZeroMemory(&m_Msg, sizeof(MSG));
 		m_Done = false;
+		
 		/*auto state = mouse->GetState();*/
 		while (!m_Done)
 		{
