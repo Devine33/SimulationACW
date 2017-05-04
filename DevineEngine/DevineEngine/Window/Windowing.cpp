@@ -12,12 +12,12 @@ Windowing::Windowing(): m_HInstance(nullptr), m_Done(false), m_Result(false), m_
 
 Windowing::~Windowing()
 {
-	TRACE(L"Window Destroyed \n");
+	//TRACE(L"Window Destroyed \n");
 }
 
 bool Windowing::FillWindowStruct(WNDPROC WndProc)
 {
-	TRACE(L"Windowing::FillWindowStruct \n");
+	//TRACE(L"Windowing::FillWindowStruct \n");
 	//Step 1: Registering the Window Class
 	m_Window.cbSize = sizeof(WNDCLASSEX);
 	m_Window.style = 0;

@@ -43,6 +43,7 @@ public:
 	void ApplyAttractor();
 	double ReturnDelta();
 	void ApplyRetractor();
+	static void StartRun(GameEngine* G);
 	
 private:
 	bool m_Done;
@@ -68,6 +69,7 @@ private:
 	Vector3 Movement;
 	float Elasticity;
 	bool Simulation_Paused;
+	Client* m_Client;
 };
 
 //static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

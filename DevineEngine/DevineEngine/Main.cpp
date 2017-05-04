@@ -28,7 +28,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		if (wParam == 82)
 		{
-			TRACE(L"System Reset\n");
+			//TRACE(L"System Reset\n");
 			
 		}
 		if (wParam == 87)

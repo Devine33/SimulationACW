@@ -1,8 +1,10 @@
 #include "GameEngine.h"
 #include <AntTweakBar.h>
 #include <iostream>
+#include <thread>
+#include "../Tracer/Trace.hpp"
 DX::StepTime s_Timer;
-GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr), Elasticity(0), Simulation_Paused(false)
+GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr), Elasticity(0), Simulation_Paused(false), m_Client(nullptr)
 {
 	m_DirectX = new Direct_X;
 	m_Camera = new Camera;
@@ -12,6 +14,7 @@ GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullpt
 	m_MarbleTexture = new Texture;
 	m_BowlingBall = new Texture;
 	m_CM = new ContactManifold;
+
 }
 
 GameEngine::~GameEngine()
@@ -27,6 +30,7 @@ GameEngine::~GameEngine()
 //Initializes Everything In The Application
 void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 {
+	TRACE(L"Start");
 	//Sphere Variables
 	Vector3 CPOS{ 0.0f,0.0f,0.0f };
 
@@ -99,9 +103,11 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	m_BowlingBall->Initialize(m_DirectX->GetDevice(), L"../DevineEngine/data/Bowling.dds");
 #pragma endregion 
 
-	mouse = std::make_shared<Mouse>();
+	mouse = std::make_shared<Mouse>(); 
 	mouse->SetWindow(m_DirectX->GetHandle());
 	mouse->SetMode(Mouse::MODE_RELATIVE);
+
+	std::thread L(StartRun, this);
 	//TRACE(L"Initialized");
 	GameLoop();
 }
@@ -392,4 +398,10 @@ void GameEngine::ApplyRetractor()
 		m_GravityWell->ApplyRepellor(DeltaTimeV);
 	}
 	
+}
+
+void GameEngine::StartRun(GameEngine* G)
+{
+	G->m_Client = new Client;
+	G->m_Client->Run();
 }
