@@ -1,7 +1,4 @@
 #include "Direct_X.h"
-#include <string>
-#include "../Tracer/Trace.hpp"
-#include <AntTweakBar.h>
 
 
 Direct_X::Direct_X(): m_Factory(nullptr), m_Adapter(nullptr), m_AdapterOutput(nullptr), m_DisplayModeList(nullptr), m_NumModes(0), i(0), m_Numerator(0), m_Denominator(0), m_FeatureLevel()
@@ -30,45 +27,45 @@ void Direct_X::CreateFeatureList()
 	m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_10_0);
 	m_FeatureLevels.push_back(D3D_FEATURE_LEVEL_9_3);*/
 
-	TRACE(L"Feature List Populate \n");
+	/*TRACE(L"Feature List Populate \n");*/
 }
 //Initializes Factory, Adapter & Output
 void Direct_X::InitializeFactory(int ScreenWidth,int ScreenHeight)
 {
 	HRESULT result;
 	CreateFeatureList();
-	TRACE(L"Direct_X::InitializeFactory \n");
+	/*TRACE(L"Direct_X::InitializeFactory \n");*/
 
 	result = CreateDXGIFactory(__uuidof(IDXGIFactory), reinterpret_cast<void**>(m_Factory.GetAddressOf()));
 	if (FAILED(result))
 	{
-		TRACE(L"Test");
+		/*TRACE(L"Test");*/
 	}
 	// Use the factory to create an adapter for the primary graphics interface (video card).
 	result = m_Factory->EnumAdapters(0, m_Adapter.GetAddressOf());
 	if (FAILED(result))
 	{
-		TRACE(L"Test");
+	/*	TRACE(L"Test");*/
 	}
 	result = m_Adapter->EnumOutputs(0, m_AdapterOutput.GetAddressOf());
 	if (FAILED(result))
 	{
-		TRACE(L"Test");
+		/*TRACE(L"Test");*/
 	}
 	result = m_AdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_NumModes, nullptr);
 	if (FAILED(result))
 	{
-		TRACE(L"Test");
+	/*	TRACE(L"Test");*/
 	}
 	m_DisplayModeList = new DXGI_MODE_DESC[m_NumModes];
 	if(!m_DisplayModeList)
 	{		
-		TRACE(L"Test");		
+		/*TRACE(L"Test");		*/
 	}
 	result = m_AdapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_NumModes, m_DisplayModeList);
 	if (FAILED(result))
 	{
-		TRACE(L"Test");
+	/*	TRACE(L"Test");*/
 	}
 	// Now go through all the display modes and find the one that matches the screen width and height.
 	// When a match is found store the numerator and denominator of the refresh rate for that monitor.
@@ -98,7 +95,7 @@ void Direct_X::InitializeSwapChain(int ScreenWidth, int ScreenHeight,HWND hwnd)
 	creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	TRACE(L"SwapChain Started \n");
+	//TRACE(L"SwapChain Started \n");
 	ZeroMemory(m_SwapChain.GetAddressOf(), sizeof(m_SwapChainDesc));
 	//BufferDesc
 	m_SwapChainDesc.BufferDesc.Width = ScreenWidth;
@@ -137,20 +134,20 @@ void Direct_X::InitializeSwapChain(int ScreenWidth, int ScreenHeight,HWND hwnd)
 	
 	if (FAILED(result))
 	{
-		TRACE(L"ASDSA");
+		//TRACE(L"ASDSA");
 	}
 
 	result = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(m_SwapChainBuffer.GetAddressOf()));
 	if (FAILED(result))
 	{
-		TRACE(L"m_SwapChain->GetBuffer::FAIL");
+		//TRACE(L"m_SwapChain->GetBuffer::FAIL");
 	}
-	TRACE(L"swapchain ended \n");
+	//TRACE(L"swapchain ended \n");
 }
 
 void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 {
-	TRACE(L"Resource Initialization Started \n");
+	//TRACE(L"Resource Initialization Started \n");
 	//Acquire texture interface from swapchain
 	
 	HRESULT result;
@@ -159,7 +156,7 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	result  = m_Device->CreateRenderTargetView(m_SwapChainBuffer.Get(), nullptr, m_RenderTarget.GetAddressOf());
 	if (FAILED(result))
 	{
-		TRACE(L"FAIL");
+		//TRACE(L"FAIL");
 	}
 	// Release pointer to the back buffer as we no longer need it.
 	
@@ -183,7 +180,7 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	result = m_Device->CreateTexture2D(&m_DepthDesc, nullptr, m_DepthStencilBuffer.GetAddressOf());
 	if (FAILED(result))
 	{
-		TRACE(L"ASDSA");
+		//TRACE(L"ASDSA");
 	}
 	
 	m_DepthStencilBufferDescription.DepthEnable = true;
@@ -206,7 +203,7 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	result = m_Device.Get()->CreateDepthStencilState(&m_DepthStencilBufferDescription, m_DepthStencilState.GetAddressOf());
 	if (FAILED(result))
 	{
-		TRACE(L"ASDSA");
+		//TRACE(L"ASDSA");
 	}
 	m_DeviceContext->OMSetDepthStencilState(m_DepthStencilState.Get(), 1);
 	
@@ -223,7 +220,7 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	result = m_Device.Get()->CreateDepthStencilView(m_DepthStencilBuffer.Get(), &m_DepthStencilViewDesc, m_DepthStencilView.GetAddressOf());
 	if (FAILED(result))
 	{
-		TRACE(L"ASDSA");
+		//TRACE(L"ASDSA");
 	}
 	m_DeviceContext.Get()->OMSetRenderTargets(1, m_RenderTarget.GetAddressOf(), m_DepthStencilView.Get());
 
@@ -242,7 +239,7 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 	result = m_Device.Get()->CreateRasterizerState(&m_Rasterizer, m_RasterizerState.GetAddressOf());
 	if (FAILED(result))
 	{
-		TRACE(L"failed");
+		//TRACE(L"failed");
 	}
 
 	m_DeviceContext.Get()->RSSetState(m_RasterizerState.Get());
@@ -257,7 +254,7 @@ void Direct_X::InitializeResources(int ScreenWidth, int ScreenHeight)
 
 	m_DeviceContext->RSSetViewports(1, &m_Viewport);
 	//attempt to break this up even more and SETUP
-	TRACE(L"Resource Initialization Finished \n");
+	//TRACE(L"Resource Initialization Finished \n");
 }
 
 //ID3D11ShaderResourceView* Direct_X::CreateShaderResourceView(ID3D11Resource* pResource, D3D11_SHADER_RESOURCE_VIEW_DESC* pDesc)

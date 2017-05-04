@@ -1,5 +1,4 @@
 #include "Time.h"
-#include <Windows.h>
 #include <string>
 #include <iostream>
 #include <thread>

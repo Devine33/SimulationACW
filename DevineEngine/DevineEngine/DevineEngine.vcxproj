@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Physics\GravityWell\GravityWell.cpp" />
     <ClCompile Include="Physics\ContactManifold\ContactManifold.cpp" />
     <ClCompile Include="Graphics\Primitives\Arena\Cylinder.cpp" />
@@ -166,14 +167,13 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Graphics\Primitives\Sphere\Sphere.cpp" />
     <ClCompile Include="Graphics\Texture\Texture.cpp" />
-    <ClCompile Include="Networking\Server.cpp" />
-    <ClCompile Include="Timer\Time.cpp" />
     <ClCompile Include="Tracer\Trace.cpp" />
     <ClCompile Include="GUI\UI.cpp" />
     <ClCompile Include="Window\Windowing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Client.h" />
     <ClInclude Include="Physics\GravityWell\GravityWell.h" />
     <ClInclude Include="Physics\ContactManifold\ContactManifold.h" />
     <ClInclude Include="Graphics\Primitives\Arena\Cylinder.h" />
@@ -189,9 +189,7 @@
     <ClInclude Include="Graphics\Shaders\Base\Shader.h" />
     <ClInclude Include="Graphics\Primitives\Sphere\Sphere.h" />
     <ClInclude Include="Graphics\Texture\Texture.h" />
-    <ClInclude Include="Networking\Server.h" />
     <ClInclude Include="Timer\StepTime.h" />
-    <ClInclude Include="Timer\Time.h" />
     <ClInclude Include="Tracer\Trace.hpp" />
     <ClInclude Include="GUI\UI.h" />
     <ClInclude Include="Window\Windowing.h" />

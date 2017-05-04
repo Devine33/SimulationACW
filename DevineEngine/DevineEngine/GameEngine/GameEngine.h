@@ -1,5 +1,5 @@
 #pragma once
-#include <Windows.h>
+#include "../Client.h"
 #include "../DirectX/Direct_X.h"
 #include "../Camera/Camera.h"
 #include "../Graphics/Primitives/Sphere/Sphere.h"

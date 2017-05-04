@@ -91,9 +91,6 @@
     <ClCompile Include="Tracer\Trace.cpp">
       <Filter>Tracer</Filter>
     </ClCompile>
-    <ClCompile Include="Timer\Time.cpp">
-      <Filter>Timer</Filter>
-    </ClCompile>
     <ClCompile Include="Input\Command.cpp">
       <Filter>Input</Filter>
     </ClCompile>
@@ -130,14 +127,14 @@
     <ClCompile Include="Graphics\Primitives\Arena\Cylinder.cpp">
       <Filter>Graphics\Primitives\Cylinder</Filter>
     </ClCompile>
-    <ClCompile Include="Networking\Server.cpp">
-      <Filter>Networking</Filter>
-    </ClCompile>
     <ClCompile Include="Physics\GravityWell\GravityWell.cpp">
       <Filter>Physics\GravityWell</Filter>
     </ClCompile>
     <ClCompile Include="Physics\ContactManifold\ContactManifold.cpp">
       <Filter>Physics\ContactManifold</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Networking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +146,6 @@
     </ClInclude>
     <ClInclude Include="Tracer\Trace.hpp">
       <Filter>Tracer</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer\Time.h">
-      <Filter>Timer</Filter>
     </ClInclude>
     <ClInclude Include="Input\Command.h">
       <Filter>Input</Filter>
@@ -198,14 +192,14 @@
     <ClInclude Include="Graphics\Primitives\Arena\Cylinder.h">
       <Filter>Graphics\Primitives\Cylinder</Filter>
     </ClInclude>
-    <ClInclude Include="Networking\Server.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
     <ClInclude Include="Physics\GravityWell\GravityWell.h">
       <Filter>Physics\GravityWell</Filter>
     </ClInclude>
     <ClInclude Include="Physics\ContactManifold\ContactManifold.h">
       <Filter>Physics\ContactManifold</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

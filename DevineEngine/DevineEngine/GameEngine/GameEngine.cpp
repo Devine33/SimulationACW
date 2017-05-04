@@ -1,11 +1,6 @@
 #include "GameEngine.h"
-#include "../Tracer/Trace.hpp"
-#include "GeometricPrimitive.h"
-#include <iostream>
-#include <thread>
 #include <AntTweakBar.h>
-#include <fstream>
-#include <Mouse.h>
+#include <iostream>
 DX::StepTime s_Timer;
 GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr), Elasticity(0), Simulation_Paused(false)
 {
@@ -107,7 +102,7 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	mouse = std::make_shared<Mouse>();
 	mouse->SetWindow(m_DirectX->GetHandle());
 	mouse->SetMode(Mouse::MODE_RELATIVE);
-	TRACE(L"Initialized");
+	//TRACE(L"Initialized");
 	GameLoop();
 }
 //MainLoop

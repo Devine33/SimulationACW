@@ -1,6 +1,8 @@
 #pragma once
-#include <d3d11.h>
-#include <directxmath.h>
+#include <DirectXCollision.h>
+namespace DirectX {
+	struct XMMATRIX;
+}
 
 class Camera
 {

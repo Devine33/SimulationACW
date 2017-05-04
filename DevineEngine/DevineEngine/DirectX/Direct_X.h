@@ -1,13 +1,9 @@
 #pragma once
-#include <d3d11.h>
 #include <vector>
 #include <wrl/client.h>
+#include <d3d11.h>
 #include "../Window/Windowing.h"
 
-
-//what can i abstract from this?
-//feature list of D3Dmodes e.g. create feature list
-//Will Initialize Direct_X and Associate with Rendering
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")

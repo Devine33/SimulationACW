@@ -1,6 +1,7 @@
 #include "Input.h"
 #include <iostream>
 #include "../Tracer/Trace.hpp"
+#include <Windows.h>
 
 Input::Input(): m_keys{true}
 {
