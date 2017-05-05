@@ -54,6 +54,7 @@ private:
 	Cylinder* m_Cylinder;
 	ColourShader* m_ColourShader;
 	vector<Sphere*> m_SphereList;
+	vector<GravityWell*> m_GravityWellList;
 	ContactManifold* m_CM;
 	UI* m_Ui;
 	Texture* m_Texture;

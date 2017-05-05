@@ -1,5 +1,6 @@
 #pragma once
 #include <winsock2.h>
+#include "Timer\StepTime.h"
 #pragma comment(lib, "ws2_32.lib")
 // TCP CLIENT
 class Client
@@ -11,21 +12,25 @@ public:
 	void CreateSocketData() const;
 	bool CheckSocket(SOCKET s);
 	bool CheckBind(SOCKET S);
-	 void Run();
-	void BeginRun();
+	bool CheckListener(SOCKET S);
+	bool CheckReceive(SOCKET S);
+	void Run();
 	void SetupHost();
 	void SetupPeer();
-	void Send( SOCKET S);
-	void Receive(SOCKET S);
+	bool ReturnPeerConnected();
+	 void Send();
+	static void Receive(Client* c);
 private:
 	//if its true your the host
 	bool m_Host;
 	////Addresses for Host & Peers
 	sockaddr_in Peer;
 	sockaddr_in Host;
-
+	bool m_PeerConnected;
+	//
 	SOCKET S;
-	SOCKET Listener;
-	SOCKET Transfer;
+	SOCKET Host_Socket;
+	SOCKET Peer_Socket;
+	DX::StepTime m_Timer;
 };
 

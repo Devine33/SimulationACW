@@ -82,12 +82,13 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	Vector3 gwellpos = { 0,-3,-5 };
 	m_GravityWell = new GravityWell(m_DirectX->GetDeviceContext(), 5);
 	m_GravityWell->SetPos(gwellpos);
-	float elasticity = 0.85;
-	fin.get(buffer, sizeof(buffer), '=');
+	m_GravityWellList.push_back(m_GravityWell);
+	//float elasticity = 0.85;
+	//fin.get(buffer, sizeof(buffer), '=');
 
-	fin.close();
-	m_GravityWell->SetElasticity(elasticity);
-	m_Sphere->SetElasticity(elasticity);
+	//fin.close();
+	m_GravityWell->SetElasticity(Elasticity);
+	m_Sphere->SetElasticity(Elasticity);
 #pragma region ColourShader
 	m_ColourShader->Initialize(m_DirectX->GetDevice());
 #pragma endregion 
@@ -108,8 +109,12 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	mouse->SetMode(Mouse::MODE_RELATIVE);
 
 	std::thread L(StartRun, this);
+
+	/*L.join();*/
+	/*L.join();*/
 	//TRACE(L"Initialized");
 	GameLoop();
+
 }
 //MainLoop
 void GameEngine::GameLoop()
@@ -167,7 +172,6 @@ void GameEngine::Draw()
 	Matrix world = worldMatrix;
 	for (auto element : m_SphereList)
 	{			
-
 		//world *= Get elements rotation x,y,z
 		world *= DirectX::XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
 		
@@ -189,10 +193,19 @@ void GameEngine::Draw()
 	world *= DirectX::XMMatrixTranslation(m_Cylinder->GetPosition().x, m_Cylinder->GetPosition().y, m_Cylinder->GetPosition().z);
 	m_Cylinder->GetPrim()->Draw(world, view, projection);
 	world = worldMatrix;
-	world *= DirectX::XMMatrixTranslation(m_GravityWell->GetPos().x, m_GravityWell->GetPos().y, m_GravityWell->GetPos().z);
 	
-	m_GravityWell->GetPrim()->Draw(world, view, projection,Red);
-	m_GravityWell->GetCPrim()->Draw(world, view, projection,Colors::AliceBlue);
+
+	
+	//m_GravityWell->GetPrim()->Draw(world, view, projection,Red);
+	//m_GravityWell->GetCPrim()->Draw(world, view, projection,Colors::AliceBlue);
+
+	for (auto element : m_GravityWellList)
+	{
+		world *= DirectX::XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
+		element->GetPrim()->Draw(world, view, projection, Red);
+		m_GravityWell->GetCPrim()->Draw(world, view, projection, Colors::AliceBlue);
+		world = worldMatrix;
+	}
 	world = worldMatrix;
 
 	TwDraw();
@@ -403,5 +416,20 @@ void GameEngine::ApplyRetractor()
 void GameEngine::StartRun(GameEngine* G)
 {
 	G->m_Client = new Client;
+	//have to be connected then initialized
+	if (G->m_Client->ReturnPeerConnected() == true)
+	{
+		Vector3 gwellpos = { 0,-3,-5 };
+		GravityWell* m_PeerWell = new GravityWell(G->m_DirectX->GetDeviceContext(), 5);
+		m_PeerWell->SetPos(gwellpos);
+		G->m_GravityWellList.push_back(m_PeerWell);
+		std::cout << "NEW PEER READY TO GO";
+	}
+	else
+	{
+		std::cout << " \n No Peer Connected";
+	}
 	G->m_Client->Run();
+
+
 }
