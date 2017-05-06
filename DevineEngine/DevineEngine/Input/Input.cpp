@@ -1,7 +1,8 @@
 #include "Input.h"
 #include <iostream>
 #include "../Tracer/Trace.hpp"
-#include <Windows.h>
+#include <wincon.h>
+
 
 Input::Input(): m_keys{true}
 {
@@ -20,7 +21,7 @@ void Input::KeyDown(const unsigned int input)
 {
 	//TRACE(L"Input::Keydown \n");
 	// If a key is pressed then save that state in the key array.
-	GetAsyncKeyState(input);
+	/*GetAsyncKeyState(input);*/
 }
 
 void Input::KeyUp(const unsigned int key)

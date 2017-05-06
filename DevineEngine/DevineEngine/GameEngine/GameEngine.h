@@ -1,5 +1,4 @@
 #pragma once
-#include "../Client.h"
 #include "../DirectX/Direct_X.h"
 #include "../Camera/Camera.h"
 #include "../Graphics/Primitives/Sphere/Sphere.h"
@@ -14,9 +13,6 @@
 #include  <SimpleMath.h>
 #include "../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/Mouse.h"
 #include <memory>
-
-
-
 class GameEngine
 {
 public:
@@ -39,11 +35,16 @@ public:
 	void MoveGravityWell();
 	std::shared_ptr<Mouse>  GetMouse();
 	void GetMousePosition();
+
+	Vector3 GetWellPosition();
+	void UpdateWellPositions();
+
 	void PauseSimulation();
 	void ApplyAttractor();
 	double ReturnDelta();
 	void ApplyRetractor();
-	static void StartRun(GameEngine* G);
+	void CreateGravityWell();
+	//static void StartRun(GameEngine* G);
 	
 private:
 	bool m_Done;
@@ -70,7 +71,7 @@ private:
 	Vector3 Movement;
 	float Elasticity;
 	bool Simulation_Paused;
-	Client* m_Client;
+	//Networking* m_Client;
 };
 
 //static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

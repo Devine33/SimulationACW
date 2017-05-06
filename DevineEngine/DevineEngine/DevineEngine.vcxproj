@@ -152,43 +152,37 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
-    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Networking\Networking.cpp" />
     <ClCompile Include="Physics\GravityWell\GravityWell.cpp" />
     <ClCompile Include="Physics\ContactManifold\ContactManifold.cpp" />
     <ClCompile Include="Graphics\Primitives\Arena\Cylinder.cpp" />
     <ClCompile Include="Graphics\Shaders\Colour\ColourShader.cpp" />
-    <ClCompile Include="Input\Command.cpp" />
     <ClCompile Include="Graphics\Shaders\Concrete\CShader.cpp" />
     <ClCompile Include="DirectX\Direct_X.cpp" />
     <ClCompile Include="GameEngine\GameEngine.cpp" />
-    <ClCompile Include="Input\Input.cpp" />
-    <ClCompile Include="Input\InputHandler.cpp" />
-    <ClCompile Include="Input\KeyDownCommand.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Graphics\Primitives\Sphere\Sphere.cpp" />
     <ClCompile Include="Graphics\Texture\Texture.cpp" />
+    <ClCompile Include="SystemEngine\SystemEngine.cpp" />
     <ClCompile Include="Tracer\Trace.cpp" />
     <ClCompile Include="GUI\UI.cpp" />
     <ClCompile Include="Window\Windowing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h" />
-    <ClInclude Include="Client.h" />
+    <ClInclude Include="Networking\Networking.h" />
     <ClInclude Include="Physics\GravityWell\GravityWell.h" />
     <ClInclude Include="Physics\ContactManifold\ContactManifold.h" />
     <ClInclude Include="Graphics\Primitives\Arena\Cylinder.h" />
     <ClInclude Include="Graphics\Shaders\Colour\ColourShader.h" />
-    <ClInclude Include="Input\Command.h" />
     <ClInclude Include="Graphics\Shaders\Concrete\CShader.h" />
     <ClInclude Include="DirectX\Direct_X.h" />
     <ClInclude Include="GameEngine\GameEngine.h" />
-    <ClInclude Include="Input\Input.h" />
-    <ClInclude Include="Input\InputHandler.h" />
-    <ClInclude Include="Input\KeyDownCommand.h" />
     <ClInclude Include="Graphics\Base\Renderer.h" />
     <ClInclude Include="Graphics\Shaders\Base\Shader.h" />
     <ClInclude Include="Graphics\Primitives\Sphere\Sphere.h" />
     <ClInclude Include="Graphics\Texture\Texture.h" />
+    <ClInclude Include="SystemEngine\SystemEngine.h" />
     <ClInclude Include="Timer\StepTime.h" />
     <ClInclude Include="Tracer\Trace.hpp" />
     <ClInclude Include="GUI\UI.h" />

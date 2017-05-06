@@ -4,7 +4,7 @@
 #include <thread>
 #include "../Tracer/Trace.hpp"
 DX::StepTime s_Timer;
-GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr), Elasticity(0), Simulation_Paused(false), m_Client(nullptr)
+GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr), Elasticity(0), Simulation_Paused(false)//, m_Client(nullptr)
 {
 	m_DirectX = new Direct_X;
 	m_Camera = new Camera;
@@ -108,12 +108,12 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 	mouse->SetWindow(m_DirectX->GetHandle());
 	mouse->SetMode(Mouse::MODE_RELATIVE);
 
-	std::thread L(StartRun, this);
+	/*std::thread L(StartRun, this);*/
 
 	/*L.join();*/
 	/*L.join();*/
 	//TRACE(L"Initialized");
-	GameLoop();
+
 
 }
 //MainLoop
@@ -215,6 +215,12 @@ void GameEngine::Draw()
 //Physics Loop Controls All Movement And Collision
 void GameEngine::Update(DX::StepTime const& timer)
 {
+	HANDLE process = GetCurrentProcess();
+	DWORD_PTR processAffinityMask = 0x03;
+	//// processor 3
+	SetProcessAffinityMask(process, processAffinityMask);
+	SetThreadAffinityMask(GetCurrentThread(), 4);
+
 	DeltaTime = timer.GetElapsedSeconds();
 	DT = &DeltaTime;
 	auto t = DT;
@@ -361,6 +367,33 @@ void GameEngine::GetMousePosition()
 
 }
 
+Vector3 GameEngine::GetWellPosition()
+{
+
+	for (auto element : m_GravityWellList)
+	{
+		if (m_GravityWellList.at(0))
+		{
+			return element->GetPos();
+		}
+			return element->GetPos();
+		
+	}
+}
+
+void GameEngine::UpdateWellPositions()
+{
+	for (auto element : m_GravityWellList)
+	{
+		/*if (m_GravityWellList.at(0))
+		{
+			element->SetPos()
+		}
+		element->SetPos()*/
+
+	}
+}
+
 void GameEngine::PauseSimulation()
 {
 	if (Simulation_Paused)
@@ -413,23 +446,25 @@ void GameEngine::ApplyRetractor()
 	
 }
 
-void GameEngine::StartRun(GameEngine* G)
+void GameEngine::CreateGravityWell()
 {
-	G->m_Client = new Client;
-	//have to be connected then initialized
-	if (G->m_Client->ReturnPeerConnected() == true)
-	{
-		Vector3 gwellpos = { 0,-3,-5 };
-		GravityWell* m_PeerWell = new GravityWell(G->m_DirectX->GetDeviceContext(), 5);
-		m_PeerWell->SetPos(gwellpos);
-		G->m_GravityWellList.push_back(m_PeerWell);
-		std::cout << "NEW PEER READY TO GO";
-	}
-	else
-	{
-		std::cout << " \n No Peer Connected";
-	}
-	G->m_Client->Run();
-
-
+	Vector3 gwellpos = { 0,-3,-5 };
+	GravityWell* m_PeerWell = new GravityWell(m_DirectX->GetDeviceContext(), 5);
+	m_PeerWell->SetPos(gwellpos);
+	m_GravityWellList.push_back(m_PeerWell);
 }
+
+//void GameEngine::StartRun(GameEngine* G)
+//{
+//	G->m_Client = new Networking;
+//	//have to be connected then initialized
+//	if (G->m_Client->ReturnPeerConnected() == true)
+//	{
+//		std::cout << "NEW PEER READY TO GO";
+//	}
+//	else
+//	{
+//		std::cout << " \n No Peer Connected";
+//	}
+//	G->m_Client->Run();
+//}

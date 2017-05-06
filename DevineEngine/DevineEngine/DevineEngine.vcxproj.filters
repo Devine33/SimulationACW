@@ -35,9 +35,6 @@
     <Filter Include="Graphics\Primitives">
       <UniqueIdentifier>{207e639f-afd4-4758-98cc-ecbd02433b1e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Primitives\Triangle">
-      <UniqueIdentifier>{02b44d0f-d392-4963-bdb3-2e556a52a94d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Shaders\Base">
       <UniqueIdentifier>{bec13a6b-1c0a-4a84-bf5d-1dd46c586440}</UniqueIdentifier>
     </Filter>
@@ -91,41 +88,14 @@
     <ClCompile Include="Tracer\Trace.cpp">
       <Filter>Tracer</Filter>
     </ClCompile>
-    <ClCompile Include="Input\Command.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Input\Input.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Input\InputHandler.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Input\KeyDownCommand.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
     <ClCompile Include="DirectX\Direct_X.cpp">
       <Filter>DirectX</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\GameEngine.cpp">
       <Filter>GameEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Shaders\Concrete\CShader.cpp">
-      <Filter>Graphics\Shaders\Concrete</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Shaders\Colour\ColourShader.cpp">
-      <Filter>Graphics\Shaders\ColourShader</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Primitives\Sphere\Sphere.cpp">
-      <Filter>Graphics\Primitives\Sphere</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\UI.cpp">
       <Filter>GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Texture\Texture.cpp">
-      <Filter>Graphics\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Primitives\Arena\Cylinder.cpp">
-      <Filter>Graphics\Primitives\Cylinder</Filter>
     </ClCompile>
     <ClCompile Include="Physics\GravityWell\GravityWell.cpp">
       <Filter>Physics\GravityWell</Filter>
@@ -133,8 +103,26 @@
     <ClCompile Include="Physics\ContactManifold\ContactManifold.cpp">
       <Filter>Physics\ContactManifold</Filter>
     </ClCompile>
-    <ClCompile Include="Client.cpp">
+    <ClCompile Include="Networking\Networking.cpp">
       <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemEngine\SystemEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Primitives\Arena\Cylinder.cpp">
+      <Filter>Graphics\Primitives\Cylinder</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Primitives\Sphere\Sphere.cpp">
+      <Filter>Graphics\Primitives\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Shaders\Colour\ColourShader.cpp">
+      <Filter>Graphics\Shaders\ColourShader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Shaders\Concrete\CShader.cpp">
+      <Filter>Graphics\Shaders\Concrete</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture\Texture.cpp">
+      <Filter>Graphics\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -147,50 +135,17 @@
     <ClInclude Include="Tracer\Trace.hpp">
       <Filter>Tracer</Filter>
     </ClInclude>
-    <ClInclude Include="Input\Command.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Input\Input.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Input\InputHandler.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Input\KeyDownCommand.h">
-      <Filter>Input</Filter>
-    </ClInclude>
     <ClInclude Include="DirectX\Direct_X.h">
       <Filter>DirectX</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\GameEngine.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Base\Renderer.h">
-      <Filter>Graphics\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Shaders\Base\Shader.h">
-      <Filter>Graphics\Shaders\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Shaders\Concrete\CShader.h">
-      <Filter>Graphics\Shaders\Concrete</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Shaders\Colour\ColourShader.h">
-      <Filter>Graphics\Shaders\ColourShader</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Primitives\Sphere\Sphere.h">
-      <Filter>Graphics\Primitives\Sphere</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\UI.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Texture\Texture.h">
-      <Filter>Graphics\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="Timer\StepTime.h">
       <Filter>Timer</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Primitives\Arena\Cylinder.h">
-      <Filter>Graphics\Primitives\Cylinder</Filter>
     </ClInclude>
     <ClInclude Include="Physics\GravityWell\GravityWell.h">
       <Filter>Physics\GravityWell</Filter>
@@ -198,8 +153,30 @@
     <ClInclude Include="Physics\ContactManifold\ContactManifold.h">
       <Filter>Physics\ContactManifold</Filter>
     </ClInclude>
-    <ClInclude Include="Client.h">
+    <ClInclude Include="Networking\Networking.h">
       <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemEngine\SystemEngine.h" />
+    <ClInclude Include="Graphics\Base\Renderer.h">
+      <Filter>Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Primitives\Arena\Cylinder.h">
+      <Filter>Graphics\Primitives\Cylinder</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Primitives\Sphere\Sphere.h">
+      <Filter>Graphics\Primitives\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shaders\Base\Shader.h">
+      <Filter>Graphics\Shaders\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shaders\Colour\ColourShader.h">
+      <Filter>Graphics\Shaders\ColourShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shaders\Concrete\CShader.h">
+      <Filter>Graphics\Shaders\Concrete</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture\Texture.h">
+      <Filter>Graphics\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

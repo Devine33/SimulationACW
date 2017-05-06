@@ -1,10 +1,9 @@
 #include <memory>
-#include "GameEngine/GameEngine.h"
-#include "Tracer/Trace.hpp"
 #include <iostream>
-#include <Mouse.h>
 #include "../packages/AntTweakBar.1.16.3/build/native/include/AntTweakBar.h"
-std::unique_ptr<GameEngine> G(new GameEngine);
+#include "SystemEngine/SystemEngine.h"
+
+std::unique_ptr<SystemEngine> S(new SystemEngine);
 int i = 0;
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -28,12 +27,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		if (wParam == 82)
 		{
-			//TRACE(L"System Reset\n");
-			
+			//TRACE(L"System Reset\n");			
 		}
 		if (wParam == 87)
 		{
-			G->MoveUp();
+			S->GetEngine()->MoveUp();
 		}
 		if(wParam == 38)
 		{
@@ -42,19 +40,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if(wParam == 83)
 		{
 			//move down
-			G->MoveDown();
+			S->GetEngine()->MoveDown();
 		}
 		if (wParam == 65)
 		{
-			G->MoveLeft();
+			S->GetEngine()->MoveLeft();
 		}
 		if (wParam == 68)
 		{
-			G->MoveRight();
+			S->GetEngine()->MoveRight();
 		}
 		if (wParam == 80)
 		{
-			G->PauseSimulation();
+			S->GetEngine()->PauseSimulation();
 		}
 		//make use of input handler here send over WPARAM MATCH MVOEMENTS TO CAMERA AND CALL METHOD
 		break;
@@ -65,19 +63,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEMOVE:
 		Mouse::ProcessMessage(msg, wParam, lParam);
 		/*std::cout << "Moving \n";*/
-		G->GetMousePosition();
-		G->MoveGravityWell();
+		S->GetEngine()->GetMousePosition();
+		S->GetEngine()->MoveGravityWell();
 		break;
 	case WM_LBUTTONDOWN:
 		Mouse::ProcessMessage(msg, wParam, lParam);
-		G->ApplyAttractor();
+		S->GetEngine()->ApplyAttractor();
 		//std::cout << "Applying Attractor /n";	
 		break;
 	case WM_LBUTTONUP:
 		break;
 	case WM_RBUTTONDOWN:
 		Mouse::ProcessMessage(msg, wParam, lParam);
-		G->ApplyRetractor();
+		S->GetEngine()->ApplyRetractor();		
 		break;
 	case WM_RBUTTONUP:
 		break;
@@ -102,6 +100,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
-	G->InitializeComponents(nCmdShow,WndProc);
+	/*G->InitializeComponents(nCmdShow,WndProc);*/
+	S->RunSystem(nCmdShow, WndProc);
 }
 

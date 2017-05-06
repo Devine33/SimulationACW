@@ -6,8 +6,6 @@
 #include "../../../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/GeometricPrimitive.h"
 #include "SimpleMath.h"
 #include <istream>
-#include <list>
-
 struct Derivative;
 struct ManifoldPoint;
 class ContactManifold;

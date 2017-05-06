@@ -1,4 +1,5 @@
 #include "Windowing.h"
+
 #include <string>
 #include "../Tracer/Trace.hpp"
 #include <AntTweakBar.h>
@@ -6,8 +7,8 @@
 
 Windowing::Windowing(): m_HInstance(nullptr), m_Done(false), m_Result(false), m_Hwnd(nullptr)//, m_Input(nullptr), m_KeyDown(nullptr), m_Handler(nullptr)
 {
-	m_InputHandler = new InputHandler;
-	m_KeyDown = new KeyDownCommand(m_Input);
+	/*m_InputHandler = new InputHandler;
+	m_KeyDown = new KeyDownCommand(m_Input);*/
 }
 
 Windowing::~Windowing()
@@ -86,12 +87,12 @@ int const& Windowing::GetScreenHeight() const
 	return screenHeight;
 }
 
-KeyDownCommand* Windowing::ReturnKeyHandle()
-{
-	return m_KeyDown;
-}
-
-InputHandler* Windowing::ReturnInputHandle()
-{
-	return m_InputHandler;
-}
+//KeyDownCommand* Windowing::ReturnKeyHandle()
+//{
+//	return m_KeyDown;
+//}
+//
+//InputHandler* Windowing::ReturnInputHandle()
+//{
+//	return m_InputHandler;
+//}

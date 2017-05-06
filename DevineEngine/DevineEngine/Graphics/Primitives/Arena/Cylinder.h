@@ -1,6 +1,5 @@
 #pragma once
 #include <d3d11.h>
-#include <istream>
 #include <memory>
 #include "../../../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/GeometricPrimitive.h"
 #include <SimpleMath.h>
