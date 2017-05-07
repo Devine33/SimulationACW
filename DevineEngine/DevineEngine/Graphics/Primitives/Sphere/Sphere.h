@@ -53,7 +53,9 @@ public:
 	std::shared_ptr<DirectX::GeometricPrimitive> GetPrim();
 	int GetSphereCount() const;
 	void ResetPos();	
-
+	bool SetVisibility();
+	bool SetInvisible();
+	bool GetVisibility();
 	friend std::istream &operator >> (std::istream &in, Sphere &o) { o.Read(in); return in; }
 private:
 	std::shared_ptr<DirectX::GeometricPrimitive> m_shape;
@@ -71,8 +73,7 @@ private:
 	Vector3 Acceleration;
 	float Elasticity;
 
-
-	
+	bool Visible;
 };
 
 

@@ -3,7 +3,7 @@
 #include "../packages/AntTweakBar.1.16.3/build/native/include/AntTweakBar.h"
 #include "SystemEngine/SystemEngine.h"
 
-std::unique_ptr<SystemEngine> S(new SystemEngine);
+std::shared_ptr<SystemEngine> S(new SystemEngine);
 int i = 0;
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {

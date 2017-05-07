@@ -1,7 +1,7 @@
 #include "Sphere.h"
 #include <iostream>
 int Sphere::countID = 0;
-Sphere::Sphere(ID3D11DeviceContext* context,float radius): SphereNumber(0), m_Mass(0), m_Radius(radius), Elasticity(0)
+Sphere::Sphere(ID3D11DeviceContext* context,float radius): SphereNumber(0), m_Mass(0), m_Radius(radius), Elasticity(0), Visible(false)
 {
 	m_objectID = countID;
 	++countID;
@@ -101,7 +101,6 @@ void Sphere::CollisionResponseWithSphere(ManifoldPoint& point)
 	point.contactID2->SetNewVel(e2 * 0.4);
 }
 
-//NEED COLLISION RESPONSE FOR FLOOR
 void Sphere::CollisionWithGround(Cylinder* Cylinder, ContactManifold* contactManifold)
 {
 	Vector3 POS1 = this->GetNewPos();
@@ -264,6 +263,21 @@ float Sphere::GetMass() const
 void Sphere::ResetPos()
 {
 	m_NewPosition = m_Position;
+}
+
+bool Sphere::SetVisibility()
+{
+	return Visible = true;
+}
+
+bool Sphere::SetInvisible()
+{
+	return Visible = false;
+}
+
+bool Sphere::GetVisibility()
+{
+	return Visible;
 }
 
 float Sphere::GetRadius() const

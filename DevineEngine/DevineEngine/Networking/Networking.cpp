@@ -4,7 +4,7 @@
 
 
 
-Networking::Networking(GameEngine *G): m_Host(false), m_PeerConnected(false), Host_Socket(0), Peer_Socket(0),Game(G)
+Networking::Networking(GameEngine *G): m_Host(false), m_PeerConnected(false), Host_Socket(0), Peer_Socket(0), s1(0), Game(G)
 {
 	//HANDLE process = GetCurrentProcess(); 
 	//DWORD_PTR processAffinityMask = 0x02; 
@@ -12,14 +12,20 @@ Networking::Networking(GameEngine *G): m_Host(false), m_PeerConnected(false), Ho
 	//SetProcessAffinityMask(process, processAffinityMask);
 	//SetThreadAffinityMask(GetCurrentThread(), 4);
 
-	InitializeSockets();
+	WORD wVersionRequested = MAKEWORD(2, 0);
+
+	WSADATA wsaData;
+	if (WSAStartup(wVersionRequested, &wsaData))
+	{
+		std::cerr << "Socket initialisation failed" << std::endl;
+	}
 
 	Peer.sin_family = AF_INET;
-	Peer.sin_port = htons(9171);	// port 9171
+	Peer.sin_port = htons(9171); // port 9171
 	Peer.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
 
 	Peer_Socket = socket(AF_INET, SOCK_STREAM, 0);
-	
+
 	if (Peer_Socket == INVALID_SOCKET)
 	{
 		std::cout << "socket failed";
@@ -28,13 +34,13 @@ Networking::Networking(GameEngine *G): m_Host(false), m_PeerConnected(false), Ho
 	else if (connect(Peer_Socket, reinterpret_cast<sockaddr*>(&Peer), sizeof Peer) == SOCKET_ERROR)
 	{
 		Host.sin_family = AF_INET;
-		Host.sin_port = htons(9171);	// port 9171
+		Host.sin_port = htons(9171); // port 9171
 		Host.sin_addr.S_un.S_addr = htonl(ADDR_ANY);
 
 		m_Host = true;
 		std::cout << " \n your now the host \n";
 		Host_Socket = socket(AF_INET, SOCK_STREAM, 0);
-		if (::bind(Host_Socket,(sockaddr *)(&Host), sizeof(Host)) == SOCKET_ERROR)
+		if (::bind(Host_Socket, (sockaddr *)(&Host), sizeof(Host)) == SOCKET_ERROR)
 		{
 			std::cout << " \n Bind Failed \n" << WSAGetLastError();
 			assert(0);
@@ -45,77 +51,11 @@ Networking::Networking(GameEngine *G): m_Host(false), m_PeerConnected(false), Ho
 		}
 	}
 	else
-	{		
-		
-		if (Peer_Socket == INVALID_SOCKET) 
-		{
-			std::cout << "Create socket failed" << WSAGetLastError() <<  std::endl;
-			assert(0);
-		}	
-		m_PeerConnected = true;
-		CreateGravityWell();
+	{
 	}
 }
 
 Networking::~Networking()
-{
-}
-
-void Networking::InitializeSockets() const
-{
-	WORD wVersionRequested = MAKEWORD(2, 0);
-
-	WSADATA wsaData;
-	if (WSAStartup(wVersionRequested, &wsaData)) {
-		std::cerr << "Socket initialisation failed" << std::endl;
-	}
-}
-
-bool Networking::CheckSocket(SOCKET s)
-{
-	if (s == INVALID_SOCKET)
-	{
-		std::cerr << "Create socket failed" << std::endl;
-		return false;
-	}
-	return true;
-}
-
-bool Networking::CheckBind(SOCKET S)
-{
-	if (::bind(S, reinterpret_cast<sockaddr *>(&Peer), sizeof(Peer)) == SOCKET_ERROR)
-	{
-		std::cerr << "Bind failed with " << WSAGetLastError() << std::endl;
-		return false;
-	}
-	return true;
-}
-
-bool Networking::CheckListener(SOCKET S)
-{
-	if (listen(S,5) == SOCKET_ERROR)
-	{
-		std::cout << "Listen Failed" << WSAGetLastError() << std::endl;
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
-
-bool Networking::CheckReceive(SOCKET S)
-{
-	/*auto Length = (int)strlen(&buffer);
-	if (recv(S,&buffer,Length,0) == SOCKET_ERROR)
-	{
-		std::cout << "Receive Failed" << WSAGetLastError() << std::endl;
-		return false;
-	}*/
-	return true;
-}
-
-void Networking::GetMessageLength()
 {
 }
 
@@ -140,13 +80,18 @@ void Networking::Run()
 			}
 			else
 			{		
-				CreateGravityWell();
+				if (Peer_Socket == INVALID_SOCKET)
+				{
+					std::cout << "Create socket failed" << WSAGetLastError() << std::endl;
+					assert(0);
+				}
+				Game->CreateGravityWell();
 			}			
 		}
 	}
 	else
-	{	
-		CreateGravityWell();
+	{			
+		Game->CreateGravityWell();
 	}
 	std::thread Rec(Receive, this);
 	while (true)
@@ -180,28 +125,38 @@ bool Networking::ReturnPeerConnected()
 	return m_PeerConnected;
 }
 
-void Networking::CreateGravityWell()
-{
-	if (m_PeerConnected == true)
-	{
-		
-	}
-	else
-	{
-		Game->CreateGravityWell();
-	}
-}
-
 void Networking::Send()
 {
-
-	string ToSend = std::to_string(Well_Pos) + '-' + to_string(Game->GetWellPosition().x) + ',' + to_string(Game->GetWellPosition().y) + "," + to_string(Game->GetWellPosition().z);
+	SOCKET Type;
+	string ToSend = std::to_string(Well_Pos) + '!' + to_string(Game->GetWellPosition().x) + ',' + to_string(Game->GetWellPosition().y) + ',' + to_string(Game->GetWellPosition().z);
 	ToSend = to_string(ToSend.size()) + "_" + ToSend;
-	//std::cout << ToSend;	
+
+	string Ball_To_Send = "";
+	for (auto element : Game->GetSphere())
+	{
+		if (m_Host == true)
+		{
+			Type = s1;
+		}
+		else
+		{
+			Type = Peer_Socket;
+		}
+
+		Ball_To_Send = std::to_string(Ball_Pos) + '!' + to_string(element->ReturnObjectID()) + ','  + to_string(element->GetPos().x) + ',' + to_string(element->GetPos().y) + ',' + to_string(element->GetPos().z);
+		Ball_To_Send = to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
+		auto BALLLENGTH = Ball_To_Send.size();
+		std::cout << Ball_To_Send;
+		send(Type, Ball_To_Send.c_str(), BALLLENGTH, 0);
+	}
+	/*string Ball_To_Send = std::to_string(Ball_Pos) + '!' + to_string(Game->GetSphere()->ReturnObjectID());
+	Ball_To_Send = to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;*/
+
 	//L  T X Y Z
 	//30_1-0,3,5
-	SOCKET Type;
+
 	auto Length = ToSend.size();
+
 	if (m_Host == true)
 	{
 		Type = s1;
@@ -212,6 +167,7 @@ void Networking::Send()
 	}
 
 	send(Type, ToSend.c_str(), Length, 0);
+	
 	//std::cout << "Sending " << ToSend << std::endl;
 }
 
@@ -235,7 +191,6 @@ void Networking::Receive(Networking* c)
 			Type = c->s1;
 		}
 		else
-			//Peer_Socet = 0;
 		{
 			Type = c->Peer_Socket;
 		}
@@ -246,9 +201,6 @@ void Networking::Receive(Networking* c)
 			int num = recv(Type,TempBuffer, 1, 0);
 			if (num == -1)
 			{
-				//cerr << "received failed" << WSAGetLastError();
-			
-				//std::cout << WSAGetLastError();
 				assert(0);
 			}
 			//1-0,3,5
@@ -263,33 +215,103 @@ void Networking::Receive(Networking* c)
 				lengthBuffer = lengthBuffer + TempBuffer[0];
 			}				
 		}
-		char buffer[300];	
-		int rl = recv(Type, buffer, length, 0);	
-		
-		auto delimiter ='-';
+		char buffer[30];	
+		int rl = recv(Type, buffer, length, 0);
+		if (rl == -1)
+		{
+			std::cout <<  "RECEIVE ERROR" << WSAGetLastError();
+		}
+		auto delimiter ='!';
+		auto nDelim = ',';
+		int count = 0;
+
 		//store chars in here
 		string token;
-		//1-0,3,5				
-			int pos = 0;
-		for (auto element : buffer)
-		{
-			//std::cout << element;
-			//FIRST ONE IS ALWAYS GONNA BE THE ONE BEFORE THE DELIMITER
-			token = element;
-			int identifer = stoi(token);
-			//if element != delimiter token = token + element;
-			std::cout << token;
-			if (element == delimiter)
-			{
-				
-			}
-		}
+		string token2;
+		string token3;
 
-	/*	if (last == Well_Pos)
-		{
-			
-		}*/
-			c->Game->UpdateWellPositions();
+		string identifer;
+		float Xnum;
+		float Ynum;
+		float Znum;
+		//1!0,3,5				
+		//gets 1
+			//std::cout << buffer[0];
+			for (auto i = 0; i < length; i++)
+			{
+				count++;
+				if (buffer[i] == delimiter)
+				{
+					
+					//std::cout << identifer;
+					count++;
+					break;
+				}
+				identifer += buffer[i];
+				int num = stoi(identifer);
+				count++;
+				switch (num)
+				{
+					case 1:
+					{
+							for (auto i = count; i < length; i++)
+							{
+								if (buffer[i] == nDelim)
+								{								
+									//std::cout << token << endl;
+									Xnum = stof(token);
+									count++;
+									break;
+								}
+								token += buffer[i];
+								count++;
+							}
+							for (auto i = count; i < length; i++)
+							{
+								if (buffer[i] == nDelim)
+								{
+									//std::cout << token2 << endl;
+									Ynum = stof(token2);
+									count++;
+									break;
+								}
+								token2 += buffer[i];
+								count++;
+							}
+							for (auto i = count; i < length; i++)
+							{
+								if (buffer[i] == nDelim)
+								{
+									/*std::cout << token3 << endl;*/
+									count++;
+									break;
+								}
+								token3 += buffer[i];
+								count++;
+							}
+							Znum = stof(token3);
+							//switch on token for action
+							c->Game->UpdateWellPositions(Xnum, Ynum, Znum);
+							break;
+					}
+					case 2:
+						{
+						if (buffer[i] == nDelim)
+						{
+							//std::cout << token << endl;
+							Xnum = stof(token);
+							count++;
+							break;
+						}
+							token += buffer[i];
+							count++;
+						}
+					//parse sphere message
+				}
+
+			}
+
+		
 	}
 }
 

@@ -171,23 +171,27 @@ void GameEngine::Draw()
 	//Shapes World Matrix
 	Matrix world = worldMatrix;
 	for (auto element : m_SphereList)
-	{			
+	{
+		if (element->GetVisibility() == true)
+		{
+			world *= DirectX::XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
+
+			//element->GetPrim()->Draw(world, view, projection, Colors::White, m_Texture->GetTexture());
+			if (element->GetMass() == 1.0f)
+			{
+				element->GetPrim()->Draw(world, view, projection, Colors::White, m_Texture->GetTexture());
+			}
+			else if (element->GetMass() == 5.0f)
+			{
+				element->GetPrim()->Draw(world, view, projection, Colors::White, m_MarbleTexture->GetTexture());
+			}
+			else
+			{
+				element->GetPrim()->Draw(world, view, projection, Colors::White, m_BowlingBall->GetTexture());
+			}
+		}
 		//world *= Get elements rotation x,y,z
-		world *= DirectX::XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
 		
-		//element->GetPrim()->Draw(world, view, projection, Colors::White, m_Texture->GetTexture());
-		if (element->GetMass() == 1.0f)
-		{
-			element->GetPrim()->Draw(world, view, projection, Colors::White, m_Texture->GetTexture());
-		}
-		else if (element ->GetMass() == 5.0f)
-		{
-			element->GetPrim()->Draw(world, view, projection, Colors::White,m_MarbleTexture->GetTexture());
-		}
-		else
-		{
-			element->GetPrim()->Draw(world, view, projection, Colors::White,m_BowlingBall->GetTexture());
-		}
 		world = worldMatrix;
 	}
 	world *= DirectX::XMMatrixTranslation(m_Cylinder->GetPosition().x, m_Cylinder->GetPosition().y, m_Cylinder->GetPosition().z);
@@ -203,7 +207,7 @@ void GameEngine::Draw()
 	{
 		world *= DirectX::XMMatrixTranslation(element->GetPos().x, element->GetPos().y, element->GetPos().z);
 		element->GetPrim()->Draw(world, view, projection, Red);
-		m_GravityWell->GetCPrim()->Draw(world, view, projection, Colors::AliceBlue);
+		element->GetCPrim()->Draw(world, view, projection, Colors::AliceBlue);
 		world = worldMatrix;
 	}
 	world = worldMatrix;
@@ -300,11 +304,12 @@ void GameEngine::CalculateObjectPhysics(float dt)
 	}
 	
 }
+
+
+
 //Should Restart
 void GameEngine::Restart()
 {
-	
-
 }
 
 //Update All The Spheres
@@ -363,8 +368,6 @@ void GameEngine::GetMousePosition()
 	{
 		// state.x and state.y are absolute pixel values; system cursor is visible
 	}
-
-
 }
 
 Vector3 GameEngine::GetWellPosition()
@@ -372,26 +375,34 @@ Vector3 GameEngine::GetWellPosition()
 
 	for (auto element : m_GravityWellList)
 	{
-		if (m_GravityWellList.at(0))
+		if (element->GetID() == 0)
 		{
 			return element->GetPos();
 		}
+		if(element->GetID() == 1)
+		{
 			return element->GetPos();
-		
+		}
 	}
 }
 
-void GameEngine::UpdateWellPositions()
+void GameEngine::UpdateWellPositions(float x,float y, float z)
 {
+	Vector3 t = Vector3(x, y, z);
 	for (auto element : m_GravityWellList)
 	{
-		/*if (m_GravityWellList.at(0))
+
+		 if (element->GetID() == 1)
 		{
-			element->SetPos()
+			element->SetPos(t);
 		}
-		element->SetPos()*/
 
 	}
+}
+
+vector<Sphere*> GameEngine::GetSphere()
+{
+	return m_SphereList;
 }
 
 void GameEngine::PauseSimulation()
@@ -448,23 +459,10 @@ void GameEngine::ApplyRetractor()
 
 void GameEngine::CreateGravityWell()
 {
-	Vector3 gwellpos = { 0,-3,-5 };
+	Vector3 gwellpos = { 0,-3,5 };
 	GravityWell* m_PeerWell = new GravityWell(m_DirectX->GetDeviceContext(), 5);
 	m_PeerWell->SetPos(gwellpos);
+	//1 WILL BE PEER
+	//0 WILL BE HOST
 	m_GravityWellList.push_back(m_PeerWell);
 }
-
-//void GameEngine::StartRun(GameEngine* G)
-//{
-//	G->m_Client = new Networking;
-//	//have to be connected then initialized
-//	if (G->m_Client->ReturnPeerConnected() == true)
-//	{
-//		std::cout << "NEW PEER READY TO GO";
-//	}
-//	else
-//	{
-//		std::cout << " \n No Peer Connected";
-//	}
-//	G->m_Client->Run();
-//}

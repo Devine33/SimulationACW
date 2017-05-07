@@ -9,6 +9,7 @@ SystemEngine::SystemEngine(): G(nullptr), N(nullptr)
 
 SystemEngine::~SystemEngine()
 {
+	
 }
 
 void SystemEngine::RunSystem(int cmd,WNDPROC wnd)

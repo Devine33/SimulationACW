@@ -17,18 +17,19 @@ public:
 	bool CheckBind(SOCKET S);
 	bool CheckListener(SOCKET S);
 	bool CheckReceive(SOCKET S);
-	Vector3 GetVector();
+	Vector3 StoreDataVector(float x,float y,float z);
 	void GetMessageLength();
 	void Run();
 	void SetupHost();
 	void SetupPeer();
 	bool ReturnPeerConnected();
-	void CreateGravityWell();
 	void Send();
 	static void Receive(Networking* c);
 
 private:
 	const int Well_Pos = 1;
+	const int Ball_Pos = 2;
+
 	//if its true your the host
 	bool m_Host;
 	////Addresses for Host & Peers

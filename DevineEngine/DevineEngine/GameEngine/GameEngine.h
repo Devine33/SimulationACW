@@ -37,8 +37,8 @@ public:
 	void GetMousePosition();
 
 	Vector3 GetWellPosition();
-	void UpdateWellPositions();
-
+	void UpdateWellPositions(float x, float y, float z);
+	vector<Sphere*> GetSphere();
 	void PauseSimulation();
 	void ApplyAttractor();
 	double ReturnDelta();

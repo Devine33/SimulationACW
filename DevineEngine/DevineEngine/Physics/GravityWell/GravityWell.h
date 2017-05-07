@@ -14,6 +14,7 @@ public:
 	Vector3 ApplyRepellor(Vector3 DT);
 	//both at the same time
 	Vector3 CancelForces();
+	int GetID() const;
 	void Move(Vector3);
 	void SpheresInWell(Sphere* S);
 	float GetRadius() const;
@@ -26,4 +27,6 @@ private:
 	Vector3 m_Position;
 	float m_Radius;
 	Vector3 m_Force;
+	int m_Well_ID;
+	static int id;
 };
