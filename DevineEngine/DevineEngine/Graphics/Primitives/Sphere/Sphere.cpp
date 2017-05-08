@@ -1,7 +1,7 @@
 #include "Sphere.h"
 #include <iostream>
 int Sphere::countID = 0;
-Sphere::Sphere(ID3D11DeviceContext* context,float radius): SphereNumber(0), m_Mass(0), m_Radius(radius), Elasticity(0), Visible(false)
+Sphere::Sphere(ID3D11DeviceContext* context,float radius): SphereNumber(0), m_Mass(0), m_Radius(radius), Owned(false), Elasticity(0), Visible(false)
 {
 	m_objectID = countID;
 	++countID;
@@ -34,7 +34,7 @@ void Sphere::CollisionWithSphere(Sphere* Sphere2, ContactManifold* contactManifo
 		SUB.Normalize();
 		mp.contactNormal = SUB;
 		contactManifold->Add(mp);
-	}		
+	}	
 }
 
 void Sphere::Update()
@@ -268,6 +268,16 @@ void Sphere::ResetPos()
 bool Sphere::SetVisibility()
 {
 	return Visible = true;
+}
+
+bool Sphere::IsOwned()
+{
+	return Owned = true;
+}
+
+bool Sphere::NotOwned()
+{
+	return Owned = false;
 }
 
 bool Sphere::SetInvisible()

@@ -54,6 +54,8 @@ public:
 	int GetSphereCount() const;
 	void ResetPos();	
 	bool SetVisibility();
+	bool IsOwned();
+	bool NotOwned();
 	bool SetInvisible();
 	bool GetVisibility();
 	friend std::istream &operator >> (std::istream &in, Sphere &o) { o.Read(in); return in; }
@@ -70,6 +72,7 @@ private:
 	static int countID;
 	int m_objectID;
 	void Read(std::istream &in);
+	bool Owned;
 	Vector3 Acceleration;
 	float Elasticity;
 

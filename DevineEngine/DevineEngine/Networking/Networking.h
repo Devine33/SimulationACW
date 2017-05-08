@@ -3,6 +3,7 @@
 #include "../Timer/StepTime.h"
 #include "../GameEngine/GameEngine.h"
 #include <sstream>
+#include <thread>
 #pragma comment(lib, "ws2_32.lib")
 
 // TCP CLIENT
@@ -25,11 +26,9 @@ public:
 	bool ReturnPeerConnected();
 	void Send();
 	static void Receive(Networking* c);
-
 private:
 	const int Well_Pos = 1;
 	const int Ball_Pos = 2;
-
 	//if its true your the host
 	bool m_Host;
 	////Addresses for Host & Peers

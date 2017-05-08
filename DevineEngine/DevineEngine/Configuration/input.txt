@@ -1,2 +1,2 @@
-Spheres= 100
+Spheres= 10
 Elasticity=0.85

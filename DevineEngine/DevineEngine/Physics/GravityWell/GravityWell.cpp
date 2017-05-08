@@ -2,9 +2,11 @@
 #include <iostream>
 
 int GravityWell::id = 0;
+int GravityWell::TotalBalls = 0;
 GravityWell::GravityWell(ID3D11DeviceContext* context, float diameter): Sphere(context, diameter), m_Position(0, 0, 0), m_Radius(0)
 {
 	m_Well_ID = id;
+	m_ballsOwned = TotalBalls;
 	m_shape = DirectX::GeometricPrimitive::CreateSphere(context, diameter);
 	m_Cshape = DirectX::GeometricPrimitive::CreateSphere(context, diameter / 5);
 	m_Diameter = diameter;
@@ -61,15 +63,20 @@ void GravityWell::SpheresInWell(Sphere* S)
 	auto Distance = Vector3::Distance(Well, _Sphere) - (this->GetRadius() + S->GetRadius() / 2);
 	
 	if(Distance < 0.0f)
-	{
-		S->SetVisibility();
-		
-		auto Direction = _Sphere - Well;
-		m_Force = Direction;
-		Direction.Normalize();
+	{	
+		/*S->IsOwned();
+		if (S->IsOwned())
+		{*/
+			S->SetVisibility();
+			auto Direction = _Sphere - Well;
+			m_Force = Direction;
+			Direction.Normalize();
+			/*std::cout << S->ReturnObjectID();*/
+			S->SetNewVel(m_Force * Direction);
+		//}
 
-		S->SetNewVel(m_Force * Direction);
-		std::cout << "In Sphere \n";
+		
+		/*std::cout << "In Sphere \n";*/
 		/*std::cout << m_Force.x << "/n";*/
 		/*m_Force +=  S->GetVel();
 		S->SetNewVel(GetGravityWellForce()); 
@@ -77,7 +84,7 @@ void GravityWell::SpheresInWell(Sphere* S)
 	}
 	else
 	{
-		//S->SetInvisible();
+		S->SetInvisible();		
 	}
 }
 

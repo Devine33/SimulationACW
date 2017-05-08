@@ -34,8 +34,11 @@ public:
 	void MoveRight() const;
 	void MoveGravityWell();
 	std::shared_ptr<Mouse>  GetMouse();
+	void BallsWithinRegion();
 	void GetMousePosition();
+	vector<Sphere*> GetRegionSpheres();
 
+	void NotifySpheres(float x, float y, float z);
 	Vector3 GetWellPosition();
 	void UpdateWellPositions(float x, float y, float z);
 	vector<Sphere*> GetSphere();
@@ -55,6 +58,7 @@ private:
 	Cylinder* m_Cylinder;
 	ColourShader* m_ColourShader;
 	vector<Sphere*> m_SphereList;
+	vector<Sphere*> m_RegionSphereList;
 	vector<GravityWell*> m_GravityWellList;
 	ContactManifold* m_CM;
 	UI* m_Ui;

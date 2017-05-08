@@ -23,10 +23,12 @@ public:
 private:
 	std::shared_ptr<DirectX::GeometricPrimitive> m_shape;
 	std::shared_ptr<DirectX::GeometricPrimitive> m_Cshape;
+	int m_ballsOwned;
 	float m_Diameter;
 	Vector3 m_Position;
 	float m_Radius;
 	Vector3 m_Force;
 	int m_Well_ID;
+	static int TotalBalls;
 	static int id;
 };

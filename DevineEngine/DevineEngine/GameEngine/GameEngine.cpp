@@ -233,6 +233,7 @@ void GameEngine::Update(DX::StepTime const& timer)
 	DynamicCollisionDetection();
 	DynamicCollisionResponse();	
 	UpdateObjectPhysics();
+	BallsWithinRegion();
 }
 //If Objects Have Collided Get The Collision Point And Respond Appropriately
 void GameEngine::DynamicCollisionResponse()
@@ -351,6 +352,34 @@ std::shared_ptr<Mouse> GameEngine::GetMouse()
 {
 	return mouse;
 }
+
+void GameEngine::BallsWithinRegion()
+{
+
+	//IF PEER IS 1 THEN PASS THE POSITION AND VELOCITY TO THE HOST 
+		//for each ball in the list
+		for (auto balls : m_SphereList)
+		{
+				//if the ball is in my sphere then it is noted i can not it with visibility 
+			if (balls->GetVisibility() == true)
+			{
+				m_RegionSphereList.push_back(balls);
+				//std::cout << m_RegionSphereList.size() << "\n";
+			}
+			/*else if (balls->GetVisibility() == false)
+			{
+				auto t = std::find(m_RegionSphereList.begin(), m_RegionSphereList.end(), balls);
+				if (t != m_RegionSphereList.end())
+				{
+					m_RegionSphereList.erase(t);
+				}
+				
+			}*/
+			else { m_RegionSphereList.clear(); }
+		}
+		
+}
+
 //gets mouse location on window
 void GameEngine::GetMousePosition()
 {
@@ -370,6 +399,26 @@ void GameEngine::GetMousePosition()
 	}
 }
 
+vector<Sphere*> GameEngine::GetRegionSpheres()
+{
+	return m_RegionSphereList;
+}
+
+void GameEngine::NotifySpheres(float x,float y,float z)
+{
+	Vector3 T = Vector3(x, y, z);
+	for (auto element : m_GravityWellList)
+	{
+		if (element->GetID() == 1)
+		{
+			for (auto type : m_RegionSphereList)
+			{
+				type->SetPos(T);
+			}
+		}
+	}
+}
+
 Vector3 GameEngine::GetWellPosition()
 {
 
@@ -385,6 +434,8 @@ Vector3 GameEngine::GetWellPosition()
 		}
 	}
 }
+
+
 
 void GameEngine::UpdateWellPositions(float x,float y, float z)
 {
