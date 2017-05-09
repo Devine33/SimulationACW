@@ -76,12 +76,11 @@ void Direct_X::InitializeFactory(int ScreenWidth,int ScreenHeight)
 			if (m_DisplayModeList[i].Height == static_cast<unsigned int>(ScreenHeight))
 			{			
 				m_Numerator = m_DisplayModeList[i].RefreshRate.Numerator;
-				m_Denominator = m_DisplayModeList[i].RefreshRate.Denominator;
+				m_Denominator = m_DisplayModeList[i].RefreshRate.Denominator;			
 			}
 		}
 	}
 	
-
 	delete[] m_DisplayModeList;
 	
 	//Factory Is Finished
@@ -100,7 +99,8 @@ void Direct_X::InitializeSwapChain(int ScreenWidth, int ScreenHeight,HWND hwnd)
 	//BufferDesc
 	m_SwapChainDesc.BufferDesc.Width = ScreenWidth;
 	m_SwapChainDesc.BufferDesc.Height = ScreenHeight;
-	m_SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	//where 60 over 1
+	m_SwapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
 	m_SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	//DXGI_FORMAT_R8G8B8A8_UNORM << only works with this one find out something about this
 	m_SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//DXGI_FORMAT_R32G32B32A32_UINT;
@@ -297,7 +297,6 @@ void Direct_X::BeginScene() const
 void Direct_X::EndScene() const
 {	
 	// Present the back buffer to the screen since rendering is complete
-	// Lock to screen refresh rate.
 	m_SwapChain.Get()->Present(1, 0);
 }
 

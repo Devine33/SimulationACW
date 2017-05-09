@@ -43,6 +43,7 @@ public:
 	void SetMass(float mass);
 	void SetNewPos(Vector3 pos);
 	void SetNewVel(Vector3 vel);
+	Vector3 GetRotation();
 	Vector3 GetPos() const;
 	Vector3 GetVel();	
 	Vector3 GetNewPos() const;
@@ -54,10 +55,12 @@ public:
 	int GetSphereCount() const;
 	void ResetPos();	
 	bool SetVisibility();
+	bool GetInWell();
 	bool IsOwned();
 	bool NotOwned();
+	bool ReturnOwnership() const;
 	bool SetInvisible();
-	bool GetVisibility();
+	bool GetVisibility() const;
 	friend std::istream &operator >> (std::istream &in, Sphere &o) { o.Read(in); return in; }
 private:
 	std::shared_ptr<DirectX::GeometricPrimitive> m_shape;
@@ -66,6 +69,7 @@ private:
 	Vector3 m_Position;
 	Vector3 m_NewPosition;
 	Vector3 m_NewVelocity;
+	Vector3 Rotation;
 	Vector3 m_Velocity;
 	float m_Mass;
 	float m_Radius;
@@ -75,7 +79,7 @@ private:
 	bool Owned;
 	Vector3 Acceleration;
 	float Elasticity;
-
+	bool m_InWell;
 	bool Visible;
 };
 

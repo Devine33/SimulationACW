@@ -1,29 +1,22 @@
 #include "Networking.h"
 #include <iostream>
 #include <thread>
-
-
-
-Networking::Networking(GameEngine *G) : m_Host(false), m_PeerConnected(false), Host_Socket(0), Peer_Socket(0), s1(0), Game(G)
+#include <WS2tcpip.h>
+Networking::Networking(GameEngine *G) : m_Host(false), m_PeerConnected(false), Host_Socket(0), Peer_Socket(0), s1(0), Game(G), Network_Freq(60), Port(0)
 {
-	//HANDLE process = GetCurrentProcess(); 
-	//DWORD_PTR processAffinityMask = 0x02; 
-	////// processor 2
-	//SetProcessAffinityMask(process, processAffinityMask);
-	//SetThreadAffinityMask(GetCurrentThread(), 4);
+	HANDLE process = GetCurrentProcess();
+	DWORD_PTR processAffinityMask = 0x03;
+	//// processor 3
+	SetProcessAffinityMask(process, 0b00000010);
 
-	WORD wVersionRequested = MAKEWORD(2, 0);
+	/*std::thread Init(&Networking::InitializeSockets,this);
+	Init.join();*/
 
-	WSADATA wsaData;
-	if (WSAStartup(wVersionRequested, &wsaData))
-	{
-		std::cerr << "Socket initialisation failed" << std::endl;
-	}
 
 	Peer.sin_family = AF_INET;
-	Peer.sin_port = htons(9171); // port 9171
-	Peer.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
-
+	std::string ip_from_config = "150.237.93.98";
+	inet_pton(AF_INET, ip_from_config.c_str(), &Peer.sin_addr);
+	Peer.sin_port = htons(9171);
 	Peer_Socket = socket(AF_INET, SOCK_STREAM, 0);
 
 	if (Peer_Socket == INVALID_SOCKET)
@@ -57,11 +50,30 @@ Networking::Networking(GameEngine *G) : m_Host(false), m_PeerConnected(false), H
 
 Networking::~Networking()
 {
+}
 
+void Networking::InitializeSockets() const
+{
+	HANDLE process = GetCurrentProcess();
+	//// processor 3
+	SetProcessAffinityMask(process, 0b00000010);
+
+	WORD wVersionRequested = MAKEWORD(2, 0);
+
+	WSADATA wsaData;
+	if (WSAStartup(wVersionRequested, &wsaData))
+	{
+		std::cerr << "Socket initialisation failed" << std::endl;
+	}
 }
 
 void Networking::Run()
 {
+	HANDLE process = GetCurrentProcess();
+	DWORD_PTR processAffinityMask = 0x03;
+	//// processor 3
+	SetProcessAffinityMask(process, 0b00000010);
+
 	if (m_Host == true)
 	{
 		//host has been bound now listen
@@ -77,14 +89,14 @@ void Networking::Run()
 			if (s1 == INVALID_SOCKET)
 			{
 				std::cout << "Accept Failed With" << WSAGetLastError() << std::endl;
-				assert(0);
+				//assert(0);
 			}
 			else
 			{
 				if (Peer_Socket == INVALID_SOCKET)
 				{
 					std::cout << "Create socket failed" << WSAGetLastError() << std::endl;
-					assert(0);
+					//assert(0);
 				}
 				Game->CreateGravityWell();
 			}
@@ -95,10 +107,13 @@ void Networking::Run()
 		Game->CreateGravityWell();
 	}
 	std::thread Rec(Receive, this);
+	//Receive_t();
 	while (true)
 	{
 		m_Timer.SetFixedTimeStep(true);
-		m_Timer.SetTargetElapsedSeconds(1.0f / 60.f);
+												//replace with variable and put in anttweak
+												//replace with 60 if errors occur
+		m_Timer.SetTargetElapsedSeconds(1.0f / Network_Freq);
 		m_Timer.Tick([&]()
 		{
 			Send();
@@ -133,15 +148,36 @@ void Networking::Send()
 	ToSend = to_string(ToSend.size()) + "_" + ToSend;
 
 	string Ball_To_Send = "";
-	for (auto element : Game->GetRegionSpheres())
-	{
-		Ball_To_Send = std::to_string(Ball_Pos) + '!' + ',' + to_string(element->GetPos().x) + ',' + to_string(element->GetPos().y) + ',' + to_string(element->GetPos().z);
-		//Ball_To_Send = to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
-		//auto BALLLENGTH = Ball_To_Send.size();
-		//std::cout << Ball_To_Send;
-		ToSend += to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
-		std::cout << Ball_To_Send;
-	}
+	//for (auto element : Game->GetSphere())
+	//{
+	//	element->ReturnOwnership();
+	//	if (element->ReturnOwnership() == false)
+	//	{
+	//		Ball_To_Send = to_string(Ball_Pos) + '!' + to_string(element->GetNewPos().x) + ',' + to_string(element->GetNewPos().y) + ',' + to_string(element->GetNewPos().z);
+	//		//Ball_To_Send = to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
+	//		//auto BALLLENGTH = Ball_To_Send.size();
+	//		//std::cout << Ball_To_Send;
+	//		ToSend += to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
+	//		//std::cout << Ball_To_Send;
+	//	}		
+	//}
+	//int ballsCounted = 0;
+	//for (auto element : Game->ReturnGravityWells())
+	//{
+	//	if (element->GetID() == 1 )
+	//	{
+	//		for (auto balls : Game->GetSphere())
+	//		{
+	//			if (balls->ReturnOwnership() ==true)
+	//			{
+	//				Ball_To_Send = to_string(Ball_Pos) + '!' + to_string(element->GetNewPos().x) + ',' + to_string(element->GetNewPos().y) + ',' + to_string(element->GetNewPos().z);
+	//				ToSend += to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
+	//				ballsCounted++;
+	//			}
+	//		}
+	//	}
+	//}
+	//std::cout << ballsCounted;
 	/*string Ball_To_Send = std::to_string(Ball_Pos) + '!' + to_string(Game->GetSphere()->ReturnObjectID());
 	Ball_To_Send = to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;*/
 
@@ -164,8 +200,36 @@ void Networking::Send()
 	//std::cout << "Sending " << ToSend << std::endl;
 }
 
+void Networking::CloseSockets()
+{
+	closesocket(Host_Socket);
+	closesocket(Peer_Socket);
+	closesocket(s1);
+	WSACleanup();
+}
+
+void Networking::SetIPAddress(string IP_s)
+{
+	IP = IP_s;
+}
+
+void Networking::SetupPort(int p)
+{
+	Port = p;
+}
+
+void Networking::SetNetworkFrequency(float Freq)
+{
+	Network_Freq = Freq;
+}
+
 void Networking::Receive(Networking* c)
 {
+	HANDLE process = GetCurrentProcess();
+	DWORD_PTR processAffinityMask = 0x03;
+	//// processor 3
+	SetProcessAffinityMask(process, 0b00000010);
+
 	while (true)
 	{
 		SOCKET Type;
@@ -194,7 +258,7 @@ void Networking::Receive(Networking* c)
 			int num = recv(Type, TempBuffer, 1, 0);
 			if (num == -1)
 			{
-				assert(0);
+				//assert(0);
 			}
 			//1-0,3,5
 			if (TempBuffer[0] == '_')
@@ -208,7 +272,7 @@ void Networking::Receive(Networking* c)
 				lengthBuffer = lengthBuffer + TempBuffer[0];
 			}
 		}
-		char buffer[68];
+		char buffer[1584];
 		int rl = recv(Type, buffer, length, 0);
 		if (rl == -1)
 		{
@@ -224,6 +288,8 @@ void Networking::Receive(Networking* c)
 		string token3;
 
 		string token4;
+		string token5;
+		string token6;
 
 		string identifer;
 		float Xnum;
@@ -241,7 +307,6 @@ void Networking::Receive(Networking* c)
 			count++;
 			if (buffer[i] == delimiter)
 			{
-
 				//std::cout << identifer;
 				count++;
 				break;
@@ -295,23 +360,48 @@ void Networking::Receive(Networking* c)
 			}
 			case 2:
 			{
-				//DATA SENDS JUST NEED TO STOP IT AT THE RIGHT PLACE
+				
 				//SEND OVER VISIBILITY DATA WHICH IS IKE IT BEING NOTED TO OTHER PEER
+				for (auto i = count; i < length; i++)
+				{
+					if (buffer[i] == nDelim)
+					{
+						//std::cout << token << endl;
+						X_SpherePos = stof(token4);
+						count++;
+						break;
+					}
+					token4 += buffer[i];
+					count++;
+				}
+				for (auto i = count; i < length; i++)
+				{
+					if (buffer[i] == nDelim)
+					{
+						//std::cout << token << endl;
+						Y_SpherePos = stof(token5);
+						count++;
+						break;
+					}
+					token5 += buffer[i];
+					count++;
+				}
 
-				//for (auto i = count; i < length; i++)
-				//{
-				//	if (buffer[i] == nDelim)
-				//	{
-				//		//std::cout << token << endl;
-				//		X_SpherePos = stof(token);
-				//		count++;
-				//		break;
-				//	}
-				//	token4 += buffer[i];
-				//	count++;
-				//}
-
+				for (auto i = count; i < length; i++)
+				{
+					if (buffer[i] == nDelim)
+					{
+						//std::cout << token << endl;
+						count++;
+						break;
+					}
+					token6 += buffer[i];	
+				}
+				Z_SpherePos = stof(token6);
 					//switch on token for action
+				c->Game->BallsWithinRegion(X_SpherePos,Y_SpherePos,Z_SpherePos);
+				//c->Game->NotifySpheres(X_SpherePos, Y_SpherePos, Z_SpherePos);
+				break;
 			}
 			//parse sphere message
 			}

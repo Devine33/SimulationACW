@@ -19,6 +19,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	case WM_KEYDOWN:
+		//if time is left use input handler + command pattern for inputs + mouse
 		//TRACE(L"Windowing::WndProc::WM_KEYDOWN \n");
 		std::cout << wParam << "\n";
 		if (wParam == 27)
@@ -53,6 +54,38 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (wParam == 80)
 		{
 			S->GetEngine()->PauseSimulation();
+		}
+		if (wParam == 77)
+		{
+			S->GetEngine()->MoveGravityWellUp();
+		}
+		if (wParam == 78)
+		{
+			S->GetEngine()->MoveGravityWellDown();
+		}
+		if (wParam == 79)
+		{
+			S->GetEngine()->IncreasePhysics();
+		}
+		if (wParam == 76)
+		{
+			S->GetEngine()->DecreasePhysics();
+		}
+		if (wParam == 85)
+		{
+			S->IncreaseNetworkFrequency();
+		}
+		if (wParam == 74)
+		{
+			S->DecreaseNetworkFrequency();
+		}
+		if (wParam == 38)
+		{
+			S->GetEngine()->MoveForward();
+		}
+		if (wParam ==40)
+		{
+			S->GetEngine()->MoveBackward();
 		}
 		//make use of input handler here send over WPARAM MATCH MVOEMENTS TO CAMERA AND CALL METHOD
 		break;

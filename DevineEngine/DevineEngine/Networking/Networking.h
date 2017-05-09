@@ -25,7 +25,16 @@ public:
 	void SetupPeer();
 	bool ReturnPeerConnected();
 	void Send();
+	void CloseSockets();
+	void SetIPAddress(string);
+	void SetupPort(int);
+	void SetNetworkFrequency(float);
 	static void Receive(Networking* c);
+
+	std::thread Receive_t()
+	{
+		return std::thread([=] {Receive(this); });
+	}
 private:
 	const int Well_Pos = 1;
 	const int Ball_Pos = 2;
@@ -42,5 +51,8 @@ private:
 	SOCKET s1;
 	DX::StepTime m_Timer;
 	GameEngine* Game;
+	float Network_Freq;
+	string IP;
+	int Port;
 };
 

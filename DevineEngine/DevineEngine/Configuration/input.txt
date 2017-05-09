@@ -1,2 +1,5 @@
-Spheres= 10
+Spheres=15
 Elasticity=0.85
+Friction=0.40
+IP="127.0.0.1"
+Port=9171

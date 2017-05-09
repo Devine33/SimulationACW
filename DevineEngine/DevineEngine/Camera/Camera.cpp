@@ -109,3 +109,13 @@ void Camera::MoveRight()
 {
 	m_positionX += 0.5f;
 }
+
+void Camera::MoveForward()
+{
+	m_positionZ += 0.5;
+}
+
+void Camera::MoveBack()
+{
+	m_positionZ -= 0.5;
+}

@@ -34,19 +34,30 @@ public:
 	void MoveRight() const;
 	void MoveGravityWell();
 	std::shared_ptr<Mouse>  GetMouse();
-	void BallsWithinRegion();
+	void BallsWithinRegion(float x, float y, float z);
 	void GetMousePosition();
-	vector<Sphere*> GetRegionSpheres();
-
+	vector<GravityWell*> ReturnGravityWells();
 	void NotifySpheres(float x, float y, float z);
 	Vector3 GetWellPosition();
 	void UpdateWellPositions(float x, float y, float z);
 	vector<Sphere*> GetSphere();
 	void PauseSimulation();
+	
 	void ApplyAttractor();
 	double ReturnDelta();
 	void ApplyRetractor();
 	void CreateGravityWell();
+	void MoveGravityWellUp();
+	void IncreasePhysics();
+	void DecreasePhysics();
+	string GetIP();
+	int ReturnPort();
+	void Calc_Physics();
+	TwBar* ReturnAntTweak();
+	void MoveGravityWellDown();
+	void CreateSpheres();
+	void MoveForward();
+	void MoveBackward();
 	//static void StartRun(GameEngine* G);
 	
 private:
@@ -75,6 +86,12 @@ private:
 	Vector3 Movement;
 	float Elasticity;
 	bool Simulation_Paused;
+	Vector3 GWellforce;
+	Vector3 gwellpos;
+	float PhysicsFrequency;
+	float Friction;
+	string IPAddress;
+	int Port;
 	//Networking* m_Client;
 };
 

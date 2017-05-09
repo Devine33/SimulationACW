@@ -1,8 +1,14 @@
 #include "Sphere.h"
 #include <iostream>
-int Sphere::countID = 0;
+int Sphere::countID = 0;																					//True?
 Sphere::Sphere(ID3D11DeviceContext* context,float radius): SphereNumber(0), m_Mass(0), m_Radius(radius), Owned(false), Elasticity(0), Visible(false)
 {
+	//HANDLE process = GetCurrentProcess();
+	//DWORD_PTR processAffinityMask = 0x05;
+	////// processor 5
+	//SetProcessAffinityMask(process, processAffinityMask);
+	//SetThreadAffinityMask(GetCurrentThread(), 4);
+
 	m_objectID = countID;
 	++countID;
 	m_shape = DirectX::GeometricPrimitive::CreateSphere(context, radius);
@@ -111,15 +117,24 @@ void Sphere::CollisionWithGround(Cylinder* Cylinder, ContactManifold* contactMan
 	ColNormal.Normalize();
 	if (POS1.y < -GROUND + this->GetRadius())
 	{
-		
+		this->ResetPos();
 		m_NewPosition = Vector3(m_NewPosition.x, -GROUND + m_Radius, m_NewPosition.z);
+		Rotation.y = atan2f(this->GetPos().x - this->GetPos().x, m_NewPosition.z - this->GetPos().z);
+		Rotation.x -= abs(this->GetVel().x) + abs(this->GetVel().z);
+		if (Rotation.x >= DirectX::XM_PI * 2)
+		{
+			Rotation.x = 0.0f;
+		}
+	/*	auto Rotation_Vector = POS1 - m_NewPosition;
+		Rotation_Vector.Normalize();*/
+		
 		Vector3 PN = Vector3(0, 1, 0);
 		/*auto R = Matrix::CreateFromYawPitchRoll(m_NewVelocity.x, m_NewVelocity.y, m_NewVelocity.z);*/
 		auto VT = m_Position -= m_NewPosition;
 		Vector3 NV = m_Velocity - (1.0f + GetElasticity()) * m_Velocity.Dot(PN) * PN;
-		auto Axis_Rotation = NV.Cross(PN);
-		Axis_Rotation.Normalize();
-		Vector3 Theta = VT * 2 / (DirectX::XM_PI * this->GetRadius());
+		//auto Axis_Rotation = NV.Cross(PN);
+		//Axis_Rotation.Normalize();
+		//Vector3 Theta = VT * 2 / (DirectX::XM_PI * this->GetRadius());	
 		this->SetNewVel(NV);
 	}
 }
@@ -136,8 +151,6 @@ void Sphere::CollisionWithWalls(Cylinder* Cylinder, ContactManifold* contactMani
 
 	//Cylinder X & Z
 	Vector2 CP = Vector2(CpositionX, CpositionZ);
-	////Distance Between Sphere & Cylinder Center
-	//Vector2 CN = CP - SP;
 
 	//distance
 	auto D = Vector2::Distance(CP, SP);
@@ -235,6 +248,11 @@ void Sphere::SetNewVel(Vector3 vel)
 	m_NewVelocity = vel;
 }
 
+Vector3 Sphere::GetRotation()
+{
+	return Rotation;
+}
+
 Vector3 Sphere::GetNewPos() const
 {
 	return m_NewPosition;
@@ -267,7 +285,13 @@ void Sphere::ResetPos()
 
 bool Sphere::SetVisibility()
 {
+	m_InWell = true;
 	return Visible = true;
+}
+
+bool Sphere::GetInWell()
+{
+	return m_InWell;
 }
 
 bool Sphere::IsOwned()
@@ -280,12 +304,18 @@ bool Sphere::NotOwned()
 	return Owned = false;
 }
 
+bool Sphere::ReturnOwnership() const
+{
+	return Owned;
+}
+
 bool Sphere::SetInvisible()
 {
+	m_InWell = false;
 	return Visible = false;
 }
 
-bool Sphere::GetVisibility()
+bool Sphere::GetVisibility() const
 {
 	return Visible;
 }

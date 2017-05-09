@@ -15,14 +15,20 @@ public:
 	//both at the same time
 	Vector3 CancelForces();
 	int GetID() const;
+	int GetBallsOwned();
 	void Move(Vector3);
+	void MoveUp();
+	void MoveDown();
 	void SpheresInWell(Sphere* S);
 	float GetRadius() const;
+	void SetTotalBalls(int balls);
 	Vector3 GetGravityWellForce() const;
 	std::shared_ptr<DirectX::GeometricPrimitive> GetCPrim();
+	std::shared_ptr<DirectX::GeometricPrimitive> GetRegion();
 private:
 	std::shared_ptr<DirectX::GeometricPrimitive> m_shape;
 	std::shared_ptr<DirectX::GeometricPrimitive> m_Cshape;
+	std::shared_ptr<DirectX::GeometricPrimitive> m_Region;
 	int m_ballsOwned;
 	float m_Diameter;
 	Vector3 m_Position;

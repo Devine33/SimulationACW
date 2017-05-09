@@ -23,7 +23,8 @@ public:
 	void MoveDown();
 	void MoveLeft();
 	void MoveRight();
-
+	void MoveForward();
+	void MoveBack();
 private:
 	float screenaspect;
 	float m_positionX, m_positionY, m_positionZ;
