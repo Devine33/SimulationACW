@@ -12,6 +12,8 @@ public:
 	static void StartNetworking(SystemEngine*);
 	void IncreaseNetworkFrequency();
 	void DecreaseNetworkFrequency();
+	string returnIP();
+	int ReturnPort();
 	void GetIP();
 	void GetPort();
 	GameEngine* GetEngine();

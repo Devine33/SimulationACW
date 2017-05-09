@@ -5,7 +5,8 @@
 #include "../Tracer/Trace.hpp"
 #include <algorithm>
 DX::StepTime s_Timer;
-GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr), Elasticity(0), Simulation_Paused(false), PhysicsFrequency(0)
+DX::StepTime D_Timer;
+GameEngine::GameEngine(): m_Done(false), m_Sphere(nullptr), m_GravityWell(nullptr), m_Cylinder(nullptr), m_Ui(nullptr), bar(nullptr), DeltaTime(0), DT(nullptr), m_NumBalls(nullptr), Elasticity(0), Simulation_Paused(false), PhysicsFrequency(0), DrawFrequency(0), Friction(0), Port(0)
 //, m_Client(nullptr)
 {
 	m_DirectX = new Direct_X;
@@ -31,7 +32,7 @@ GameEngine::~GameEngine()
 //Initializes Everything In The Application
 void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 {
-	TRACE(L"Start");
+	/*TRACE(L"Start");*/
 	//Sphere Variables
 	Vector3 CPOS{ 0.0f,0.0f,0.0f };
 
@@ -120,7 +121,8 @@ void GameEngine::InitializeComponents(int cmd, WNDPROC Wndproc)
 
 	PhysicsFrequency = 60.0f;
 	TwAddVarRW(bar, "Physics_Frequency", TW_TYPE_FLOAT, &PhysicsFrequency, "");
-
+	DrawFrequency = 60.0f;
+	TwAddVarRW(bar, "Draw_Frequency", TW_TYPE_FLOAT, &DrawFrequency, "");
 	m_GravityWell->SetElasticity(Elasticity);
 	m_Sphere->SetElasticity(Elasticity);
 #pragma region ColourShader
@@ -171,7 +173,16 @@ void GameEngine::GameLoop()
 						Update(s_Timer);
 						//allows Y,H to increase/decrease the time scale, minimum 0.001, maximum 1.0 (globally)
 					});
-					Draw();
+
+					D_Timer.SetFixedTimeStep(true);
+					D_Timer.SetTargetElapsedSeconds(1.0f / DrawFrequency);
+					D_Timer.Tick([&]()
+					{
+						/*std::thread DR(&GameEngine::Draw, this);
+						DR.join();*/
+						Draw();
+					});
+					
 					TwAddVarRW(bar, "Delta", TW_TYPE_DOUBLE, &DeltaTime, "");
 				}
 				else
@@ -435,9 +446,11 @@ std::shared_ptr<Mouse> GameEngine::GetMouse()
 	return mouse;
 }
 
-void GameEngine::BallsWithinRegion(float x, float y, float z)
+void GameEngine::BallsWithinRegion(float x, float y, float z,float a,float b,float c,float m)
 {
 	Vector3 T(x, y, z);
+	Vector3 Vel(a, b, c);
+	float mass = m;
 	//IF PEER IS 1 THEN PASS THE POSITION AND VELOCITY TO THE HOST 
 		//for each ball in the list
 		//for (auto balls : m_SphereList)
@@ -464,15 +477,23 @@ void GameEngine::BallsWithinRegion(float x, float y, float z)
 	{
 		for (auto ball : m_SphereList)
 		{
+			if (element->GetID() == 1)
+			{
+				ball->SetMass(m);
+				ball->SetNewVel(Vel);
+				ball->IsOwned();
+				ball->SetNewPos(T);	
+				ball->SetVisibility();
+		
+			}
 			if (element->GetID() == 0)
 			{
 				ball->IsOwned();
-				ball->SetPos(T);		
-			}
-			if (element->GetID() == 1)
-			{
-				ball->IsOwned();
-				ball->SetNewPos(T);			
+				ball->SetNewPos(T);
+				ball->SetMass(m);
+				ball->SetNewVel(Vel);
+				ball->SetVisibility();
+				
 			}
 		}
 	}
@@ -602,8 +623,9 @@ void GameEngine::CreateGravityWell()
 	//1 WILL BE PEER
 	//0 WILL BE HOST
 	m_GravityWellList.push_back(m_PeerWell);
-	int totalballs = 0;
-	int Balls = 0;
+	totalballs = 0;
+	
+	Balls = 0;
 	for (auto element : m_GravityWellList)
 	{
 		for (auto t : m_SphereList)
@@ -614,7 +636,8 @@ void GameEngine::CreateGravityWell()
 				totalballs++;				
 				//std::cout << totalballs;
 				element->SetTotalBalls(totalballs);
-				TwAddVarRW(bar, "Delta", TW_TYPE_INT32, &totalballs, "");
+				TwAddVarRW(bar, "Total Balls Owned", TW_TYPE_INT32, &totalballs, "");
+				
 			}
 
 			if (element->GetID() == 1)
@@ -623,6 +646,7 @@ void GameEngine::CreateGravityWell()
 				if (t->NotOwned())
 				{
 					balls++;
+					TwAddVarRW(bar, "Total Balls Owned", TW_TYPE_INT32, &Balls, "");
 				}
 			}
 		}
@@ -649,6 +673,16 @@ void GameEngine::IncreasePhysics()
 void GameEngine::DecreasePhysics()
 {
 	PhysicsFrequency -= 0.1f;
+}
+
+void GameEngine::IncreaseGraphics()
+{
+	DrawFrequency += 0.3;
+}
+
+void GameEngine::DecreaseGraphics()
+{
+	DrawFrequency -= 0.3;
 }
 
 string GameEngine::GetIP()

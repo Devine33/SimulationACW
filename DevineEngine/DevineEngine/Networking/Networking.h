@@ -28,6 +28,8 @@ public:
 	void CloseSockets();
 	void SetIPAddress(string);
 	void SetupPort(int);
+	int GetPort();
+	string GetIP();
 	void SetNetworkFrequency(float);
 	static void Receive(Networking* c);
 

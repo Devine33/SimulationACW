@@ -9,13 +9,12 @@ Networking::Networking(GameEngine *G) : m_Host(false), m_PeerConnected(false), H
 	//// processor 3
 	SetProcessAffinityMask(process, 0b00000010);
 
-	/*std::thread Init(&Networking::InitializeSockets,this);
-	Init.join();*/
-
+	std::thread Init(&Networking::InitializeSockets,this);
+	Init.join();
 
 	Peer.sin_family = AF_INET;
-	std::string ip_from_config = "150.237.93.98";
-	inet_pton(AF_INET, ip_from_config.c_str(), &Peer.sin_addr);
+	std::string ip_from_config = "150.237.93.28";
+	inet_pton(AF_INET, "150.237.93.28", &Peer.sin_addr);
 	Peer.sin_port = htons(9171);
 	Peer_Socket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -141,6 +140,22 @@ bool Networking::ReturnPeerConnected()
 	return m_PeerConnected;
 }
 
+//union byte32
+//{
+//	int iVal;
+//	float fVal;
+//	char bytes[sizeof(int)];
+//};
+//
+//struct spheretonetwork
+//{
+//	int id;
+//	float x;
+//	float y;
+//	float z;
+//	bool owned;
+//};
+
 void Networking::Send()
 {
 	SOCKET Type;
@@ -148,19 +163,19 @@ void Networking::Send()
 	ToSend = to_string(ToSend.size()) + "_" + ToSend;
 
 	string Ball_To_Send = "";
-	//for (auto element : Game->GetSphere())
-	//{
-	//	element->ReturnOwnership();
-	//	if (element->ReturnOwnership() == false)
-	//	{
-	//		Ball_To_Send = to_string(Ball_Pos) + '!' + to_string(element->GetNewPos().x) + ',' + to_string(element->GetNewPos().y) + ',' + to_string(element->GetNewPos().z);
-	//		//Ball_To_Send = to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
-	//		//auto BALLLENGTH = Ball_To_Send.size();
-	//		//std::cout << Ball_To_Send;
-	//		ToSend += to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
-	//		//std::cout << Ball_To_Send;
-	//	}		
-	//}
+	for (auto element : Game->GetSphere())
+	{
+		element->ReturnOwnership();
+		if (element->ReturnOwnership() == false)
+		{
+			Ball_To_Send = to_string(Ball_Pos) + '!' + to_string(element->GetNewPos().x) + ',' + to_string(element->GetNewPos().y) + ',' + to_string(element->GetNewPos().z) + ',' + to_string(element->GetNewVel().x) + ',' + to_string(element->GetNewVel().y) + ',' + to_string(element->GetNewVel().z) + ',' + to_string(element->GetMass());
+			//Ball_To_Send = to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
+			//auto BALLLENGTH = Ball_To_Send.size();
+			//std::cout << Ball_To_Send;
+			ToSend += to_string(Ball_To_Send.size()) + "_" + Ball_To_Send;
+			//std::cout << Ball_To_Send;
+		}		
+	}
 	//int ballsCounted = 0;
 	//for (auto element : Game->ReturnGravityWells())
 	//{
@@ -216,6 +231,16 @@ void Networking::SetIPAddress(string IP_s)
 void Networking::SetupPort(int p)
 {
 	Port = p;
+}
+
+int Networking::GetPort()
+{
+	return Port;
+}
+
+string Networking::GetIP()
+{
+ 	return IP;
 }
 
 void Networking::SetNetworkFrequency(float Freq)
@@ -291,14 +316,24 @@ void Networking::Receive(Networking* c)
 		string token5;
 		string token6;
 
+		string token7;
+		string token8;
+		string token9;
+		string token10;
+	
+
 		string identifer;
 		float Xnum;
 		float Ynum;
 		float Znum;
 
 		float X_SpherePos;
+		float X_SphereVel;
 		float Y_SpherePos;
+		float Y_SphereVel;
 		float Z_SpherePos;
+		float Z_SphereVel;
+		float mass;
 		//1!0,3,5				
 		//gets 1
 			//std::cout << buffer[0];
@@ -392,14 +427,75 @@ void Networking::Receive(Networking* c)
 					if (buffer[i] == nDelim)
 					{
 						//std::cout << token << endl;
+						Z_SpherePos = stof(token6);
 						count++;
 						break;
 					}
-					token6 += buffer[i];	
+					token6 += buffer[i];
+					count++;
 				}
-				Z_SpherePos = stof(token6);
+				for (auto i = count; i < length; i++)
+				{
+					if (buffer[i] == nDelim)
+					{
+						//std::cout << token << endl;
+						Z_SpherePos = stof(token6);
+						count++;
+						break;
+					}
+					token6 += buffer[i];
+					count++;
+				}
+				for (auto i = count; i < length; i++)
+				{
+					if (buffer[i] == nDelim)
+					{
+						//std::cout << token << endl;
+						X_SphereVel = stof(token7);
+						count++;
+						break;
+					}
+					token7 += buffer[i];
+					count++;
+				}
+				for (auto i = count; i < length; i++)
+				{
+					if (buffer[i] == nDelim)
+					{
+						//std::cout << token << endl;
+						Y_SphereVel = stof(token8);
+						count++;
+						break;
+					}
+					token8 += buffer[i];
+					count++;
+				}
+				for (auto i = count; i < length; i++)
+				{
+					if (buffer[i] == nDelim)
+					{
+						//std::cout << token << endl;
+						Z_SphereVel = stof(token9);
+						count++;
+						break;
+					}
+					token9 += buffer[i];
+					count++;
+				}
+				for (auto i = count; i < length; i++)
+				{
+					if (buffer[i] == nDelim)
+					{
+						//std::cout << token << endl;
+						mass = stof(token10);
+						count++;
+						break;
+					}
+					token10 += buffer[i];
+					count++;
+				}
 					//switch on token for action
-				c->Game->BallsWithinRegion(X_SpherePos,Y_SpherePos,Z_SpherePos);
+				c->Game->BallsWithinRegion(X_SpherePos,Y_SpherePos,Z_SpherePos,X_SphereVel,Y_SphereVel,Z_SphereVel,mass);
 				//c->Game->NotifySpheres(X_SpherePos, Y_SpherePos, Z_SpherePos);
 				break;
 			}

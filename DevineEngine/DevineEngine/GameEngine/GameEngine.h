@@ -13,6 +13,8 @@
 #include  <SimpleMath.h>
 #include "../../packages/directxtk_desktop_2015.2017.2.10.1/build/native/include/Mouse.h"
 #include <memory>
+#include <AntTweakBar.h>
+
 class GameEngine
 {
 public:
@@ -34,7 +36,7 @@ public:
 	void MoveRight() const;
 	void MoveGravityWell();
 	std::shared_ptr<Mouse>  GetMouse();
-	void BallsWithinRegion(float x, float y, float z);
+	void BallsWithinRegion(float x, float y, float z,float,float,float,float);
 	void GetMousePosition();
 	vector<GravityWell*> ReturnGravityWells();
 	void NotifySpheres(float x, float y, float z);
@@ -50,6 +52,8 @@ public:
 	void MoveGravityWellUp();
 	void IncreasePhysics();
 	void DecreasePhysics();
+	void IncreaseGraphics();
+	void DecreaseGraphics();
 	string GetIP();
 	int ReturnPort();
 	void Calc_Physics();
@@ -89,9 +93,12 @@ private:
 	Vector3 GWellforce;
 	Vector3 gwellpos;
 	float PhysicsFrequency;
+	float DrawFrequency;
 	float Friction;
 	string IPAddress;
 	int Port;
+	int totalballs;
+	int Balls;
 	//Networking* m_Client;
 };
 

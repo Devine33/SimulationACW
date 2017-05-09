@@ -9,7 +9,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (TwEventWin(hwnd, msg, wParam, lParam))
 		return 0;
-	//TRACE(L"Windowing::WndProc \n");
+	/*TRACE(L"Windowing::WndProc \n");*/
 	switch (msg)
 	{
 	case WM_CLOSE:
@@ -86,6 +86,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (wParam ==40)
 		{
 			S->GetEngine()->MoveBackward();
+		}
+		if (wParam ==73)
+		{
+			S->GetEngine()->IncreaseGraphics();
+		}
+		if (wParam == 75)
+		{
+			S->GetEngine()->DecreaseGraphics();
 		}
 		//make use of input handler here send over WPARAM MATCH MVOEMENTS TO CAMERA AND CALL METHOD
 		break;
